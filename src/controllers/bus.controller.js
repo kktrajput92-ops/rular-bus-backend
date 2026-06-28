@@ -44,7 +44,75 @@ const getAllBuses = async (req, res) => {
   }
 };
 
+const updateBus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bus_name, bus_number, bus_type, total_seats } = req.body;
+
+    const result = await pool.query(
+      `UPDATE buses
+       SET bus_name=$1,
+           bus_number=$2,
+           bus_type=$3,
+           total_seats=$4
+       WHERE id=$5
+       RETURNING *`,
+      [bus_name, bus_number, bus_type, total_seats, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Bus Updated Successfully",
+      bus: result.rows[0],
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+const deleteBus = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const result = await pool.query(
+      "DELETE FROM buses WHERE id=$1 RETURNING *",
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Bus not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      message: "Bus Deleted Successfully",
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   addBus,
   getAllBuses,
+  updateBus,
+  deleteBus,
 };
