@@ -6,7 +6,7 @@ require("./config/db");
 
 const authRoutes = require("./routes/auth.routes");
 const busRoutes = require("./routes/bus.routes");
-
+const driverRoutes = require("./routes/driver.routes");
 const app = express();
 
 app.use(cors());
@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/buses", busRoutes);
-
+app.use("/api/drivers", driverRoutes);
 app.get("/", (req, res) => {
   res.json({
     success: true,
