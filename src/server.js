@@ -10,6 +10,8 @@ const driverRoutes = require("./routes/driver.routes");
 const routeRoutes = require("./routes/route.routes");
 const scheduleRoutes = require("./routes/schedule.routes");
 const passengerRoutes = require("./routes/passenger.routes");
+const bookingRoutes = require("./routes/booking.routes");
+
 const app = express();
 
 app.use(cors());
@@ -21,6 +23,8 @@ app.use("/api/drivers", driverRoutes);
 app.use("/api/routes", routeRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/passengers", passengerRoutes);
+app.use("/api/bookings", bookingRoutes);
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
