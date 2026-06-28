@@ -8,6 +8,7 @@ const authRoutes = require("./routes/auth.routes");
 const busRoutes = require("./routes/bus.routes");
 const driverRoutes = require("./routes/driver.routes");
 const routeRoutes = require("./routes/route.routes");
+const scheduleRoutes = require("./routes/schedule.routes");
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/buses", busRoutes);
 app.use("/api/drivers", driverRoutes);
 app.use("/api/routes", routeRoutes);
+app.use("/api/schedules", scheduleRoutes);
 
 app.get("/", (req, res) => {
   res.json({
