@@ -7,6 +7,8 @@ require("./config/db");
 const authRoutes = require("./routes/auth.routes");
 const busRoutes = require("./routes/bus.routes");
 const driverRoutes = require("./routes/driver.routes");
+const routeRoutes = require("./routes/route.routes");
+
 const app = express();
 
 app.use(cors());
@@ -15,10 +17,12 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/buses", busRoutes);
 app.use("/api/drivers", driverRoutes);
+app.use("/api/routes", routeRoutes);
+
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "🚍 Rular Bus Backend Running Successfully"
+    message: "🚍 Rular Bus Backend Running Successfully",
   });
 });
 
@@ -26,7 +30,7 @@ app.get("/api/health", (req, res) => {
   res.json({
     success: true,
     database: "Connected",
-    server: "Running"
+    server: "Running",
   });
 });
 
