@@ -5,7 +5,8 @@ const router = express.Router();
 const {
   lockSeat,
   getLockedSeats,
-  unlockSeat
+  unlockSeat,
+  cleanupExpiredLocks
 } = require("../controllers/seat_lock.controller");
 
 // Lock Seat
@@ -16,5 +17,8 @@ router.get("/:schedule_id", getLockedSeats);
 
 // Unlock Seat
 router.delete("/unlock/:id", unlockSeat);
+
+// Cleanup Expired Locks
+router.delete("/cleanup", cleanupExpiredLocks);
 
 module.exports = router;
