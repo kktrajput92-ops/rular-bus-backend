@@ -4,9 +4,12 @@ const pool = require("../config/db");
 const addBooking = async (req, res) => {
   try {
 
-    const { passenger_id, schedule_id, seat_number } = req.body;
-
-    // Passenger Exists?
+    const {
+  passenger_id,
+  schedule_id,
+  journey_id,
+  seat_number
+} = req.body;
     const passenger = await pool.query(
       "SELECT id FROM passengers WHERE id=$1",
       [passenger_id]
