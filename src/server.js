@@ -13,6 +13,11 @@ const passengerRoutes = require("./routes/passenger.routes");
 const bookingRoutes = require("./routes/booking.routes");
 const ticketRoutes = require("./routes/ticket.routes");
 const paymentRoutes = require("./routes/payment.routes");
+const seatRoutes = require("./routes/seat.routes");
+const searchRoutes = require("./routes/search.routes");
+const stopRoutes = require("./routes/stop.routes");
+const journeyRoutes = require("./routes/journey.routes");
+const dashboardRoutes = require("./routes/dashboard.routes");
 
 const app = express();
 
@@ -28,6 +33,11 @@ app.use("/api/passengers", passengerRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/tickets", ticketRoutes);
 app.use("/api/payments", paymentRoutes);
+app.use("/api/seats", seatRoutes);
+app.use("/api/search", searchRoutes);
+app.use("/api/stops", stopRoutes);
+app.use("/api/journeys", journeyRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 app.get("/", (req, res) => {
   res.json({
@@ -41,7 +51,7 @@ app.get("/api/health", (req, res) => {
     success: true,
     database: "Connected",
     server: "Running",
-    version: "1.0.0",
+    version: "2.1.0",
   });
 });
 

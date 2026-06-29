@@ -1,5 +1,6 @@
 const pool = require("../config/db");
 const QRCode = require("qrcode");
+const generateTicket = require("../utils/pdfTicket");
 
 // Create Ticket
 const createTicket = async (req, res) => {
@@ -18,9 +19,7 @@ const createTicket = async (req, res) => {
       });
     }
 
-    const count = await pool.query(
-      "SELECT COUNT(*) FROM tickets"
-    );
+    const count = await pool.query("SELECT COUNT(*) FROM tickets");
 
     const ticket_number =
       "RB2026" +
@@ -104,6 +103,7 @@ const getAllTickets = async (req, res) => {
       success: false,
       message: err.message,
     });
+
   }
 };
 
@@ -116,6 +116,7 @@ const verifyTicket = async (req, res) => {
     const result = await pool.query(`
       SELECT
       tickets.ticket_number,
+      tickets.qr_code,
       passengers.full_name,
       passengers.phone,
       routes.source,
@@ -166,6 +167,62 @@ const verifyTicket = async (req, res) => {
   }
 };
 
+// Download PDF Ticket
+const downloadTicket = async (req,res)=>{
+  try{
+
+    const {ticket_number}=req.params;
+
+    const result=await pool.query(`
+      SELECT
+      tickets.ticket_number,
+      tickets.qr_code,
+      passengers.full_name,
+      passengers.phone,
+      routes.source,
+      routes.destination,
+      bookings.seat_number,
+      bookings.booking_status,
+      schedules.departure_time
+
+      FROM tickets
+
+      JOIN bookings
+      ON tickets.booking_id=bookings.id
+
+      JOIN passengers
+      ON bookings.passenger_id=passengers.id
+
+      JOIN schedules
+      ON bookings.schedule_id=schedules.id
+
+      JOIN routes
+      ON schedules.route_id=routes.id
+
+      WHERE tickets.ticket_number=$1
+    `,[ticket_number]);
+
+    if(result.rows.length===0){
+      return res.status(404).json({
+        success:false,
+        message:"Ticket not found"
+      });
+    }
+
+    generateTicket(res,result.rows[0]);
+
+  }catch(err){
+
+    console.error(err);
+
+    res.status(500).json({
+      success:false,
+      message:err.message
+    });
+
+  }
+};
+
 // Delete Ticket
 const deleteTicket = async (req,res)=>{
   try{
@@ -205,5 +262,6 @@ module.exports={
   createTicket,
   getAllTickets,
   verifyTicket,
+  downloadTicket,
   deleteTicket,
 };
