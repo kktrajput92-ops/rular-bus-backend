@@ -14,14 +14,17 @@ const lockSeat = async (req, res) => {
       passenger_phone
     } = req.body;
 
-    // Check Existing Lock
     const existing = await pool.query(
       `SELECT *
        FROM seat_locks
        WHERE schedule_id = $1
        AND journey_id = $2
        AND seat_number = $3
-       AND status = 'locked'`,
+       AND status = 'locked'
+       AND (
+         expires_at IS NULL
+         OR expires_at > NOW()
+       )`,
       [
         schedule_id,
         journey_id,
@@ -36,12 +39,10 @@ const lockSeat = async (req, res) => {
       });
     }
 
-    // Lock Expire After 5 Minutes
     const expires_at = new Date(
-      Date.now() + 5 * 60 * 1000
+      Date.now() + (5 * 60 * 1000)
     );
 
-    // Insert Lock
     const result = await pool.query(
       `INSERT INTO seat_locks
       (
@@ -66,7 +67,7 @@ const lockSeat = async (req, res) => {
       ]
     );
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Seat locked successfully",
       seat_lock: result.rows[0]
@@ -76,7 +77,7 @@ const lockSeat = async (req, res) => {
 
     console.error(err);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: err.message
     });
@@ -102,7 +103,7 @@ const getLockedSeats = async (req, res) => {
       [schedule_id]
     );
 
-    res.json({
+    return res.json({
       success: true,
       total: result.rows.length,
       seats: result.rows
@@ -112,7 +113,50 @@ const getLockedSeats = async (req, res) => {
 
     console.error(err);
 
-    res.status(500).json({
+    return res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+};
+// ======================================
+// UNLOCK SEAT
+// ======================================
+const unlockSeat = async (req, res) => {
+
+  try {
+
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `DELETE FROM seat_locks
+       WHERE id = $1
+       RETURNING *`,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+
+      return res.status(404).json({
+        success: false,
+        message: "Seat lock not found"
+      });
+
+    }
+
+    return res.json({
+      success: true,
+      message: "Seat unlocked successfully",
+      seat_lock: result.rows[0]
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    return res.status(500).json({
       success: false,
       message: err.message
     });
@@ -121,7 +165,11 @@ const getLockedSeats = async (req, res) => {
 
 };
 
+// ======================================
+// MODULE EXPORTS
+// ======================================
 module.exports = {
   lockSeat,
-  getLockedSeats
+  getLockedSeats,
+  unlockSeat
 };
