@@ -1,6 +1,6 @@
 nohup: ignoring input
-◇ injected env (7) from .env // tip: ⌘ multiple files { path: ['.env.local', '.env'] }
-◇ injected env (0) from .env // tip: ⌁ auth for agents [www.vestauth.com]
+◇ injected env (7) from .env // tip: ⌘ override existing { override: true }
+◇ injected env (0) from .env // tip: ⌘ custom filepath { path: '/custom/path/.env' }
 HOST = 127.0.0.1
 PORT = 5432
 NAME = rular_bus
@@ -8,4 +8,3 @@ USER = postgres
 🚀 Server running on port 5000
 ✅ PostgreSQL Connected
 ✅ Database Test Query Success
-✅ PostgreSQL Connected
