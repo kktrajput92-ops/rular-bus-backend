@@ -1,0 +1,127 @@
+const pool = require("../config/db");
+
+// ======================================
+// LOCK SEAT
+// ======================================
+const lockSeat = async (req, res) => {
+  try {
+
+    const {
+      schedule_id,
+      journey_id,
+      seat_number,
+      passenger_name,
+      passenger_phone
+    } = req.body;
+
+    // Check Existing Lock
+    const existing = await pool.query(
+      `SELECT *
+       FROM seat_locks
+       WHERE schedule_id = $1
+       AND journey_id = $2
+       AND seat_number = $3
+       AND status = 'locked'`,
+      [
+        schedule_id,
+        journey_id,
+        seat_number
+      ]
+    );
+
+    if (existing.rows.length > 0) {
+      return res.status(409).json({
+        success: false,
+        message: "Seat already locked"
+      });
+    }
+
+    // Lock Expire After 5 Minutes
+    const expires_at = new Date(
+      Date.now() + 5 * 60 * 1000
+    );
+
+    // Insert Lock
+    const result = await pool.query(
+      `INSERT INTO seat_locks
+      (
+        schedule_id,
+        journey_id,
+        seat_number,
+        passenger_name,
+        passenger_phone,
+        status,
+        expires_at
+      )
+      VALUES
+      ($1,$2,$3,$4,$5,'locked',$6)
+      RETURNING *`,
+      [
+        schedule_id,
+        journey_id,
+        seat_number,
+        passenger_name,
+        passenger_phone,
+        expires_at
+      ]
+    );
+
+    res.status(201).json({
+      success: true,
+      message: "Seat locked successfully",
+      seat_lock: result.rows[0]
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+};
+
+// ======================================
+// GET LOCKED SEATS
+// ======================================
+const getLockedSeats = async (req, res) => {
+
+  try {
+
+    const { schedule_id } = req.params;
+
+    const result = await pool.query(
+      `SELECT *
+       FROM seat_locks
+       WHERE schedule_id = $1
+       AND status = 'locked'
+       ORDER BY seat_number`,
+      [schedule_id]
+    );
+
+    res.json({
+      success: true,
+      total: result.rows.length,
+      seats: result.rows
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
+  }
+
+};
+
+module.exports = {
+  lockSeat,
+  getLockedSeats
+};

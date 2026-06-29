@@ -18,12 +18,14 @@ const searchRoutes = require("./routes/search.routes");
 const stopRoutes = require("./routes/stop.routes");
 const journeyRoutes = require("./routes/journey.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const seatLockRoutes = require("./routes/seat_lock.routes");
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
+// API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/buses", busRoutes);
 app.use("/api/drivers", driverRoutes);
@@ -38,20 +40,23 @@ app.use("/api/search", searchRoutes);
 app.use("/api/stops", stopRoutes);
 app.use("/api/journeys", journeyRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/seat-locks", seatLockRoutes);
 
+// Root
 app.get("/", (req, res) => {
   res.json({
     success: true,
-    message: "🚍 Rular Bus Backend Running Successfully",
+    message: "🚍 Rular Bus Backend Running Successfully"
   });
 });
 
+// Health
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
     database: "Connected",
     server: "Running",
-    version: "2.1.0",
+    version: "2.2.0"
   });
 });
 
