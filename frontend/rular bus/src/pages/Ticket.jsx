@@ -1,75 +1,30 @@
-import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import api from "../api/api";
 
 function Ticket() {
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { booking } = location.state || {};
+  const { booking, payment } = location.state || {};
 
-  const [ticket, setTicket] = useState(null);
-  const [loading, setLoading] = useState(true);
+  if (!booking || !payment) {
 
-  useEffect(() => {
-
-    createTicket();
-
-  }, []);
-
-  const createTicket = async () => {
-
-    try {
-
-      const res = await api.post("/tickets", {
-        booking_id: booking.id,
-      });
-
-      setTicket(res.data.ticket);
-
-    } catch (err) {
-
-      console.error(err);
-
-      alert(
-        err.response?.data?.message ||
-        "Ticket Generation Failed"
-      );
-
-    } finally {
-
-      setLoading(false);
-
-    }
-
-  };
-
-  if (loading) {
     return (
+
       <div
         style={{
-          textAlign: "center",
-          marginTop: "120px",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
           fontSize: "22px",
-        }}
-      >
-        Generating Ticket...
-      </div>
-    );
-  }
-
-  if (!ticket) {
-    return (
-      <div
-        style={{
-          textAlign: "center",
-          marginTop: "120px",
         }}
       >
         Ticket Not Found
       </div>
+
     );
+
   }
 
   return (
@@ -77,38 +32,63 @@ function Ticket() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#f5f7fb",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        padding: "20px",
+        background: "#eef3f8",
+        padding: "25px",
       }}
     >
-
       <div
         style={{
-          width: "95%",
-          maxWidth: "550px",
-          background: "#fff",
-          borderRadius: "15px",
-          padding: "25px",
-          boxShadow: "0 10px 30px rgba(0,0,0,.15)",
+          maxWidth: "700px",
+          margin: "0 auto",
+          background: "#ffffff",
+          borderRadius: "20px",
+          padding: "30px",
+          boxShadow: "0 12px 35px rgba(0,0,0,.15)",
         }}
       >
 
-        <h1
+        <div
           style={{
             textAlign: "center",
-            color: "#16a34a",
+            marginBottom: "25px",
           }}
         >
-          🎫 Rular Bus E-Ticket
-        </h1>
+
+          <h1
+            style={{
+              color: "#d62828",
+              marginBottom: "8px",
+            }}
+          >
+            🚌 Rular Bus
+          </h1>
+
+          <h2
+            style={{
+              color: "#16a34a",
+              margin: 0,
+            }}
+          >
+            Smart Digital Ticket
+          </h2>
+
+          <p
+            style={{
+              color: "#6b7280",
+              marginTop: "10px",
+            }}
+          >
+            Happy Journey ❤️
+          </p>
+
+        </div>
 
         <hr />
 
+        <h3>👤 Passenger Information</h3>
+
         <p>
-          <b>Ticket Number :</b> {ticket.ticket_number}
+          <b>Name :</b> {booking.full_name || "Passenger"}
         </p>
 
         <p>
@@ -116,98 +96,209 @@ function Ticket() {
         </p>
 
         <p>
-          <b>Seat :</b> {booking.seat_number}
+          <b>Seat Number :</b> {booking.seat_number}
         </p>
+
         <p>
-          <b>Payment Status :</b> Paid
+          <b>Payment Status :</b>
+
+          <span
+            style={{
+              color: "#16a34a",
+              fontWeight: "bold",
+            }}
+          >
+            {" "}Confirmed ✅
+          </span>
+
+        </p>
+
+        <hr />
+
+        <h3>🚌 Journey Details</h3>
+        <p>
+          <b>From :</b> {booking.source || "Gurugram"}
+        </p>
+
+        <p>
+          <b>To :</b> {booking.destination || "Kannauj"}
+        </p>
+
+        <p>
+          <b>Departure :</b>{" "}
+          {booking.departure_time || "01 Jul 2026, 08:00 AM"}
+        </p>
+
+        <p>
+          <b>Bus :</b>{" "}
+          {booking.bus_name || "Rular Bus Service"}
         </p>
 
         <hr />
 
         <div
           style={{
+            marginTop: "25px",
+            padding: "20px",
+            border: "2px dashed #16a34a",
+            borderRadius: "15px",
             textAlign: "center",
-            marginTop: "20px",
+            background: "#f0fdf4",
           }}
         >
-          <h3>QR Code</h3>
 
-          <img
-            src={ticket.qr_code}
-            alt="QR Code"
+          <h2
             style={{
-              width: "180px",
-              height: "180px",
-              border: "1px solid #ddd",
-              borderRadius: "10px",
+              color: "#16a34a",
+              marginBottom: "10px",
             }}
-          />
+          >
+            🔳 QR Ticket
+          </h2>
+
+          <div
+            style={{
+              width: "170px",
+              height: "170px",
+              margin: "0 auto",
+              background: "#ffffff",
+              border: "2px solid #d1d5db",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              fontSize: "18px",
+              fontWeight: "bold",
+            }}
+          >
+            QR CODE
+          </div>
+
+          <p
+            style={{
+              marginTop: "12px",
+              color: "#6b7280",
+            }}
+          >
+            Scan this ticket during boarding.
+          </p>
+
+        </div>
+        <hr />
+
+        <div
+          style={{
+            marginTop: "25px",
+            background: "#eff6ff",
+            border: "1px solid #93c5fd",
+            borderRadius: "12px",
+            padding: "18px",
+          }}
+        >
+
+          <h3
+            style={{
+              marginTop: 0,
+              color: "#2563eb",
+            }}
+          >
+            💳 Payment Details
+          </h3>
+
+          <p>
+            <b>Payment ID :</b>{" "}
+            {payment.id || "N/A"}
+          </p>
+
+          <p>
+            <b>Method :</b>{" "}
+            {payment.payment_method || "UPI"}
+          </p>
+
+          <p>
+            <b>Amount :</b> ₹
+            {payment.amount || 450}
+          </p>
+
+          <p>
+            <b>Status :</b>
+
+            <span
+              style={{
+                color: "#16a34a",
+                fontWeight: "bold",
+              }}
+            >
+              {" "}Paid ✅
+            </span>
+
+          </p>
+
         </div>
 
-        <button
-          onClick={() =>
-            window.open(
-              api.defaults.baseURL +
-              "/tickets/pdf/" +
-              ticket.ticket_number,
-              "_blank"
-            )
-          }
+        <div
           style={{
-            width: "100%",
-            marginTop: "25px",
-            padding: "14px",
-            background: "#2563eb",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            cursor: "pointer",
+            display: "flex",
+            gap: "12px",
+            marginTop: "30px",
+            flexWrap: "wrap",
           }}
         >
-          📄 Download PDF Ticket
-        </button>
 
-        <button
-          onClick={() => window.print()}
-          style={{
-            width: "100%",
-            marginTop: "10px",
-            padding: "14px",
-            background: "#7c3aed",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            cursor: "pointer",
-          }}
-        >
-          🖨 Print Ticket
-        </button>
+          <button
+            style={{
+              flex: 1,
+              padding: "15px",
+              background: "#2563eb",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            📄 Download PDF
+          </button>
 
-        <button
-          onClick={() => navigate("/")}
-          style={{
-            width: "100%",
-            marginTop: "10px",
-            padding: "14px",
-            background: "#16a34a",
-            color: "#fff",
-            border: "none",
-            borderRadius: "8px",
-            fontSize: "16px",
-            cursor: "pointer",
-          }}
-        >
-          🏠 Back to Home
-        </button>
+          <button
+            style={{
+              flex: 1,
+              padding: "15px",
+              background: "#16a34a",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            📤 Share Ticket
+          </button>
+
+          <button
+            onClick={() => navigate("/")}
+            style={{
+              width: "100%",
+              padding: "15px",
+              background: "#6b7280",
+              color: "#ffffff",
+              border: "none",
+              borderRadius: "10px",
+              fontSize: "16px",
+              cursor: "pointer",
+            }}
+          >
+            🏠 Back to Home
+          </button>
+
+        </div>
 
       </div>
 
     </div>
 
   );
+
 }
 
 export default Ticket;
-
+     
