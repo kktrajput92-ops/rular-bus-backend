@@ -1,7 +1,13 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { QRCodeSVG } from "qrcode.react";
-import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
+
+import TicketHeader from "../components/ticket/TicketHeader";
+import PassengerCard from "../components/ticket/PassengerCard";
+import JourneyCard from "../components/ticket/JourneyCard";
+import PaymentCard from "../components/ticket/PaymentCard";
+import QRSection from "../components/ticket/QRSection";
+import TicketActions from "../components/ticket/TicketActions";
 
 function Ticket() {
 
@@ -10,41 +16,92 @@ function Ticket() {
 
   const { booking, payment } = location.state || {};
 
-const downloadPDF = async () => {
+  const downloadPDF = async () => {
 
-  const ticket = document.getElementById("ticket-card");
+    const ticket =
+      document.getElementById("ticket-card");
 
-  if (!ticket) return;
+    if (!ticket) return;
 
-  const canvas = await html2canvas(ticket, {
-    scale: 2,
-  });
+    const canvas = await html2canvas(ticket, {
+      scale: 2,
+    });
 
-  const imgData = canvas.toDataURL("image/png");
+    const imgData =
+      canvas.toDataURL("image/png");
 
-  const pdf = new jsPDF("p", "mm", "a4");
+    const pdf =
+      new jsPDF("p", "mm", "a4");
 
-  pdf.setFont("helvetica", "bold");
-  pdf.setFontSize(18);
-  pdf.text("Rular Bus Smart Ticket", 10, 10);
+    const pdfWidth = 190;
 
-  const pdfWidth = 190;
+    const pdfHeight =
+      (canvas.height * pdfWidth) /
+      canvas.width;
 
-  const pdfHeight =
-    (canvas.height * pdfWidth) / canvas.width;
+    pdf.setFont("helvetica", "bold");
+    pdf.setFontSize(18);
 
-  pdf.addImage(
-    imgData,
-    "PNG",
-    10,
-    20,
-    pdfWidth,
-    pdfHeight
-  );
+    pdf.text(
+      "Rular Bus Smart Ticket",
+      10,
+      10
+    );
 
-  pdf.save(`RularBus-Ticket-${booking.id}.pdf`);
+    pdf.addImage(
+      imgData,
+      "PNG",
+      10,
+      20,
+      pdfWidth,
+      pdfHeight
+    );
 
-};
+    pdf.save(
+      `RularBus-Ticket-${booking.id}.pdf`
+    );
+
+  };
+  const shareTicket = async () => {
+
+    const message =
+`🚌 Rular Bus Ticket
+
+Booking ID : ${booking.id}
+
+Seat : ${booking.seat_number}
+
+Route : ${booking.source} ➜ ${booking.destination}
+
+Status : Confirmed ✅`;
+
+    if (navigator.share) {
+
+      try {
+
+        await navigator.share({
+
+          title: "Rular Bus Ticket",
+
+          text: message,
+
+        });
+
+      } catch (err) {
+
+        console.log(err);
+
+      }
+
+    } else {
+
+      await navigator.clipboard.writeText(message);
+
+      alert("Ticket copied to clipboard.");
+
+    }
+
+  };
 
   if (!booking || !payment) {
 
@@ -75,10 +132,10 @@ const downloadPDF = async () => {
         padding: "25px",
       }}
     >
-       <div
-  id="ticket-card"
-  style={{
-    maxWidth: "700px",
+      <div
+        id="ticket-card"
+        style={{
+          maxWidth: "700px",
           margin: "0 auto",
           background: "#ffffff",
           borderRadius: "20px",
@@ -86,292 +143,28 @@ const downloadPDF = async () => {
           boxShadow: "0 12px 35px rgba(0,0,0,.15)",
         }}
       >
+        <TicketHeader />
 
-        <div
-          style={{
-            textAlign: "center",
-            marginBottom: "25px",
-          }}
-        >
+        <PassengerCard booking={booking} />
 
-          <h1
-            style={{
-              color: "#d62828",
-              marginBottom: "8px",
-            }}
-          >
-            🚌 Rular Bus
-          </h1>
+        <JourneyCard booking={booking} />
 
-          <h2
-            style={{
-              color: "#16a34a",
-              margin: 0,
-            }}
-          >
-            Smart Digital Ticket
-          </h2>
+        <QRSection
+          booking={booking}
+          payment={payment}
+        />
 
-          <p
-            style={{
-              color: "#6b7280",
-              marginTop: "10px",
-            }}
-          >
-            Happy Journey ❤️
-          </p>
+        <PaymentCard payment={payment} />
 
-        </div>
-
-        <hr />
-
-        <h3>👤 Passenger Information</h3>
-
-        <p>
-          <b>Name :</b> {booking.full_name || "Passenger"}
-        </p>
-
-        <p>
-          <b>Booking ID :</b> {booking.id}
-        </p>
-
-        <p>
-          <b>Seat Number :</b> {booking.seat_number}
-        </p>
-
-        <p>
-          <b>Payment Status :</b>
-
-          <span
-            style={{
-              color: "#16a34a",
-              fontWeight: "bold",
-            }}
-          >
-            {" "}Confirmed ✅
-          </span>
-
-        </p>
-
-        <hr />
-
-        <h3>🚌 Journey Details</h3>
-        <p>
-          <b>From :</b> {booking.source || "Gurugram"}
-        </p>
-
-        <p>
-          <b>To :</b> {booking.destination || "Kannauj"}
-        </p>
-
-        <p>
-          <b>Departure :</b>{" "}
-          {booking.departure_time || "01 Jul 2026, 08:00 AM"}
-        </p>
-
-        <p>
-          <b>Bus :</b>{" "}
-          {booking.bus_name || "Rular Bus Service"}
-        </p>
-
-        <hr />
-
-        <div
-          style={{
-            marginTop: "25px",
-            padding: "20px",
-            border: "2px dashed #16a34a",
-            borderRadius: "15px",
-            textAlign: "center",
-            background: "#f0fdf4",
-          }}
-        >
-
-          <h2
-            style={{
-              color: "#16a34a",
-              marginBottom: "10px",
-            }}
-          >
-            🔳 QR Ticket
-          </h2>
-
-         <div
-  style={{
-    background: "#ffffff",
-    display: "inline-block",
-    padding: "12px",
-    borderRadius: "12px",
-    border: "2px solid #d1d5db",
-  }}
->
-  <QRCodeSVG
-    value={`RB-${booking.id}-${payment.id}`}
-    size={170}
-    level="H"
-    includeMargin={true}
-  />
-</div>
-<p
-  style={{
-    marginTop: "15px",
-    fontSize: "15px",
-    color: "#16a34a",
-    fontWeight: "bold",
-  }}
->
-  Verification Code
-</p>
-
-<p
-  style={{
-    fontSize: "18px",
-    fontWeight: "bold",
-    letterSpacing: "2px",
-    color: "#2563eb",
-  }}
->
-  RB-{booking.id}-{payment.id}
-</p>
-
-<p
-  style={{
-    marginTop: "12px",
-    color: "#6b7280",
-    fontSize: "14px",
-  }}
->
-  Scan this QR at boarding for quick verification.
-</p>
-
-          <p
-            style={{
-              marginTop: "12px",
-              color: "#6b7280",
-            }}
-          >
-            Scan this ticket during boarding.
-          </p>
-
-        </div>
-        <hr />
-
-        <div
-          style={{
-            marginTop: "25px",
-            background: "#eff6ff",
-            border: "1px solid #93c5fd",
-            borderRadius: "12px",
-            padding: "18px",
-          }}
-        >
-
-          <h3
-            style={{
-              marginTop: 0,
-              color: "#2563eb",
-            }}
-          >
-            💳 Payment Details
-          </h3>
-
-          <p>
-            <b>Payment ID :</b>{" "}
-            {payment.id || "N/A"}
-          </p>
-
-          <p>
-            <b>Method :</b>{" "}
-            {payment.payment_method || "UPI"}
-          </p>
-
-          <p>
-            <b>Amount :</b> ₹
-            {payment.amount || 450}
-          </p>
-
-          <p>
-            <b>Status :</b>
-
-            <span
-              style={{
-                color: "#16a34a",
-                fontWeight: "bold",
-              }}
-            >
-              {" "}Paid ✅
-            </span>
-
-          </p>
-
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            gap: "12px",
-            marginTop: "30px",
-            flexWrap: "wrap",
-          }}
-        >
-
-        <button
-  onClick={downloadPDF}
-  style={{
-    flex: 1,
-    padding: "15px",
-    background: "#2563eb",
-    color: "#ffffff",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "16px",
-    cursor: "pointer",
-  }}
->
-  📄 Download PDF
-</button>
-
-            <button
-  onClick={() => alert("Share Feature Coming Soon 🚀")}
-  style={{
-    flex: 1,
-    padding: "15px",
-    background: "#16a34a",
-    color: "#ffffff",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "16px",
-    cursor: "pointer",
-  }}
->
-  📤 Share Ticket
-</button>
-
-          <button
-            onClick={() => navigate("/")}
-            style={{
-              width: "100%",
-              padding: "15px",
-              background: "#6b7280",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: "10px",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            🏠 Back to Home
-          </button>
-
-        </div>
-
+        <TicketActions
+          onDownload={downloadPDF}
+          onShare={shareTicket}
+          onHome={() => navigate("/")}
+        />
       </div>
-
     </div>
-
   );
 
 }
 
 export default Ticket;
-     

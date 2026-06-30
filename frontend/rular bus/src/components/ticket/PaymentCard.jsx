@@ -1,0 +1,50 @@
+import React from "react";
+
+function PaymentCard({ payment }) {
+  return (
+    <div
+      style={{
+        marginTop: "25px",
+        background: "#eff6ff",
+        border: "1px solid #93c5fd",
+        borderRadius: "12px",
+        padding: "18px",
+      }}
+    >
+      <h3
+        style={{
+          marginTop: 0,
+          color: "#2563eb",
+        }}
+      >
+        💳 Payment Details
+      </h3>
+
+      <p>
+        <b>Payment ID :</b> {payment.id || "N/A"}
+      </p>
+
+      <p>
+        <b>Method :</b> {payment.payment_method || "UPI"}
+      </p>
+
+      <p>
+        <b>Amount :</b> ₹{payment.amount || 450}
+      </p>
+
+      <p>
+        <b>Status :</b>{" "}
+        <span
+          style={{
+            color: "#16a34a",
+            fontWeight: "bold",
+          }}
+        >
+          Paid ✅
+        </span>
+      </p>
+    </div>
+  );
+}
+
+export default PaymentCard;
