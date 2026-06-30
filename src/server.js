@@ -25,6 +25,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Request Logger
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.originalUrl}`);
+  next();
+});
+
 // API Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/buses", busRoutes);
@@ -42,7 +48,7 @@ app.use("/api/journeys", journeyRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/seat-locks", seatLockRoutes);
 
-// Root
+// Root Route
 app.get("/", (req, res) => {
   res.json({
     success: true,
@@ -50,13 +56,23 @@ app.get("/", (req, res) => {
   });
 });
 
-// Health
+// Health Check
 app.get("/api/health", (req, res) => {
   res.json({
     success: true,
     database: "Connected",
     server: "Running",
     version: "2.2.0"
+  });
+});
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error(err);
+
+  res.status(500).json({
+    success: false,
+    message: err.message
   });
 });
 

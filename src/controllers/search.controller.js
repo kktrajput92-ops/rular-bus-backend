@@ -1,52 +1,69 @@
 const pool = require("../config/db");
 
 const searchBus = async (req, res) => {
+
   try {
-    const { source, destination } = req.query;
 
-    const result = await pool.query(
-      `
+    const source = (req.query.source || "").trim();
+    const destination = (req.query.destination || "").trim();
+    const journey_date = (req.query.journey_date || "").trim();
+
+    console.log("========== SEARCH ==========");
+    console.log("SOURCE :", source);
+    console.log("DESTINATION :", destination);
+    console.log("DATE :", journey_date);
+
+    const sql = `
       SELECT
-        schedules.id AS schedule_id,
-        buses.bus_name,
-        buses.bus_number,
-        buses.total_seats,
-        routes.source,
-        routes.destination,
-        schedules.departure_time,
-        schedules.arrival_time,
-
+        s.id AS schedule_id,
+        s.bus_id,
+        s.route_id,
+        b.bus_name,
+        b.bus_number,
+        b.total_seats,
+        TRIM(r.source) AS source,
+        TRIM(r.destination) AS destination,
+        s.departure_time,
+        s.arrival_time,
         (
           SELECT COUNT(*)
-          FROM bookings
-          WHERE bookings.schedule_id=schedules.id
-          AND bookings.booking_status='confirmed'
-        )::INTEGER AS booked_seats
-
-      FROM schedules
-
-      JOIN buses
-      ON schedules.bus_id=buses.id
-
-      JOIN routes
-      ON schedules.route_id=routes.id
-
+          FROM bookings bk
+          WHERE bk.schedule_id = s.id
+          AND bk.booking_status='confirmed'
+        )::INT AS booked_seats
+      FROM schedules s
+      INNER JOIN buses b
+      ON b.id = s.bus_id
+      INNER JOIN routes r
+      ON r.id = s.route_id
       WHERE
-      LOWER(routes.source)=LOWER($1)
-      AND LOWER(routes.destination)=LOWER($2)
+        TRIM(LOWER(r.source)) = LOWER($1)
+        AND
+        TRIM(LOWER(r.destination)) = LOWER($2)
+        AND
+        DATE(s.departure_time) = $3::date
+      ORDER BY s.departure_time;
+    `;
 
-      ORDER BY schedules.departure_time
-      `,
-      [source, destination]
-    );
+    console.log(sql);
+    console.log([source, destination, journey_date]);
 
-    const buses = result.rows.map(bus => ({
-      ...bus,
+    const result = await pool.query(sql, [
+      source,
+      destination,
+      journey_date
+    ]);
+
+    console.log("ROWS FOUND =", result.rows.length);
+    console.log(result.rows);
+
+    const buses = result.rows.map((row) => ({
+      ...row,
       available_seats:
-        bus.total_seats - bus.booked_seats
+        Number(row.total_seats) - Number(row.booked_seats)
     }));
 
-    res.json({
+    return res.json({
       success: true,
       total: buses.length,
       buses
@@ -54,16 +71,18 @@ const searchBus = async (req, res) => {
 
   } catch (err) {
 
+    console.error("SEARCH ERROR");
     console.error(err);
 
-    res.status(500).json({
-      success:false,
-      message:err.message
+    return res.status(500).json({
+      success: false,
+      message: err.message
     });
 
   }
+
 };
 
-module.exports={
+module.exports = {
   searchBus
 };

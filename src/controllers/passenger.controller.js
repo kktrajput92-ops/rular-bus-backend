@@ -1,21 +1,56 @@
 const pool = require("../config/db");
 
+// ===============================
 // Add Passenger
+// ===============================
 const addPassenger = async (req, res) => {
   try {
+
     const {
       full_name,
       phone,
       email,
       gender,
+      age,
     } = req.body;
-
+console.log("BODY =", req.body);
+console.log("AGE =", age);
+console.log("PARAMS =", [
+  full_name,
+  phone,
+  email,
+  gender,
+  age,
+]);
+console.log("BODY =", req.body);
+console.log("AGE =", age, typeof age);
     const result = await pool.query(
-      `INSERT INTO passengers
-      (full_name, phone, email, gender)
-      VALUES ($1, $2, $3, $4)
-      RETURNING *`,
-      [full_name, phone, email, gender]
+      `
+      INSERT INTO passengers
+      (
+        full_name,
+        phone,
+        email,
+        gender,
+        age
+      )
+      VALUES
+      (
+        $1,
+        $2,
+        $3,
+        $4,
+        $5
+      )
+      RETURNING *
+      `,
+      [
+        full_name,
+        phone,
+        email,
+        gender,
+        age,
+      ]
     );
 
     res.json({
@@ -25,18 +60,23 @@ const addPassenger = async (req, res) => {
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
       success: false,
       message: err.message,
     });
+
   }
 };
 
+// ===============================
 // Get All Passengers
+// ===============================
 const getAllPassengers = async (req, res) => {
   try {
+
     const result = await pool.query(
       "SELECT * FROM passengers ORDER BY id DESC"
     );
@@ -47,18 +87,22 @@ const getAllPassengers = async (req, res) => {
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
       success: false,
       message: err.message,
     });
+
   }
 };
-
+// ===============================
 // Update Passenger
+// ===============================
 const updatePassenger = async (req, res) => {
   try {
+
     const { id } = req.params;
 
     const {
@@ -66,21 +110,27 @@ const updatePassenger = async (req, res) => {
       phone,
       email,
       gender,
+      age,
     } = req.body;
 
     const result = await pool.query(
-      `UPDATE passengers
-       SET full_name=$1,
-           phone=$2,
-           email=$3,
-           gender=$4
-       WHERE id=$5
-       RETURNING *`,
+      `
+      UPDATE passengers
+      SET
+        full_name=$1,
+        phone=$2,
+        email=$3,
+        gender=$4,
+        age=$5
+      WHERE id=$6
+      RETURNING *
+      `,
       [
         full_name,
         phone,
         email,
         gender,
+        age,
         id,
       ]
     );
@@ -99,18 +149,23 @@ const updatePassenger = async (req, res) => {
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
       success: false,
       message: err.message,
     });
+
   }
 };
 
+// ===============================
 // Delete Passenger
+// ===============================
 const deletePassenger = async (req, res) => {
   try {
+
     const { id } = req.params;
 
     const result = await pool.query(
@@ -131,12 +186,14 @@ const deletePassenger = async (req, res) => {
     });
 
   } catch (err) {
+
     console.error(err);
 
     res.status(500).json({
       success: false,
       message: err.message,
     });
+
   }
 };
 
