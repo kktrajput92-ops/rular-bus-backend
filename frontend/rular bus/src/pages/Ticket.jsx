@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-
+import { QRCodeSVG } from "qrcode.react";
 function Ticket() {
 
   const navigate = useNavigate();
@@ -156,22 +156,53 @@ function Ticket() {
             🔳 QR Ticket
           </h2>
 
-          <div
-            style={{
-              width: "170px",
-              height: "170px",
-              margin: "0 auto",
-              background: "#ffffff",
-              border: "2px solid #d1d5db",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              fontSize: "18px",
-              fontWeight: "bold",
-            }}
-          >
-            QR CODE
-          </div>
+         <div
+  style={{
+    background: "#ffffff",
+    display: "inline-block",
+    padding: "12px",
+    borderRadius: "12px",
+    border: "2px solid #d1d5db",
+  }}
+>
+  <QRCodeSVG
+    value={`RB-${booking.id}-${payment.id}`}
+    size={170}
+    level="H"
+    includeMargin={true}
+  />
+</div>
+<p
+  style={{
+    marginTop: "15px",
+    fontSize: "15px",
+    color: "#16a34a",
+    fontWeight: "bold",
+  }}
+>
+  Verification Code
+</p>
+
+<p
+  style={{
+    fontSize: "18px",
+    fontWeight: "bold",
+    letterSpacing: "2px",
+    color: "#2563eb",
+  }}
+>
+  RB-{booking.id}-{payment.id}
+</p>
+
+<p
+  style={{
+    marginTop: "12px",
+    color: "#6b7280",
+    fontSize: "14px",
+  }}
+>
+  Scan this QR at boarding for quick verification.
+</p>
 
           <p
             style={{
@@ -244,35 +275,37 @@ function Ticket() {
           }}
         >
 
-          <button
-            style={{
-              flex: 1,
-              padding: "15px",
-              background: "#2563eb",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: "10px",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            📄 Download PDF
-          </button>
+         <button
+  onClick={() => alert("PDF Download Coming Soon 🚀")}
+  style={{
+    flex: 1,
+    padding: "15px",
+    background: "#2563eb",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "16px",
+    cursor: "pointer",
+  }}
+>
+  📄 Download PDF
+</button>
 
-          <button
-            style={{
-              flex: 1,
-              padding: "15px",
-              background: "#16a34a",
-              color: "#ffffff",
-              border: "none",
-              borderRadius: "10px",
-              fontSize: "16px",
-              cursor: "pointer",
-            }}
-          >
-            📤 Share Ticket
-          </button>
+            <button
+  onClick={() => alert("Share Feature Coming Soon 🚀")}
+  style={{
+    flex: 1,
+    padding: "15px",
+    background: "#16a34a",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "16px",
+    cursor: "pointer",
+  }}
+>
+  📤 Share Ticket
+</button>
 
           <button
             onClick={() => navigate("/")}
