@@ -1,11 +1,50 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { QRCodeSVG } from "qrcode.react";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+
 function Ticket() {
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const { booking, payment } = location.state || {};
+
+const downloadPDF = async () => {
+
+  const ticket = document.getElementById("ticket-card");
+
+  if (!ticket) return;
+
+  const canvas = await html2canvas(ticket, {
+    scale: 2,
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF("p", "mm", "a4");
+
+  pdf.setFont("helvetica", "bold");
+  pdf.setFontSize(18);
+  pdf.text("Rular Bus Smart Ticket", 10, 10);
+
+  const pdfWidth = 190;
+
+  const pdfHeight =
+    (canvas.height * pdfWidth) / canvas.width;
+
+  pdf.addImage(
+    imgData,
+    "PNG",
+    10,
+    20,
+    pdfWidth,
+    pdfHeight
+  );
+
+  pdf.save(`RularBus-Ticket-${booking.id}.pdf`);
+
+};
 
   if (!booking || !payment) {
 
@@ -36,9 +75,10 @@ function Ticket() {
         padding: "25px",
       }}
     >
-      <div
-        style={{
-          maxWidth: "700px",
+       <div
+  id="ticket-card"
+  style={{
+    maxWidth: "700px",
           margin: "0 auto",
           background: "#ffffff",
           borderRadius: "20px",
@@ -275,8 +315,8 @@ function Ticket() {
           }}
         >
 
-         <button
-  onClick={() => alert("PDF Download Coming Soon 🚀")}
+        <button
+  onClick={downloadPDF}
   style={{
     flex: 1,
     padding: "15px",
