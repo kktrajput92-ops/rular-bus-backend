@@ -1,100 +1,245 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 function Seats() {
-  const navigate = useNavigate();
 
-  const totalSeats = 52;
-  const [selectedSeat, setSelectedSeat] = useState(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const bus = location.state || {};
+
+  const bookedSeats = [3, 7, 12, 18, 24, 31, 40, 45];
+
+  const [selectedSeats, setSelectedSeats] = useState([]);
+
+  const farePerSeat = 550;
+
+  const toggleSeat = (seat) => {
+
+    if (bookedSeats.includes(seat)) {
+      return;
+    }
+
+    if (selectedSeats.includes(seat)) {
+
+      setSelectedSeats(
+        selectedSeats.filter((s) => s !== seat)
+      );
+
+    } else {
+
+      setSelectedSeats([
+        ...selectedSeats,
+        seat,
+      ]);
+
+    }
+
+  };
 
   const continueBooking = () => {
-    if (!selectedSeat) {
-      alert("Please select a seat");
+
+    if (selectedSeats.length === 0) {
+
+      alert("Please select at least one seat.");
+
       return;
+
     }
 
     navigate("/passenger", {
       state: {
-        seat_number: selectedSeat,
+        ...bus,
+        seats: selectedSeats,
+        totalFare:
+          selectedSeats.length * farePerSeat,
       },
     });
+
+  };
+
+  const seatStyle = (seat) => {
+
+    if (bookedSeats.includes(seat)) {
+
+      return {
+        background: "#dc3545",
+        color: "#fff",
+      };
+
+    }
+
+    if (selectedSeats.includes(seat)) {
+
+      return {
+        background: "#0d6efd",
+        color: "#fff",
+      };
+
+    }
+
+    return {
+      background: "#28a745",
+      color: "#fff",
+    };
+
   };
 
   return (
+
     <div
       style={{
-        padding: "20px",
-        fontFamily: "Arial, sans-serif",
+        padding: 20,
+        maxWidth: 520,
+        margin: "auto",
+        fontFamily: "Arial",
       }}
     >
-      <h1 style={{ textAlign: "center" }}>
-        🚌 Select Your Seat
-      </h1>
+
+      <h2
+        style={{
+          textAlign: "center",
+        }}
+      >
+        🚌 Select Your Seats
+      </h2>
+
+      <div
+        style={{
+          background: "#f8f9fa",
+          padding: 15,
+          borderRadius: 10,
+          marginBottom: 20,
+        }}
+      >
+
+        <h3>
+          {bus.bus_name}
+        </h3>
+
+        <p>
+
+          {bus.source} ➜ {bus.destination}
+
+        </p>
+
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          marginBottom: 20,
+          fontWeight: "bold",
+        }}
+      >
+
+        <span>🟢 Available</span>
+
+        <span>🔵 Selected</span>
+
+        <span>🔴 Booked</span>
+
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 20,
+          fontSize: 22,
+        }}
+      >
+
+        👨‍✈️ Driver
+
+      </div>
 
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(4,60px)",
-          gap: "12px",
+          gridTemplateColumns:
+            "repeat(5,60px)",
+          gap: 10,
           justifyContent: "center",
-          marginTop: "30px",
         }}
       >
-        {Array.from({ length: totalSeats }, (_, i) => {
-          const seat = i + 1;
+        {Array.from({ length: 52 }, (_, index) => {
+
+          const seat = index + 1;
 
           return (
+
             <button
               key={seat}
-              onClick={() => setSelectedSeat(seat)}
+              onClick={() => toggleSeat(seat)}
               style={{
-                height: "60px",
+                width: 60,
+                height: 60,
                 border: "none",
-                borderRadius: "10px",
-                cursor: "pointer",
-                background:
-                  selectedSeat === seat
-                    ? "#2196f3"
-                    : "#22c55e",
-                color: "#fff",
+                borderRadius: 10,
+                cursor: bookedSeats.includes(seat)
+                  ? "not-allowed"
+                  : "pointer",
                 fontWeight: "bold",
+                ...seatStyle(seat),
               }}
             >
               {seat}
             </button>
+
           );
+
         })}
+
       </div>
 
-      {selectedSeat && (
-        <div
+      <div
+        style={{
+          marginTop: 30,
+          background: "#f8f9fa",
+          padding: 15,
+          borderRadius: 10,
+        }}
+      >
+
+        <h3>Selected Seats</h3>
+
+        <p>
+          {selectedSeats.length === 0
+            ? "No Seat Selected"
+            : selectedSeats.join(", ")}
+        </p>
+
+        <h3>
+          Total Fare : ₹
+          {selectedSeats.length * farePerSeat}
+        </h3>
+
+        <button
+          onClick={continueBooking}
           style={{
-            textAlign: "center",
-            marginTop: "30px",
+            width: "100%",
+            padding: 15,
+            background: "#198754",
+            color: "#fff",
+            border: "none",
+            borderRadius: 10,
+            cursor: "pointer",
+            fontSize: 18,
+            marginTop: 15,
           }}
         >
-          <h2>
-            Selected Seat : {selectedSeat}
-          </h2>
+          Continue Booking
+        </button>
 
-          <button
-            onClick={continueBooking}
-            style={{
-              padding: "14px 25px",
-              background: "#e63946",
-              color: "#fff",
-              border: "none",
-              borderRadius: "8px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            Continue Booking
-          </button>
-        </div>
-      )}
+      </div>
+
     </div>
+
   );
+
 }
 
 export default Seats;
+

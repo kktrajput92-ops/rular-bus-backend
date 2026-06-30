@@ -7,7 +7,14 @@ function Passenger() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const { schedule_id, seat_number } = location.state || {};
+  const {
+    schedule_id,
+    seats = [],
+    totalFare = 0,
+    bus_name = "",
+    source = "",
+    destination = "",
+  } = location.state || {};
 
   const [loading, setLoading] = useState(false);
 
@@ -35,11 +42,11 @@ function Passenger() {
     if (
       !form.full_name ||
       !form.phone ||
-      !form.gender ||
       !form.age
     ) {
 
-      alert("Please fill all required fields");
+      alert("Please fill all required fields.");
+
       return;
 
     }
@@ -64,14 +71,16 @@ function Passenger() {
 
         passenger_id: passenger.id,
         schedule_id,
-        seat_number,
+        seat_number: seats[0],
 
       });
 
       navigate("/payment", {
 
         state: {
+
           booking: bookingRes.data.booking,
+
         },
 
       });
@@ -98,38 +107,70 @@ function Passenger() {
     <div
       style={{
         minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
         background: "#f5f7fb",
+        padding: 20,
+        fontFamily: "Arial",
       }}
     >
 
       <div
         style={{
-          width: "90%",
-          maxWidth: "500px",
+          maxWidth: 520,
+          margin: "auto",
           background: "#fff",
-          padding: "25px",
-          borderRadius: "15px",
+          borderRadius: 15,
+          padding: 25,
         }}
       >
 
-        <h2 style={{ textAlign: "center" }}>
+        <h2
+          style={{
+            textAlign: "center",
+          }}
+        >
           Passenger Details
         </h2>
+        <div
+          style={{
+            background: "#eef6ff",
+            padding: 15,
+            borderRadius: 10,
+            marginTop: 20,
+            marginBottom: 20,
+          }}
+        >
+
+          <h3>{bus_name}</h3>
+
+          <p>
+            📍 {source} → {destination}
+          </p>
+
+          <p>
+            💺 Selected Seat(s):{" "}
+            {seats.length ? seats.join(", ") : "-"}
+          </p>
+
+          <p>
+            💰 Total Fare: ₹{totalFare}
+          </p>
+
+        </div>
 
         <form onSubmit={handleSubmit}>
+
           <input
             type="text"
             name="full_name"
             placeholder="Full Name"
             value={form.full_name}
             onChange={handleChange}
-            required
+            style={{
+              width: "100%",
+              padding: 12,
+              marginBottom: 12,
+            }}
           />
-
-          <br /><br />
 
           <input
             type="text"
@@ -137,10 +178,12 @@ function Passenger() {
             placeholder="Phone Number"
             value={form.phone}
             onChange={handleChange}
-            required
+            style={{
+              width: "100%",
+              padding: 12,
+              marginBottom: 12,
+            }}
           />
-
-          <br /><br />
 
           <input
             type="email"
@@ -148,21 +191,27 @@ function Passenger() {
             placeholder="Email (Optional)"
             value={form.email}
             onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: 12,
+              marginBottom: 12,
+            }}
           />
-
-          <br /><br />
 
           <select
             name="gender"
             value={form.gender}
             onChange={handleChange}
+            style={{
+              width: "100%",
+              padding: 12,
+              marginBottom: 12,
+            }}
           >
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
-
-          <br /><br />
 
           <input
             type="number"
@@ -170,24 +219,30 @@ function Passenger() {
             placeholder="Age"
             value={form.age}
             onChange={handleChange}
-            required
+            style={{
+              width: "100%",
+              padding: 12,
+              marginBottom: 20,
+            }}
           />
-
-                   <button
+          <button
             type="submit"
             disabled={loading}
             style={{
               width: "100%",
-              padding: "12px",
+              padding: 14,
               background: "#e63946",
               color: "#fff",
               border: "none",
-              borderRadius: "8px",
+              borderRadius: 8,
               cursor: "pointer",
-              fontSize: "16px",
+              fontSize: 16,
+              fontWeight: "bold",
             }}
           >
-            {loading ? "Please Wait..." : "Continue To Payment"}
+            {loading
+              ? "Please Wait..."
+              : "Continue To Payment"}
           </button>
 
         </form>
@@ -199,5 +254,4 @@ function Passenger() {
   );
 
 }
-
 export default Passenger;
