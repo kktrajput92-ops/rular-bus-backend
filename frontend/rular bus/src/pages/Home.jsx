@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-
+import logo from "../assets/logo/rular-logo.png";
 function Home() {
 
   const navigate = useNavigate();
@@ -55,25 +55,81 @@ function Home() {
       }}
     >
 
-      <div
-        style={{
-          maxWidth: 850,
-          margin: "auto",
-          background: "#fff",
-          padding: 25,
-          borderRadius: 15,
-          boxShadow: "0 8px 25px rgba(0,0,0,.15)",
-        }}
-      >
+       <div
+  style={{
+    maxWidth: 850,
+    margin: "0 auto 20px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: "12px 18px",
+    background: "#ffffff",
+    borderRadius: "16px",
+    boxShadow: "0 4px 15px rgba(0,0,0,.08)",
+  }}
+>
+  <div
+    style={{
+      fontSize: "22px",
+      fontWeight: "700",
+      color: "#0B3D91",
+    }}
+  >
+    🚌 Rular Bus
+  </div>
 
-        <h1
-          style={{
-            textAlign: "center",
-            color: "#d62828",
-          }}
-        >
-          🚌 Rular Bus
-        </h1>
+  <div
+    style={{
+      fontSize: "15px",
+      color: "#555",
+      fontWeight: "500",
+    }}
+  >
+    Home
+  </div>
+</div>
+
+
+<div
+  style={{
+    textAlign: "center",
+    marginBottom: "15px",
+  }}
+>
+  <img
+    src={logo}
+    alt="Rular Bus"
+    style={{
+      width: "220px",
+      maxWidth: "100%",
+      height: "auto",
+    }}
+  />
+
+  <p
+  style={{
+    textAlign: "center",
+    fontSize: "32px",
+    fontWeight: "700",
+    color: "#0B3D91",
+    marginTop: "15px",
+    marginBottom: "10px",
+  }}
+>
+  India's Smart Bus Booking Platform
+</p>
+
+<p
+  style={{
+    textAlign: "center",
+    color: "#6b7280",
+    fontSize: "18px",
+    marginBottom: "25px",
+  }}
+>
+  Book Safe • Travel Smart • Reach Happy
+</p>
+</div>
 
         <p
           style={{
@@ -221,8 +277,6 @@ function Home() {
         )}
 
       </div>
-
-    </div>
 
   );
 
