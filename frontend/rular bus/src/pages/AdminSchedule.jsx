@@ -3,13 +3,17 @@ import { API_BASE } from "../api/api";
 
 function AdminSchedule() {
 
+  const API = `${API_BASE}/schedules`;
   const BUS_API = `${API_BASE}/buses`;
   const ROUTE_API = `${API_BASE}/routes`;
-  const SCHEDULE_API = `${API_BASE}/schedules`;
 
   const [buses, setBuses] = useState([]);
   const [routes, setRoutes] = useState([]);
   const [schedules, setSchedules] = useState([]);
+
+  const [editingId, setEditingId] = useState(null);
+
+  const [loading, setLoading] = useState(false);
 
   const [form, setForm] = useState({
     bus_id: "",
@@ -26,7 +30,7 @@ function AdminSchedule() {
         await Promise.all([
           fetch(BUS_API),
           fetch(ROUTE_API),
-          fetch(SCHEDULE_API),
+          fetch(API),
         ]);
 
       const busData = await busRes.json();
@@ -60,23 +64,42 @@ function AdminSchedule() {
 
   };
 
-  const addSchedule = async (e) => {
+  const saveSchedule = async (e) => {
 
     e.preventDefault();
 
+    setLoading(true);
+
     try {
 
-      const res = await fetch(SCHEDULE_API, {
-        method: "POST",
+      const url = editingId
+        ? `${API}/${editingId}`
+        : API;
+
+      const method = editingId
+        ? "PUT"
+        : "POST";
+
+      const res = await fetch(url, {
+
+        method,
+
         headers: {
           "Content-Type": "application/json",
         },
+
         body: JSON.stringify({
+
           bus_id: Number(form.bus_id),
+
           route_id: Number(form.route_id),
+
           departure_time: form.departure_time,
+
           arrival_time: form.arrival_time,
+
         }),
+
       });
 
       const data = await res.json();
@@ -85,12 +108,69 @@ function AdminSchedule() {
 
       if (data.success) {
 
+        setEditingId(null);
+
         setForm({
+
           bus_id: "",
+
           route_id: "",
+
           departure_time: "",
+
           arrival_time: "",
+
         });
+
+        loadData();
+
+      }
+
+    } catch (err) {
+
+      console.error(err);
+
+    }
+
+    setLoading(false);
+
+  };
+
+  const editSchedule = (schedule) => {
+
+    setEditingId(schedule.id);
+
+    setForm({
+
+      bus_id: schedule.bus_id,
+
+      route_id: schedule.route_id,
+
+      departure_time: schedule.departure_time.slice(0,16),
+
+      arrival_time: schedule.arrival_time.slice(0,16),
+
+    });
+
+  };
+
+  const deleteSchedule = async (id) => {
+
+    if (!window.confirm("Delete this schedule?")) return;
+
+    try {
+
+      const res = await fetch(`${API}/${id}`, {
+
+        method: "DELETE",
+
+      });
+
+      const data = await res.json();
+
+      alert(data.message);
+
+      if (data.success) {
 
         loadData();
 
@@ -110,7 +190,7 @@ function AdminSchedule() {
 
       <h2>🕒 Schedule Management</h2>
 
-      <form onSubmit={addSchedule}>
+      <form onSubmit={saveSchedule}>
         <select
           name="bus_id"
           value={form.bus_id}
@@ -167,9 +247,44 @@ function AdminSchedule() {
 
         <br /><br />
 
-        <button type="submit">
-          Add Schedule
+        <button
+          type="submit"
+          disabled={loading}
+        >
+          {loading
+            ? "Saving..."
+            : editingId
+            ? "Update Schedule"
+            : "Add Schedule"}
         </button>
+
+        {editingId && (
+
+          <button
+            type="button"
+            onClick={() => {
+
+              setEditingId(null);
+
+              setForm({
+
+                bus_id: "",
+
+                route_id: "",
+
+                departure_time: "",
+
+                arrival_time: "",
+
+              });
+
+            }}
+            style={{ marginLeft: "10px" }}
+          >
+            Cancel
+          </button>
+
+        )}
 
       </form>
 
@@ -187,20 +302,30 @@ function AdminSchedule() {
       >
 
         <thead>
+
           <tr>
+
             <th>ID</th>
+
             <th>Bus</th>
+
             <th>Route</th>
+
             <th>Departure</th>
+
             <th>Arrival</th>
+
+            <th>Actions</th>
+
           </tr>
+
         </thead>
 
         <tbody>
           {schedules.length === 0 ? (
 
             <tr>
-              <td colSpan="5">No Schedules Found</td>
+              <td colSpan="6">No Schedules Found</td>
             </tr>
 
           ) : (
@@ -208,6 +333,7 @@ function AdminSchedule() {
             schedules.map((schedule) => (
 
               <tr key={schedule.id}>
+
                 <td>{schedule.id}</td>
 
                 <td>
@@ -226,6 +352,39 @@ function AdminSchedule() {
 
                 <td>
                   {new Date(schedule.arrival_time).toLocaleString()}
+                </td>
+
+                <td>
+
+                  <button
+                    onClick={() => editSchedule(schedule)}
+                    style={{
+                      marginRight: "8px",
+                      background: "#0d6efd",
+                      color: "#fff",
+                      border: "none",
+                      padding: "6px 10px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Edit
+                  </button>
+
+                  <button
+                    onClick={() => deleteSchedule(schedule.id)}
+                    style={{
+                      background: "#dc3545",
+                      color: "#fff",
+                      border: "none",
+                      padding: "6px 10px",
+                      borderRadius: "5px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Delete
+                  </button>
+
                 </td>
 
               </tr>

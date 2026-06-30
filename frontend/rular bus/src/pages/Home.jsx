@@ -3,36 +3,55 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 
 function Home() {
+
   const navigate = useNavigate();
 
   const [source, setSource] = useState("");
+
   const [destination, setDestination] = useState("");
+
   const [journeyDate, setJourneyDate] = useState("");
+
   const [buses, setBuses] = useState([]);
+
   const [loading, setLoading] = useState(false);
 
   const searchBus = async () => {
-    console.time("Search API");
+
+    if (!source || !destination || !journeyDate) {
+
+      alert("Please fill all fields");
+
+      return;
+
+    }
+
     setLoading(true);
 
     try {
+
       const res = await api.get(
-        `/search?source=${source}&destination=${destination}`
+
+        `/search?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&journey_date=${journeyDate}`
+
       );
 
-      console.timeEnd("Search API");
+      setBuses(res.data.buses || []);
 
-      setBuses(res.data.buses);
     } catch (err) {
-      console.timeEnd("Search API");
+
       console.error(err);
+
       alert("Unable to search buses");
-    } finally {
-      setLoading(false);
+
     }
+
+    setLoading(false);
+
   };
 
   return (
+
     <div
       style={{
         minHeight: "100vh",
@@ -41,22 +60,38 @@ function Home() {
         fontFamily: "Arial",
       }}
     >
+
       <div
         style={{
-          maxWidth: "700px",
+          maxWidth: "800px",
           margin: "auto",
-          background: "#fff",
+          background: "#ffffff",
           borderRadius: "15px",
-          padding: "20px",
+          padding: "25px",
           boxShadow: "0 10px 25px rgba(0,0,0,.15)",
         }}
       >
-        <h1 style={{ textAlign: "center", color: "#d62828" }}>
+
+        <h1
+          style={{
+            textAlign: "center",
+            color: "#d62828",
+          }}
+        >
           🚌 Rular Bus
         </h1>
 
+        <p
+          style={{
+            textAlign: "center",
+            color: "#666",
+          }}
+        >
+          Search & Book Your Journey
+        </p>
         <input
-          placeholder="From"
+          type="text"
+          placeholder="From City"
           value={source}
           onChange={(e) => setSource(e.target.value)}
           style={{
@@ -67,7 +102,8 @@ function Home() {
         />
 
         <input
-          placeholder="To"
+          type="text"
+          placeholder="To City"
           value={destination}
           onChange={(e) => setDestination(e.target.value)}
           style={{
@@ -105,55 +141,81 @@ function Home() {
           {loading ? "Searching..." : "Search Buses"}
         </button>
 
-        {buses.map((bus) => (
-          <div
-            key={bus.schedule_id}
-            style={{
-              marginTop: "20px",
-              border: "1px solid #ddd",
-              borderRadius: "12px",
-              padding: "15px",
-            }}
-          >
-            <h2>{bus.bus_name}</h2>
+        <hr />
 
-            <p>
-              {bus.source} ➜ {bus.destination}
-            </p>
+        <h3>Available Buses</h3>
 
-            <p>🚌 Bus No: {bus.bus_number}</p>
+        {buses.length === 0 ? (
 
-            <p>💺 Available Seats: {bus.available_seats}</p>
+          <p>No buses found.</p>
 
-            <p>
-              🕗 Departure:{" "}
-              {new Date(bus.departure_time).toLocaleTimeString()}
-            </p>
+        ) : (
 
-            <p>
-              🕐 Arrival:{" "}
-              {new Date(bus.arrival_time).toLocaleTimeString()}
-            </p>
+          buses.map((bus) => (
 
-            <button
-              onClick={() => navigate("/seats")}
+            <div
+              key={bus.schedule_id}
               style={{
-                width: "100%",
-                padding: "12px",
-                background: "#198754",
-                color: "#fff",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
+                border: "1px solid #ddd",
+                borderRadius: "10px",
+                padding: "15px",
+                marginTop: "15px",
               }}
             >
-              View Seats
-            </button>
-          </div>
-        ))}
+              <h3>{bus.bus_name}</h3>
+
+              <p>
+                🚌 {bus.bus_number}
+              </p>
+
+              <p>
+                📍 {bus.source} → {bus.destination}
+              </p>
+
+              <p>
+                💺 Available Seats: {bus.available_seats}
+              </p>
+
+              <p>
+                🕒 Departure:{" "}
+                {new Date(bus.departure_time).toLocaleString()}
+              </p>
+
+              <p>
+                🕒 Arrival:{" "}
+                {new Date(bus.arrival_time).toLocaleString()}
+              </p>
+
+              <button
+                onClick={() =>
+                  navigate("/seats", {
+                    state: bus,
+                  })
+                }
+                style={{
+                  width: "100%",
+                  padding: "12px",
+                  background: "#198754",
+                  color: "#fff",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                }}
+              >
+                Select Seats
+              </button>
+
+            </div>
+
+          ))
+
+        )}
       </div>
+
     </div>
+
   );
+
 }
 
 export default Home;
