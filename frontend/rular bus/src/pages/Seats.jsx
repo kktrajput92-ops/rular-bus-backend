@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import DriverCabin from "../components/seats/DriverCabin";
 import SeatGrid from "../components/seats/SeatGrid";
+import BookingSummary from "../components/seats/BookingSummary";
 function Seats() {
 
   const navigate = useNavigate();
@@ -189,46 +190,11 @@ fontSize: "15px",
 
       </div>
 
-      <div
-        style={{
-          marginTop: 30,
-          background: "#f8f9fa",
-          padding: 15,
-          borderRadius: 10,
-        }}
-      >
-
-        <h3>Selected Seats</h3>
-
-        <p>
-          {selectedSeats.length === 0
-            ? "No Seat Selected"
-            : selectedSeats.join(", ")}
-        </p>
-
-        <h3>
-          Total Fare : ₹
-          {selectedSeats.length * farePerSeat}
-        </h3>
-
-        <button
-          onClick={continueBooking}
-          style={{
-            width: "100%",
-            padding: 15,
-            background: "#198754",
-            color: "#fff",
-            border: "none",
-            borderRadius: 10,
-            cursor: "pointer",
-            fontSize: 18,
-            marginTop: 15,
-          }}
-        >
-          Continue Booking
-        </button>
-
-      </div>
+       <BookingSummary
+  selectedSeats={selectedSeats}
+  farePerSeat={farePerSeat}
+  onContinue={continueBooking}
+/>
 
     </div>
 
