@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import logo from "../assets/logo/rular-logo.png";
 import Navbar from "../components/Navbar";
+import Hero from "../components/Hero";
 function Home() {
 
   const navigate = useNavigate();
@@ -58,41 +59,7 @@ function Home() {
   >
 
     <Navbar />
-
-    <div
-      style={{
-        maxWidth: 850,
-    margin: "0 auto 20px",
-    display: "flex",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: "12px 18px",
-    background: "#ffffff",
-    borderRadius: "16px",
-    boxShadow: "0 4px 15px rgba(0,0,0,.08)",
-  }}
->
-  <div
-    style={{
-      fontSize: "22px",
-      fontWeight: "700",
-      color: "#0B3D91",
-    }}
-  >
-    🚌 Rular Bus
-  </div>
-
-  <div
-    style={{
-      fontSize: "15px",
-      color: "#555",
-      fontWeight: "500",
-    }}
-  >
-    Home
-  </div>
-</div>
-
+    <Hero />
 
 <div
   style={{
