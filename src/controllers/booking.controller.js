@@ -135,7 +135,80 @@ const getAllBookings = async (req,res)=>{
 
   }
 };
+// Get Booking By ID
+const getBookingById = async (req, res) => {
+  try {
 
+    const { id } = req.params;
+
+    const result = await pool.query(
+      `
+      SELECT
+        b.id,
+        b.seat_number,
+        b.booking_status,
+
+        p.id AS passenger_id,
+        p.full_name,
+        p.phone,
+        p.email,
+        p.gender,
+        p.age,
+
+        s.id AS schedule_id,
+        s.departure_time,
+        s.arrival_time,
+
+        bus.id AS bus_id,
+        bus.bus_name,
+        bus.bus_number,
+
+        r.id AS route_id,
+        r.source,
+        r.destination
+
+      FROM bookings b
+
+      JOIN passengers p
+        ON b.passenger_id = p.id
+
+      JOIN schedules s
+        ON b.schedule_id = s.id
+
+      JOIN buses bus
+        ON s.bus_id = bus.id
+
+      JOIN routes r
+        ON s.route_id = r.id
+
+      WHERE b.id = $1
+      `,
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found",
+      });
+    }
+
+    res.json({
+      success: true,
+      booking: result.rows[0],
+    });
+
+  } catch (err) {
+
+    console.error(err);
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+
+  }
+};
 // Update Booking
 const updateBooking = async (req,res)=>{
   try{
@@ -257,9 +330,10 @@ const cancelBooking = async (req,res)=>{
   }
 };
 
-module.exports={
+module.exports = {
   addBooking,
   getAllBookings,
+  getBookingById,
   updateBooking,
   cancelBooking,
 };
