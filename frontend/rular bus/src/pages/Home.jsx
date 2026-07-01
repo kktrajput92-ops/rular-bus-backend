@@ -5,6 +5,10 @@ import logo from "../assets/logo/rular-logo.png";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import SearchCard from "../components/SearchCard";
+import PopularRoutes from "../components/PopularRoutes";
+import WhyChooseUs from "../components/WhyChooseUs";
+import BusCard from "../components/BusCard";
+import Footer from "../components/Footer";
 function Home() {
 
   const navigate = useNavigate();
@@ -62,7 +66,8 @@ function Home() {
     <Navbar />
     <Hero />
 <SearchCard />
-
+<PopularRoutes />
+       <WhyChooseUs />
         <h3>Available Buses</h3>
         {buses.length === 0 ? (
 
@@ -79,72 +84,23 @@ function Home() {
         ) : (
 
           buses.map((bus) => (
+  <BusCard
+    key={bus.id}
+    bus={bus}
+    onSelect={() =>
+      navigate("/seats", {
+        state: bus,
+      })
+    }
+  />
+))
 
-            <div
-              key={bus.schedule_id}
-              style={{
-                border: "1px solid #ddd",
-                borderRadius: 12,
-                padding: 16,
-                marginTop: 15,
-                background: "#fafafa",
-              }}
-            >
+      
+          
 
-              <h3>{bus.bus_name}</h3>
-
-              <p>🚌 {bus.bus_number}</p>
-
-              <p>
-                📍 {bus.source} → {bus.destination}
-              </p>
-
-              <p>
-                💺 Available Seats : {bus.available_seats}
-              </p>
-
-              <p>
-                🕒 Departure :
-                {" "}
-                {new Date(
-                  bus.departure_time
-                ).toLocaleString()}
-              </p>
-
-              <p>
-                🕒 Arrival :
-                {" "}
-                {new Date(
-                  bus.arrival_time
-                ).toLocaleString()}
-              </p>
-
-              <button
-                onClick={() =>
-                  navigate("/seats", {
-                    state: bus,
-                  })
-                }
-                style={{
-                  width: "100%",
-                  padding: 12,
-                  marginTop: 12,
-                  background: "#198754",
-                  color: "#fff",
-                  border: "none",
-                  borderRadius: 8,
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                Select Seats
-              </button>
-
-            </div>
-
-          ))
+    
         )}
-
+    <Footer />
       </div>
 
   );
