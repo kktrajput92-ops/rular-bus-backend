@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import DriverCabin from "../components/seats/DriverCabin";
 import SeatGrid from "../components/seats/SeatGrid";
 import BookingSummary from "../components/seats/BookingSummary";
+import SeatRenderer from "../components/seats/SeatRenderer";
 function Seats() {
 
   const navigate = useNavigate();
@@ -136,15 +137,34 @@ function Seats() {
         }}
       >
 
-        <span>🟢 Available</span>
+       <div
+  style={{
+    display: "flex",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    background: "#f8fafc",
+    padding: "14px",
+    borderRadius: "16px",
+    marginBottom: "24px",
+    boxShadow: "0 6px 18px rgba(0,0,0,.08)",
+    fontWeight: "600",
+    flexWrap: "wrap",
+    gap: "12px",
+  }}
+>
+  <span>🟢 Available</span>
 
-        <span>🔵 Selected</span>
+  <span>🔵 Selected</span>
 
-        <span>🔴 Booked</span>
+  <span>🔴 Booked</span>
+
+  <span>⭐ Premium</span>
+</div>
 
       </div>
 
      <DriverCabin />
+<SeatRenderer />
 <div
   style={{
     display: "grid",
