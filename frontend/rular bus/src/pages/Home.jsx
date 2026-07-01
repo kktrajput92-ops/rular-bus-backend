@@ -34,7 +34,13 @@ function Home() {
       const res = await api.get(
         `/search?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&journey_date=${journeyDate}`
       );
+console.log("Search Params:", {
+  source,
+  destination,
+  journeyDate,
+});
 
+console.log("API Response:", res.data);
       setBuses(res.data.buses || []);
 
     } catch (err) {
@@ -65,7 +71,16 @@ function Home() {
 
     <Navbar />
     <Hero />
-<SearchCard />
+<SearchCard
+  source={source}
+  destination={destination}
+  journeyDate={journeyDate}
+  setSource={setSource}
+  setDestination={setDestination}
+  setJourneyDate={setJourneyDate}
+  searchBus={searchBus}
+  loading={loading}
+/>
 <PopularRoutes />
        <WhyChooseUs />
         <h3>Available Buses</h3>
