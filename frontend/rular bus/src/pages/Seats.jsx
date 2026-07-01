@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
+import DriverCabin from "../components/seats/DriverCabin";
+import SeatGrid from "../components/seats/SeatGrid";
 function Seats() {
 
   const navigate = useNavigate();
@@ -142,31 +143,22 @@ function Seats() {
 
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: 20,
-          fontSize: 22,
-        }}
-      >
-
-        👨‍✈️ Driver
-
-      </div>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(5,60px)",
-          gap: 10,
-          justifyContent: "center",
-        }}
-      >
+     <DriverCabin />
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 72px)",
+    columnGap: "18px",
+    rowGap: "18px",
+    justifyContent: "center",
+  }}
+>
         {Array.from({ length: 52 }, (_, index) => {
 
           const seat = index + 1;
+const row = String.fromCharCode(65 + Math.floor(index / 2));
+const column = (index % 2) + 1;
+const seatLabel = `${row}${column}`;
 
           return (
 
@@ -174,10 +166,13 @@ function Seats() {
               key={seat}
               onClick={() => toggleSeat(seat)}
               style={{
-                width: 60,
-                height: 60,
-                border: "none",
-                borderRadius: 10,
+               width: 72,
+height: 72,
+border: "2px solid rgba(255,255,255,0.25)",
+borderRadius: "18px",
+boxShadow: "0 8px 20px rgba(0,0,0,.12)",
+transition: "all .25s ease",
+fontSize: "15px",
                 cursor: bookedSeats.includes(seat)
                   ? "not-allowed"
                   : "pointer",
@@ -185,7 +180,7 @@ function Seats() {
                 ...seatStyle(seat),
               }}
             >
-              {seat}
+             {seatLabel}
             </button>
 
           );
