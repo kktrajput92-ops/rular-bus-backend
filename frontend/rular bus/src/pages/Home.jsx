@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import logo from "../assets/logo/rular-logo.png";
+import Navbar from "../components/Navbar";
 function Home() {
 
   const navigate = useNavigate();
@@ -46,18 +47,21 @@ function Home() {
 
   return (
 
+
+  <div
+    style={{
+      minHeight: "100vh",
+      background: "#f3f4f6",
+      padding: 20,
+      fontFamily: "Arial",
+    }}
+  >
+
+    <Navbar />
+
     <div
       style={{
-        minHeight: "100vh",
-        background: "#f3f4f6",
-        padding: 20,
-        fontFamily: "Arial",
-      }}
-    >
-
-       <div
-  style={{
-    maxWidth: 850,
+        maxWidth: 850,
     margin: "0 auto 20px",
     display: "flex",
     justifyContent: "space-between",
