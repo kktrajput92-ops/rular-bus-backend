@@ -1,4 +1,13 @@
-export default function SearchCard() {
+export default function SearchCard({
+  source,
+  destination,
+  journeyDate,
+  setSource,
+  setDestination,
+  setJourneyDate,
+  searchBus,
+  loading,
+}) {
   return (
     <div
       style={{
@@ -23,6 +32,9 @@ export default function SearchCard() {
       <input
         type="text"
         placeholder="📍 From City"
+   value={source}
+onChange={(e) =>
+ setSource(e.target.value)}
         style={{
           width: "100%",
           padding: "12px",
@@ -36,6 +48,9 @@ export default function SearchCard() {
       <input
         type="text"
         placeholder="📍 To City"
+value={destination}
+onChange={(e) => 
+setDestination(e.target.value)}
         style={{
           width: "100%",
           padding: "12px",
@@ -48,6 +63,9 @@ export default function SearchCard() {
 
       <input
         type="date"
+value={journeyDate}
+onChange={(e) =>
+ setJourneyDate(e.target.value)}
         style={{
           width: "100%",
           padding: "12px",
@@ -58,20 +76,22 @@ export default function SearchCard() {
         }}
       />
 
-      <button
-        style={{
-          width: "100%",
-          padding: "14px",
-          background: "#0B3D91",
-          color: "#fff",
-          border: "none",
-          borderRadius: "10px",
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
-      >
-        🔍 Search Buses
-      </button>
+     <button
+  onClick={searchBus}
+  disabled={loading}
+  style={{
+    width: "100%",
+    padding: "14px",
+    background: "#0B3D91",
+    color: "#fff",
+    border: "none",
+    borderRadius: "10px",
+    fontWeight: "bold",
+    cursor: "pointer",
+  }}
+>
+  {loading ? "Searching..." : "🔍 Search Buses"}
+</button>
     </div>
   );
 }
