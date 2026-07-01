@@ -4,6 +4,7 @@ import api from "../api/api";
 import logo from "../assets/logo/rular-logo.png";
 import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
+import SearchCard from "../components/SearchCard";
 function Home() {
 
   const navigate = useNavigate();
@@ -60,7 +61,7 @@ function Home() {
 
     <Navbar />
     <Hero />
-
+<SearchCard />
 <div
   style={{
     textAlign: "center",
