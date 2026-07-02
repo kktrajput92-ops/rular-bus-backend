@@ -13,8 +13,8 @@ export default function SeatButton({
       style={{
         width: 64,
         height: 64,
-        border: "none",
-        borderRadius: 16,
+        border: "2px solid rgba(255,255,255,0.25)",
+        borderRadius: 18,
         background: isBooked
           ? "#dc3545"
           : isSelected
@@ -22,10 +22,13 @@ export default function SeatButton({
           : "#22c55e",
         color: "#fff",
         fontWeight: "bold",
-        fontSize: "15px",
+        fontSize: "16px",
         cursor: isBooked ? "not-allowed" : "pointer",
-        boxShadow: "0 8px 18px rgba(0,0,0,.15)",
-        transition: "all .2s ease",
+        boxShadow: isSelected
+  ? "0 0 18px rgba(13,110,253,.55)"
+  : "0 10px 22px rgba(0,0,0,.18)",
+        transition: "all .25s ease",
+transform: isSelected ? "scale(1.06)" : "scale(1)",
       }}
     >
       {seat.label}
