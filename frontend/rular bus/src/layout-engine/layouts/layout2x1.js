@@ -1,3 +1,5 @@
+import { createSeat } from "../helpers";
+
 export default function layout2x1(totalSeats) {
   const rows = [];
 
@@ -11,43 +13,28 @@ export default function layout2x1(totalSeats) {
 
     // Left Window
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}1`,
-        side: "left",
-        position: "window",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}1`, "left", "window")
+      );
       seatNumber++;
     }
 
     // Left Aisle
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}2`,
-        side: "left",
-        position: "aisle",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}2`, "left", "aisle")
+      );
       seatNumber++;
     }
 
     // Walkway
     row.push(null);
 
-    // Right Window (Single Seat)
+    // Right Window
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}3`,
-        side: "right",
-        position: "window",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}3`, "right", "window")
+      );
       seatNumber++;
     }
 

@@ -1,3 +1,5 @@
+import { createSeat } from "../helpers";
+
 export default function layout3x2(totalSeats) {
   const rows = [];
 
@@ -11,40 +13,25 @@ export default function layout3x2(totalSeats) {
 
     // Left Window
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}1`,
-        side: "left",
-        position: "window",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}1`, "left", "window")
+      );
       seatNumber++;
     }
 
     // Left Middle
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}2`,
-        side: "left",
-        position: "middle",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}2`, "left", "middle")
+      );
       seatNumber++;
     }
 
     // Left Aisle
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}3`,
-        side: "left",
-        position: "aisle",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}3`, "left", "aisle")
+      );
       seatNumber++;
     }
 
@@ -53,27 +40,17 @@ export default function layout3x2(totalSeats) {
 
     // Right Aisle
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}4`,
-        side: "right",
-        position: "aisle",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}4`, "right", "aisle")
+      );
       seatNumber++;
     }
 
     // Right Window
     if (seatNumber <= totalSeats) {
-      row.push({
-        id: seatNumber,
-        label: `${rowLetter}5`,
-        side: "right",
-        position: "window",
-        status: "available",
-        type: "normal",
-      });
+      row.push(
+        createSeat(seatNumber, `${rowLetter}5`, "right", "window")
+      );
       seatNumber++;
     }
 
