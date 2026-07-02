@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../api/api";
 
 function AdminBus() {
@@ -6,10 +6,9 @@ function AdminBus() {
   const API = `${API_BASE}/buses`;
 
   const [buses, setBuses] = useState([]);
-
-  const [editingId, setEditingId] = useState(null);
-
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [search, setSearch] = useState("");
 
   const [form, setForm] = useState({
     bus_name: "",
@@ -23,14 +22,13 @@ function AdminBus() {
     try {
 
       const res = await fetch(API);
-
       const data = await res.json();
 
       setBuses(data.buses || []);
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -42,18 +40,28 @@ function AdminBus() {
 
   }, []);
 
-  const handleChange = (e) => {
+  const filteredBuses = useMemo(() => {
 
-    setForm({
+    return buses.filter((bus) => {
 
-      ...form,
+      const text =
+        `${bus.bus_name} ${bus.bus_number} ${bus.bus_type}`
+          .toLowerCase();
 
-      [e.target.name]: e.target.value,
+      return text.includes(search.toLowerCase());
 
     });
 
-  };
+  }, [buses, search]);
 
+  const handleChange = (e) => {
+
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+
+  };
   const saveBus = async (e) => {
 
     e.preventDefault();
@@ -71,21 +79,14 @@ function AdminBus() {
         : "POST";
 
       const res = await fetch(url, {
-
         method,
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
-
           ...form,
-
           total_seats: Number(form.total_seats),
-
         }),
-
       });
 
       const data = await res.json();
@@ -97,15 +98,10 @@ function AdminBus() {
         setEditingId(null);
 
         setForm({
-
           bus_name: "",
-
           bus_number: "",
-
           bus_type: "",
-
           total_seats: "",
-
         });
 
         loadBuses();
@@ -114,7 +110,7 @@ function AdminBus() {
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -127,15 +123,10 @@ function AdminBus() {
     setEditingId(bus.id);
 
     setForm({
-
       bus_name: bus.bus_name,
-
       bus_number: bus.bus_number,
-
       bus_type: bus.bus_type,
-
       total_seats: bus.total_seats,
-
     });
 
   };
@@ -143,13 +134,10 @@ function AdminBus() {
   const deleteBus = async (id) => {
 
     if (!window.confirm("Delete this bus?")) return;
-
     try {
 
       const res = await fetch(`${API}/${id}`, {
-
         method: "DELETE",
-
       });
 
       const data = await res.json();
@@ -164,7 +152,7 @@ function AdminBus() {
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -172,194 +160,219 @@ function AdminBus() {
 
   return (
 
-    <div style={{ padding: "20px" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f5f7fa",
+        padding: "30px",
+      }}
+    >
 
-      <h2>🚌 Bus Management</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: "25px",
+          flexWrap: "wrap",
+          gap: "15px",
+        }}
+      >
 
-      <form onSubmit={saveBus}>
+        <div>
+
+          <h1 style={{ margin: 0, color: "#0B3D91" }}>
+            🚍 Fleet Management
+          </h1>
+
+          <p style={{ color: "#666" }}>
+            Rular Bus Admin ERP
+          </p>
+
+        </div>
+
         <input
           type="text"
-          name="bus_name"
-          placeholder="Bus Name"
-          value={form.bus_name}
-          onChange={handleChange}
-          required
+          placeholder="Search Bus..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            padding: "12px",
+            width: "300px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            outline: "none",
+          }}
         />
 
-        <br /><br />
+      </div>
 
-        <input
-          type="text"
-          name="bus_number"
-          placeholder="Bus Number"
-          value={form.bus_number}
-          onChange={handleChange}
-          required
-        />
+      <form
+        onSubmit={saveBus}
+        style={{
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+          marginBottom: "25px",
+          boxShadow: "0 4px 10px rgba(0,0,0,.08)",
+        }}
+      >
 
-        <br /><br />
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+            gap: "15px",
+          }}
+        >
 
-        <input
-          type="text"
-          name="bus_type"
-          placeholder="Bus Type"
-          value={form.bus_type}
-          onChange={handleChange}
-          required
-        />
+          <input
+            name="bus_name"
+            placeholder="Bus Name"
+            value={form.bus_name}
+            onChange={handleChange}
+          />
 
-        <br /><br />
+          <input
+            name="bus_number"
+            placeholder="Bus Number"
+            value={form.bus_number}
+            onChange={handleChange}
+          />
 
-        <input
-          type="number"
-          name="total_seats"
-          placeholder="Total Seats"
-          value={form.total_seats}
-          onChange={handleChange}
-          required
-        />
+          <input
+            name="bus_type"
+            placeholder="Bus Type"
+            value={form.bus_type}
+            onChange={handleChange}
+          />
 
-        <br /><br />
+          <input
+            type="number"
+            name="total_seats"
+            placeholder="Total Seats"
+            value={form.total_seats}
+            onChange={handleChange}
+          />
+
+        </div>
 
         <button
           type="submit"
           disabled={loading}
         >
-          {loading
-            ? "Saving..."
-            : editingId
-            ? "Update Bus"
-            : "Add Bus"}
+          {editingId ? "Update Bus" : "Add Bus"}
         </button>
 
-        {editingId && (
-
-          <button
-            type="button"
-            onClick={() => {
-
-              setEditingId(null);
-
-              setForm({
-
-                bus_name: "",
-
-                bus_number: "",
-
-                bus_type: "",
-
-                total_seats: "",
-
-              });
-
-            }}
-            style={{ marginLeft: "10px" }}
-          >
-            Cancel
-          </button>
-
-        )}
-
       </form>
-
-      <hr />
-
-      <h3>Bus List</h3>
-
-      <table
-        border="1"
-        cellPadding="10"
+      <div
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
+          background: "#fff",
+          borderRadius: "10px",
+          overflow: "hidden",
+          boxShadow: "0 4px 10px rgba(0,0,0,.08)",
         }}
       >
 
-        <thead>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
 
-          <tr>
-
-            <th>ID</th>
-
-            <th>Bus Name</th>
-
-            <th>Bus Number</th>
-
-            <th>Type</th>
-
-            <th>Total Seats</th>
-
-            <th>Actions</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-          {buses.length === 0 ? (
-
+          <thead
+            style={{
+              background: "#0B3D91",
+              color: "#fff",
+            }}
+          >
             <tr>
-              <td colSpan="6">No Buses Found</td>
+              <th style={{ padding: "14px" }}>ID</th>
+              <th>Bus Name</th>
+              <th>Bus Number</th>
+              <th>Type</th>
+              <th>Total Seats</th>
+              <th>Action</th>
             </tr>
+          </thead>
 
-          ) : (
+          <tbody>
 
-            buses.map((bus) => (
+            {filteredBuses.length === 0 ? (
 
-              <tr key={bus.id}>
-
-                <td>{bus.id}</td>
-
-                <td>{bus.bus_name}</td>
-
-                <td>{bus.bus_number}</td>
-
-                <td>{bus.bus_type}</td>
-
-                <td>{bus.total_seats}</td>
-
-                <td>
-
-                  <button
-                    onClick={() => editBus(bus)}
-                    style={{
-                      marginRight: "8px",
-                      background: "#0d6efd",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 10px",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => deleteBus(bus.id)}
-                    style={{
-                      background: "#dc3545",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 10px",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Delete
-                  </button>
-
+              <tr>
+                <td
+                  colSpan="6"
+                  style={{
+                    textAlign: "center",
+                    padding: "25px",
+                  }}
+                >
+                  No Bus Found
                 </td>
-
               </tr>
 
-            ))
+            ) : (
 
-          )}
+              filteredBuses.map((bus) => (
 
-        </tbody>
+                <tr
+                  key={bus.id}
+                  style={{
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
 
-      </table>
+                  <td style={{ padding: "14px" }}>{bus.id}</td>
+                  <td>{bus.bus_name}</td>
+                  <td>{bus.bus_number}</td>
+                  <td>{bus.bus_type}</td>
+                  <td>{bus.total_seats}</td>
+
+                  <td>
+                    <button
+                      onClick={() => editBus(bus)}
+                      style={{
+                        background: "#0B3D91",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px 14px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteBus(bus.id)}
+                      style={{
+                        background: "#D62828",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px 14px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              ))
+
+            )}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
 
