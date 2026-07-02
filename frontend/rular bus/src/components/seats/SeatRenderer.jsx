@@ -1,5 +1,6 @@
 import { generateLayout } from "../../layout-engine/generateLayout";
 import SeatButton from "./SeatButton";
+import Bed from "./Bed";
 export default function SeatRenderer({
   totalSeats,
   layoutType,
@@ -7,7 +8,10 @@ export default function SeatRenderer({
   selectedSeats,
   onSeatClick,
 }) {
-  const rows = generateLayout(totalSeats, layoutType);
+  const rows = generateLayout({
+  totalSeats,
+  layoutType,
+});
 
   return (
     <div
@@ -39,7 +43,18 @@ export default function SeatRenderer({
               );
             }
 
-            return (
+            return ( 
+
+ seat.type === "upper" || seat.type === "lower" ? (
+  <Bed
+    key={seat.id}
+    label={seat.label}
+    type={seat.type}
+    booked={bookedSeats.includes(seat.id)}
+    selected={selectedSeats.includes(seat.id)}
+    onClick={() => onSeatClick(seat.id)}
+  />
+) : (
   <SeatButton
     key={seat.id}
     seat={seat}
@@ -47,8 +62,8 @@ export default function SeatRenderer({
     selectedSeats={selectedSeats}
     onSeatClick={onSeatClick}
   />
-);
-         
+)
+);         
 
           })}
         </div>
