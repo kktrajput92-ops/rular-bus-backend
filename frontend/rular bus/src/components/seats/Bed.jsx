@@ -15,8 +15,11 @@ export default function Bed({
     <div
       onClick={!booked ? onClick : undefined}
       style={{
-        width: 150,
-        height: 68,
+        width:
+  type === "double-lower" || type === "double-upper"
+    ? 220
+    : 140,
+        height: 74,
         borderRadius: 18,
         background,
         border: selected

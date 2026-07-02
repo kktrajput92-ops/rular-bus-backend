@@ -26,7 +26,7 @@ export default function SeatRenderer({
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "16px",
+            gap: "28px",
             marginBottom: "20px",
           }}
         >
@@ -37,7 +37,7 @@ export default function SeatRenderer({
                 <div
                   key={index}
                   style={{
-                   width: 60,
+                   width: 110,
                   }}
                 />
               );
@@ -45,7 +45,7 @@ export default function SeatRenderer({
 
             return ( 
 
- seat.type === "upper" || seat.type === "lower" ? (
+ seat.type?.includes("lower") || seat.type?.includes("upper") ? (
   <Bed
     key={seat.id}
     label={seat.label}

@@ -1,4 +1,4 @@
-import AdminSchedule from "./pages/AdminSchedule";import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Home from "./pages/Home";
 import Seats from "./pages/Seats";
@@ -9,6 +9,7 @@ import BookingHistory from "./pages/BookingHistory";
 import Admin from "./pages/Admin";
 import AdminBus from "./pages/AdminBus";
 import AdminRoute from "./pages/AdminRoute";
+import AdminSchedule from "./pages/AdminSchedule";
 
 function App() {
   return (
@@ -23,8 +24,8 @@ function App() {
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/buses" element={<AdminBus />} />
         <Route path="/admin/routes" element={<AdminRoute />} />
-         <Route path="/admin/schedules" element={<AdminSchedule />} />      
-</Routes>
+        <Route path="/admin/schedules" element={<AdminSchedule />} />
+      </Routes>
     </BrowserRouter>
   );
 }

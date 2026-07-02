@@ -1,146 +1,221 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import api from "../api/api";
 
-function Admin() {
+import AdminSidebar from "../components/admin/AdminSidebar";
+import AdminHeader from "../components/admin/AdminHeader";
+import DashboardCard from "../components/admin/DashboardCard";
+import QuickActions from "../components/admin/QuickActions";
 
-  const navigate = useNavigate();
+export default function Admin() {
 
-  const cardStyle = {
-    background: "#ffffff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 6px 15px rgba(0,0,0,.12)",
-    cursor: "pointer",
-    textAlign: "center",
-    fontSize: "18px",
-    fontWeight: "bold",
-  };
+const [stats,setStats]=useState({
 
-  return (
+total_buses:0,
+total_drivers:0,
+total_routes:0,
+total_schedules:0,
+total_passengers:0,
+total_bookings:0,
+total_tickets:0,
+total_revenue:0
 
-    <div
-      style={{
-        minHeight: "100vh",
-        background: "#f5f7fb",
-        padding: "20px",
-      }}
-    >
+});
 
-      <h1
-        style={{
-          textAlign: "center",
-          color: "#e63946",
-          marginBottom: "30px",
-        }}
-      >
-        🚍 Rular Bus Admin Dashboard
-      </h1>
+useEffect(()=>{
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns:
-            "repeat(auto-fit,minmax(220px,1fr))",
-          gap: "20px",
-        }}
-      >
+loadDashboard();
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/buses")}
-        >
-          🚌
-          <br /><br />
-          Bus Management
-        </div>
+},[]);
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/routes")}
-        >
-          🛣
-          <br /><br />
-          Route Management
-        </div>
+const loadDashboard=async()=>{
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/schedules")}
-        >
-          ⏰
-          <br /><br />
-          Schedule Management
-        </div>
+try{
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/bookings")}
-        >
-          📚
-          <br /><br />
-          Booking History
-        </div>
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/passengers")}
-        >
-          👥
-          <br /><br />
-          Passenger Management
-        </div>
+const res=await api.get("/dashboard");
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/tickets")}
-        >
-          🎫
-          <br /><br />
-          Ticket Management
-        </div>
+setStats(res.data.dashboard);
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/admin/reports")}
-        >
-          📊
-          <br /><br />
-          Reports & Analytics
-        </div>
+}catch(err){
 
-        <div
-          style={cardStyle}
-          onClick={() => navigate("/")}
-        >
-          🏠
-          <br /><br />
-          Back To Home
-        </div>
+console.log(err);
 
-      </div>
-
-      <div
-        style={{
-          marginTop: "40px",
-          background: "#ffffff",
-          padding: "20px",
-          borderRadius: "12px",
-          boxShadow: "0 6px 15px rgba(0,0,0,.12)",
-        }}
-      >
-        <h2>Dashboard Status</h2>
-
-        <p>🚌 Bus Management : Ready</p>
-        <p>🛣 Route Management : Ready</p>
-        <p>⏰ Schedule Management : Ready</p>
-        <p>👥 Passenger Management : Ready</p>
-        <p>📖 Booking History : Ready</p>
-        <p>🎫 Ticket Module : Ready</p>
-        <p>💳 Payment Module : Ready</p>
-        <p>📊 Reports : Coming Soon</p>
-      </div>
-
-    </div>
-
-  );
 }
 
-export default Admin;
+};
+
+return(
+
+<div
+style={{
+display:"flex",
+background:"#F5F7FA",
+minHeight:"100vh"
+}}
+>
+
+<AdminSidebar/>
+
+<div
+style={{
+flex:1,
+padding:25
+}}
+>
+
+<AdminHeader/>
+
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",
+gap:20
+}}
+>
+
+<DashboardCard
+title="Total Buses"
+value={stats.total_buses}
+icon="🚌"
+color="#0B3D91"
+/>
+
+<DashboardCard
+title="Drivers"
+value={stats.total_drivers}
+icon="👨‍✈️"
+color="#198754"
+/>
+
+<DashboardCard
+title="Routes"
+value={stats.total_routes}
+icon="🛣️"
+color="#D62828"
+/>
+
+<DashboardCard
+title="Schedules"
+value={stats.total_schedules}
+icon="⏰"
+color="#6f42c1"
+/>
+<DashboardCard
+title="Passengers"
+value={stats.total_passengers}
+icon="👥"
+color="#FD7E14"
+/>
+
+<DashboardCard
+title="Bookings"
+value={stats.total_bookings}
+icon="📚"
+color="#20C997"
+/>
+
+<DashboardCard
+title="Tickets"
+value={stats.total_tickets}
+icon="🎫"
+color="#6F42C1"
+/>
+
+<DashboardCard
+title="Revenue"
+value={`₹ ${stats.total_revenue}`}
+icon="💰"
+color="#D4AF37"
+/>
+
+</div>
+
+<div
+style={{
+marginTop:30
+}}
+>
+
+<QuickActions/>
+
+</div>
+
+<div
+style={{
+marginTop:30,
+background:"#fff",
+borderRadius:20,
+padding:25,
+boxShadow:"0 10px 25px rgba(0,0,0,.08)"
+}}
+>
+
+<h2
+style={{
+marginBottom:20,
+color:"#0B3D91"
+}}
+>
+
+📈 Dashboard Overview
+
+</h2>
+
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
+gap:20
+}}
+>
+
+<div>
+
+<h3>🚌 Fleet</h3>
+
+<p>Total Buses : {stats.total_buses}</p>
+
+<p>Total Drivers : {stats.total_drivers}</p>
+
+<p>Total Routes : {stats.total_routes}</p>
+
+</div>
+
+<div>
+
+<h3>🎫 Booking</h3>
+
+<p>Total Bookings : {stats.total_bookings}</p>
+
+<p>Total Tickets : {stats.total_tickets}</p>
+
+<p>Passengers : {stats.total_passengers}</p>
+
+</div>
+
+<div>
+
+<h3>💰 Revenue</h3>
+
+<h1
+style={{
+color:"#198754"
+}}
+>
+
+₹ {stats.total_revenue}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+);
+
+}
