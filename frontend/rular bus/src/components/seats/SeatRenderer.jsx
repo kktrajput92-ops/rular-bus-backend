@@ -1,7 +1,13 @@
 import { generateLayout } from "../../layout-engine/generateLayout";
-
-export default function SeatRenderer() {
-  const rows = generateLayout(12, "2x2");
+import SeatButton from "./SeatButton";
+export default function SeatRenderer({
+  totalSeats,
+  layoutType,
+  bookedSeats,
+  selectedSeats,
+  onSeatClick,
+}) {
+  const rows = generateLayout(totalSeats, layoutType);
 
   return (
     <div
@@ -16,8 +22,8 @@ export default function SeatRenderer() {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            gap: "12px",
-            marginBottom: "14px",
+            gap: "16px",
+            marginBottom: "20px",
           }}
         >
           {row.map((seat, index) => {
@@ -27,30 +33,22 @@ export default function SeatRenderer() {
                 <div
                   key={index}
                   style={{
-                    width: 40,
+                   width: 60,
                   }}
                 />
               );
             }
 
             return (
-              <button
-                key={seat.id}
-                style={{
-                  width: 64,
-                  height: 64,
-                  border: "none",
-                  borderRadius: 16,
-                  background: "#22c55e",
-                  color: "#fff",
-                  fontWeight: "bold",
-                  fontSize: "15px",
-                  boxShadow: "0 8px 18px rgba(0,0,0,.15)",
-                }}
-              >
-                {seat.label}
-              </button>
-            );
+  <SeatButton
+    key={seat.id}
+    seat={seat}
+    bookedSeats={bookedSeats}
+    selectedSeats={selectedSeats}
+    onSeatClick={onSeatClick}
+  />
+);
+         
 
           })}
         </div>
