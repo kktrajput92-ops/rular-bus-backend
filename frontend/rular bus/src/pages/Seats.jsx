@@ -168,7 +168,7 @@ function Seats() {
    
 <SeatRenderer
   totalSeats={52}
-  layoutType="2x1"
+  layoutType="3x2"
   bookedSeats={bookedSeats}
   selectedSeats={selectedSeats}
   onSeatClick={toggleSeat}
