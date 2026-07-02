@@ -62,7 +62,7 @@ const searchBus = async (req, res) => {
       available_seats:
         Number(row.total_seats) - Number(row.booked_seats)
     }));
-
+console.log("BUSES RESPONSE =", buses);
     return res.json({
       success: true,
       total: buses.length,
