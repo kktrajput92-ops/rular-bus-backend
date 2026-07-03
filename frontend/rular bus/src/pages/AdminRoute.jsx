@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../api/api";
 
 function AdminRoute() {
@@ -6,10 +6,9 @@ function AdminRoute() {
   const API = `${API_BASE}/routes`;
 
   const [routes, setRoutes] = useState([]);
-
-  const [editingId, setEditingId] = useState(null);
-
   const [loading, setLoading] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+  const [search, setSearch] = useState("");
 
   const [form, setForm] = useState({
     source: "",
@@ -23,14 +22,13 @@ function AdminRoute() {
     try {
 
       const res = await fetch(API);
-
       const data = await res.json();
 
       setRoutes(data.routes || []);
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -42,18 +40,28 @@ function AdminRoute() {
 
   }, []);
 
-  const handleChange = (e) => {
+  const filteredRoutes = useMemo(() => {
 
-    setForm({
+    return routes.filter((route) => {
 
-      ...form,
+      const text =
+        `${route.source} ${route.destination}`
+          .toLowerCase();
 
-      [e.target.name]: e.target.value,
+      return text.includes(search.toLowerCase());
 
     });
 
-  };
+  }, [routes, search]);
 
+  const handleChange = (e) => {
+
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+
+  };
   const saveRoute = async (e) => {
 
     e.preventDefault();
@@ -71,25 +79,16 @@ function AdminRoute() {
         : "POST";
 
       const res = await fetch(url, {
-
         method,
-
         headers: {
           "Content-Type": "application/json",
         },
-
         body: JSON.stringify({
-
           source: form.source,
-
           destination: form.destination,
-
           distance_km: Number(form.distance_km),
-
           estimated_time: form.estimated_time,
-
         }),
-
       });
 
       const data = await res.json();
@@ -101,15 +100,10 @@ function AdminRoute() {
         setEditingId(null);
 
         setForm({
-
           source: "",
-
           destination: "",
-
           distance_km: "",
-
           estimated_time: "",
-
         });
 
         loadRoutes();
@@ -118,7 +112,7 @@ function AdminRoute() {
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -131,15 +125,10 @@ function AdminRoute() {
     setEditingId(route.id);
 
     setForm({
-
       source: route.source,
-
       destination: route.destination,
-
       distance_km: route.distance_km,
-
       estimated_time: route.estimated_time,
-
     });
 
   };
@@ -147,13 +136,10 @@ function AdminRoute() {
   const deleteRoute = async (id) => {
 
     if (!window.confirm("Delete this route?")) return;
-
     try {
 
       const res = await fetch(`${API}/${id}`, {
-
         method: "DELETE",
-
       });
 
       const data = await res.json();
@@ -168,7 +154,7 @@ function AdminRoute() {
 
     } catch (err) {
 
-      console.error(err);
+      console.log(err);
 
     }
 
@@ -176,194 +162,219 @@ function AdminRoute() {
 
   return (
 
-    <div style={{ padding: "20px" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "#f5f7fa",
+        padding: "30px",
+      }}
+    >
 
-      <h2>🛣 Route Management</h2>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          flexWrap: "wrap",
+          gap: "15px",
+          marginBottom: "25px",
+        }}
+      >
 
-      <form onSubmit={saveRoute}>
-        <input
-          type="text"
-          name="source"
-          placeholder="Source"
-          value={form.source}
-          onChange={handleChange}
-          required
-        />
+        <div>
 
-        <br /><br />
+          <h1 style={{ margin: 0, color: "#0B3D91" }}>
+            🛣 Route Management
+          </h1>
 
-        <input
-          type="text"
-          name="destination"
-          placeholder="Destination"
-          value={form.destination}
-          onChange={handleChange}
-          required
-        />
+          <p style={{ color: "#666" }}>
+            Rular Bus Admin ERP
+          </p>
 
-        <br /><br />
-
-        <input
-          type="number"
-          name="distance_km"
-          placeholder="Distance (KM)"
-          value={form.distance_km}
-          onChange={handleChange}
-          required
-        />
-
-        <br /><br />
+        </div>
 
         <input
           type="text"
-          name="estimated_time"
-          placeholder="Estimated Time"
-          value={form.estimated_time}
-          onChange={handleChange}
-          required
+          placeholder="Search Route..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          style={{
+            padding: "12px",
+            width: "300px",
+            border: "1px solid #ddd",
+            borderRadius: "8px",
+            outline: "none",
+          }}
         />
 
-        <br /><br />
+      </div>
+
+      <form
+        onSubmit={saveRoute}
+        style={{
+          background: "#fff",
+          padding: "20px",
+          borderRadius: "10px",
+          marginBottom: "25px",
+          boxShadow: "0 4px 10px rgba(0,0,0,.08)",
+        }}
+      >
+
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+            gap: "15px",
+          }}
+        >
+
+          <input
+            name="source"
+            placeholder="Source"
+            value={form.source}
+            onChange={handleChange}
+          />
+
+          <input
+            name="destination"
+            placeholder="Destination"
+            value={form.destination}
+            onChange={handleChange}
+          />
+
+          <input
+            type="number"
+            name="distance_km"
+            placeholder="Distance (KM)"
+            value={form.distance_km}
+            onChange={handleChange}
+          />
+
+          <input
+            name="estimated_time"
+            placeholder="Estimated Time"
+            value={form.estimated_time}
+            onChange={handleChange}
+          />
+
+        </div>
 
         <button
           type="submit"
           disabled={loading}
         >
-          {loading
-            ? "Saving..."
-            : editingId
-            ? "Update Route"
-            : "Add Route"}
+          {editingId ? "Update Route" : "Add Route"}
         </button>
 
-        {editingId && (
-
-          <button
-            type="button"
-            onClick={() => {
-
-              setEditingId(null);
-
-              setForm({
-
-                source: "",
-
-                destination: "",
-
-                distance_km: "",
-
-                estimated_time: "",
-
-              });
-
-            }}
-            style={{ marginLeft: "10px" }}
-          >
-            Cancel
-          </button>
-
-        )}
-
       </form>
-
-      <hr />
-
-      <h3>Route List</h3>
-
-      <table
-        border="1"
-        cellPadding="10"
+      <div
         style={{
-          width: "100%",
-          borderCollapse: "collapse",
+          background: "#fff",
+          borderRadius: "10px",
+          overflow: "hidden",
+          boxShadow: "0 4px 10px rgba(0,0,0,.08)",
         }}
       >
 
-        <thead>
+        <table
+          style={{
+            width: "100%",
+            borderCollapse: "collapse",
+          }}
+        >
 
-          <tr>
-
-            <th>ID</th>
-
-            <th>Source</th>
-
-            <th>Destination</th>
-
-            <th>Distance</th>
-
-            <th>Estimated Time</th>
-
-            <th>Actions</th>
-
-          </tr>
-
-        </thead>
-
-        <tbody>
-          {routes.length === 0 ? (
-
+          <thead
+            style={{
+              background: "#0B3D91",
+              color: "#fff",
+            }}
+          >
             <tr>
-              <td colSpan="6">No Routes Found</td>
+              <th style={{ padding: "14px" }}>ID</th>
+              <th>Source</th>
+              <th>Destination</th>
+              <th>Distance</th>
+              <th>Estimated Time</th>
+              <th>Action</th>
             </tr>
+          </thead>
 
-          ) : (
+          <tbody>
 
-            routes.map((route) => (
+            {filteredRoutes.length === 0 ? (
 
-              <tr key={route.id}>
-
-                <td>{route.id}</td>
-
-                <td>{route.source}</td>
-
-                <td>{route.destination}</td>
-
-                <td>{route.distance_km} KM</td>
-
-                <td>{route.estimated_time}</td>
-
-                <td>
-
-                  <button
-                    onClick={() => editRoute(route)}
-                    style={{
-                      marginRight: "8px",
-                      background: "#0d6efd",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 10px",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    onClick={() => deleteRoute(route.id)}
-                    style={{
-                      background: "#dc3545",
-                      color: "#fff",
-                      border: "none",
-                      padding: "6px 10px",
-                      borderRadius: "5px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Delete
-                  </button>
-
+              <tr>
+                <td
+                  colSpan="6"
+                  style={{
+                    textAlign: "center",
+                    padding: "25px",
+                  }}
+                >
+                  No Route Found
                 </td>
-
               </tr>
 
-            ))
+            ) : (
 
-          )}
+              filteredRoutes.map((route) => (
 
-        </tbody>
+                <tr
+                  key={route.id}
+                  style={{
+                    borderBottom: "1px solid #eee",
+                  }}
+                >
 
-      </table>
+                  <td style={{ padding: "14px" }}>{route.id}</td>
+                  <td>{route.source}</td>
+                  <td>{route.destination}</td>
+                  <td>{route.distance_km} KM</td>
+                  <td>{route.estimated_time}</td>
+
+                  <td>
+                    <button
+                      onClick={() => editRoute(route)}
+                      style={{
+                        background: "#0B3D91",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px 14px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                        marginRight: "10px",
+                      }}
+                    >
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => deleteRoute(route.id)}
+                      style={{
+                        background: "#D62828",
+                        color: "#fff",
+                        border: "none",
+                        padding: "8px 14px",
+                        borderRadius: "6px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      Delete
+                    </button>
+
+                  </td>
+
+                </tr>
+
+              ))
+
+            )}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
     </div>
 
@@ -372,4 +383,5 @@ function AdminRoute() {
 }
 
 export default AdminRoute;
+
 
