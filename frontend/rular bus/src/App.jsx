@@ -10,7 +10,7 @@ import Admin from "./pages/Admin";
 import AdminBus from "./pages/AdminBus";
 import AdminRoute from "./pages/AdminRoute";
 import AdminSchedule from "./pages/AdminSchedule";
-
+import AdminDriver from "./pages/AdminDriver";
 function App() {
   return (
     <BrowserRouter>
@@ -25,6 +25,7 @@ function App() {
         <Route path="/admin/buses" element={<AdminBus />} />
         <Route path="/admin/routes" element={<AdminRoute />} />
         <Route path="/admin/schedules" element={<AdminSchedule />} />
+        <Route path="/admin/drivers" element={<AdminDriver />} />
       </Routes>
     </BrowserRouter>
   );

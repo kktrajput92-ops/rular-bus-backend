@@ -3,6 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 const menus = [
   { name: "Dashboard", icon: "🏠", path: "/admin" },
   { name: "Buses", icon: "🚌", path: "/admin/buses" },
+  { name: "Drivers", icon: "👨‍✈️", path: "/admin/drivers" },
   { name: "Routes", icon: "🛣️", path: "/admin/routes" },
   { name: "Schedules", icon: "⏰", path: "/admin/schedules" },
   { name: "Passengers", icon: "👥", path: "/admin/passengers" },
