@@ -233,14 +233,27 @@ function AdminRoute() {
             placeholder="Source"
             value={form.source}
             onChange={handleChange}
-          />
-
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}          
+/>
           <input
             name="destination"
             placeholder="Destination"
             value={form.destination}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
           <input
             type="number"
@@ -248,21 +261,47 @@ function AdminRoute() {
             placeholder="Distance (KM)"
             value={form.distance_km}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
           <input
             name="estimated_time"
             placeholder="Estimated Time"
             value={form.estimated_time}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
         </div>
 
         <button
           type="submit"
           disabled={loading}
-        >
+style={{
+  marginTop: "20px",
+  width: "100%",
+  padding: "14px",
+  background: "#0B3D91",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "bold",
+  cursor: "pointer",
+}}  
+      >
           {editingId ? "Update Route" : "Add Route"}
         </button>
 

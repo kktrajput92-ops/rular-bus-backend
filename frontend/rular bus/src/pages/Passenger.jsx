@@ -115,29 +115,33 @@ function Passenger() {
 
       <div
         style={{
-          maxWidth: 520,
-          margin: "auto",
-          background: "#fff",
-          borderRadius: 15,
-          padding: 25,
+          maxWidth: 650,
+margin: "auto",
+background: "#fff",
+borderRadius: 20,
+padding: 30,
+boxShadow: "0 10px 25px rgba(0,0,0,.08)",
         }}
       >
 
         <h2
           style={{
-            textAlign: "center",
-          }}
+  textAlign: "center",
+  color: "#0B3D91",
+  marginBottom: 20,
+}}
+        
         >
           Passenger Details
         </h2>
         <div
-          style={{
-            background: "#eef6ff",
-            padding: 15,
-            borderRadius: 10,
-            marginTop: 20,
-            marginBottom: 20,
-          }}
+         style={{
+  background: "#EEF6FF",
+  padding: 18,
+  borderRadius: 12,
+  marginBottom: 25,
+  border: "1px solid #D6E8FF",
+}}
         >
 
           <h3>{bus_name}</h3>
@@ -166,10 +170,13 @@ function Passenger() {
             value={form.full_name}
             onChange={handleChange}
             style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 12,
-            }}
+  width: "100%",
+  padding: 12,
+  marginBottom: 12,
+  border: "1px solid #ddd",
+  borderRadius: 8,
+  outline: "none",
+}}
           />
 
           <input
@@ -179,9 +186,9 @@ function Passenger() {
             value={form.phone}
             onChange={handleChange}
             style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 12,
+              border: "1px solid #ddd",
+borderRadius: 8,
+outline: "none",
             }}
           />
 
@@ -192,9 +199,9 @@ function Passenger() {
             value={form.email}
             onChange={handleChange}
             style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 12,
+             border: "1px solid #ddd",
+borderRadius: 8,
+outline: "none",
             }}
           />
 
@@ -203,9 +210,9 @@ function Passenger() {
             value={form.gender}
             onChange={handleChange}
             style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 12,
+            border: "1px solid #ddd",
+borderRadius: 8,
+outline: "none",
             }}
           >
             <option value="Male">Male</option>
@@ -220,9 +227,9 @@ function Passenger() {
             value={form.age}
             onChange={handleChange}
             style={{
-              width: "100%",
-              padding: 12,
-              marginBottom: 20,
+              border: "1px solid #ddd",
+borderRadius: 8,
+outline: "none",
             }}
           />
           <button
@@ -231,7 +238,7 @@ function Passenger() {
             style={{
               width: "100%",
               padding: 14,
-              background: "#e63946",
+              background:"#0B3D91",
               color: "#fff",
               border: "none",
               borderRadius: 8,

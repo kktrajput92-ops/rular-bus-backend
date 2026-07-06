@@ -4,17 +4,18 @@ function PaymentCard({ payment }) {
   return (
     <div
       style={{
-        marginTop: "25px",
-        background: "#eff6ff",
-        border: "1px solid #93c5fd",
-        borderRadius: "12px",
-        padding: "18px",
+       background: "#F8FAFC",
+border: "1px solid #E5E7EB",
+borderRadius: "12px",
+padding: "18px",
+marginBottom: "20px",
+      
       }}
     >
       <h3
         style={{
           marginTop: 0,
-          color: "#2563eb",
+         color: "#0B3D91",
         }}
       >
         💳 Payment Details
@@ -40,7 +41,7 @@ function PaymentCard({ payment }) {
             fontWeight: "bold",
           }}
         >
-          Paid ✅
+          Payment Successful ✅
         </span>
       </p>
     </div>

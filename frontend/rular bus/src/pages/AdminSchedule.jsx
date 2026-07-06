@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../api/api";
 
 function AdminSchedule() {
@@ -14,6 +14,7 @@ function AdminSchedule() {
   const [editingId, setEditingId] = useState(null);
 
   const [loading, setLoading] = useState(false);
+  const [search, setSearch] = useState("");
 
   const [form, setForm] = useState({
     bus_id: "",
@@ -54,7 +55,25 @@ function AdminSchedule() {
     loadData();
 
   }, []);
+const filteredSchedules = useMemo(() => {
 
+  return schedules.filter((schedule) => {
+
+    const text = (
+      schedule.bus_name +
+      " " +
+      schedule.bus_number +
+      " " +
+      schedule.source +
+      " " +
+      schedule.destination
+    ).toLowerCase();
+
+    return text.includes(search.toLowerCase());
+
+  });
+
+}, [schedules, search]);
   const handleChange = (e) => {
 
     setForm({
@@ -186,16 +205,90 @@ function AdminSchedule() {
 
   return (
 
-    <div style={{ padding: "20px" }}>
+  <div
+    style={{
+      minHeight: "100vh",
+      background: "#f5f7fa",
+      padding: "30px",
+    }}
+  >
 
-      <h2>🕒 Schedule Management</h2>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "15px",
+        marginBottom: "25px",
+      }}
+    >
 
-      <form onSubmit={saveSchedule}>
-        <select
+      <div>
+
+        <h1
+          style={{
+            margin: 0,
+            color: "#0B3D91",
+          }}
+        >
+          🕒 Schedule Management
+        </h1>
+
+        <p
+          style={{
+            color: "#666",
+          }}
+        >
+          Rular Bus Admin ERP
+        </p>
+
+      </div>
+
+      <input
+        type="text"
+        placeholder="Search Schedule..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        style={{
+          padding: "12px",
+          width: "300px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+          outline: "none",
+        }}
+      />
+
+    </div>
+
+      <form
+  onSubmit={saveSchedule}
+  style={{
+    background: "#fff",
+    padding: "20px",
+    borderRadius: "10px",
+    marginBottom: "25px",
+    boxShadow: "0 4px 10px rgba(0,0,0,.08)",
+  }}
+>
+<div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))",
+    gap: "15px",
+  }}
+>     
+   <select
           name="bus_id"
           value={form.bus_id}
           onChange={handleChange}
           required
+         style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+}}
         >
           <option value="">Select Bus</option>
 
@@ -206,14 +299,20 @@ function AdminSchedule() {
           ))}
 
         </select>
-
-        <br /><br />
+     
 
         <select
           name="route_id"
           value={form.route_id}
           onChange={handleChange}
           required
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
         >
           <option value="">Select Route</option>
 
@@ -224,8 +323,16 @@ function AdminSchedule() {
           ))}
 
         </select>
-
-        <br /><br />
+<h3
+  style={{
+    gridColumn: "1 / -1",
+    margin: "10px 0 5px",
+    color: "#0B3D91",
+  }}
+>
+  📅 Schedule Details
+</h3>
+        
 
         <input
           type="datetime-local"
@@ -233,9 +340,16 @@ function AdminSchedule() {
           value={form.departure_time}
           onChange={handleChange}
           required
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
         />
 
-        <br /><br />
+       
 
         <input
           type="datetime-local"
@@ -243,14 +357,33 @@ function AdminSchedule() {
           value={form.arrival_time}
           onChange={handleChange}
           required
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
         />
 
-        <br /><br />
-
+       
+         </div>
         <button
           type="submit"
           disabled={loading}
-        >
+style={{
+  marginTop: "20px",
+  width: "100%",
+  padding: "14px",
+  background: "#0B3D91",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "bold",
+  cursor: "pointer",
+}}        
+>
           {loading
             ? "Saving..."
             : editingId
@@ -288,20 +421,29 @@ function AdminSchedule() {
 
       </form>
 
-      <hr />
+   <div
+  style={{
+    background: "#fff",
+    borderRadius: "10px",
+    overflow: "hidden",
+    boxShadow: "0 4px 10px rgba(0,0,0,.08)",
+  }}
+>
 
-      <h3>Schedule List</h3>
+<table
+  style={{
+    width: "100%",
+    borderCollapse: "collapse",
+  }}
+>
+    
 
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-        }}
-      >
-
-        <thead>
+       <thead
+  style={{
+    background: "#0B3D91",
+    color: "#fff",
+  }}
+>
 
           <tr>
 
@@ -330,9 +472,14 @@ function AdminSchedule() {
 
           ) : (
 
-            schedules.map((schedule) => (
+            filteredSchedules.map((schedule) => (
 
-              <tr key={schedule.id}>
+              <tr
+  key={schedule.id}
+  style={{
+    borderBottom: "1px solid #eee",
+  }}
+>
 
                 <td>{schedule.id}</td>
 
@@ -398,7 +545,7 @@ function AdminSchedule() {
       </table>
 
     </div>
-
+  </div>
   );
 
 }

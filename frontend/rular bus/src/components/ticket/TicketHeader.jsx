@@ -3,14 +3,16 @@ import React from "react";
 function TicketHeader() {
   return (
     <div
-      style={{
-        textAlign: "center",
-        marginBottom: "25px",
-      }}
+    style={{
+  textAlign: "center",
+  marginBottom: "30px",
+  paddingBottom: "20px",
+  borderBottom: "2px dashed #dbe4ee",
+}}
     >
       <h1
         style={{
-          color: "#d62828",
+          color: "#0B3D91",
           marginBottom: "8px",
         }}
       >
@@ -19,7 +21,7 @@ function TicketHeader() {
 
       <h2
         style={{
-          color: "#16a34a",
+          color: "#198754",
           margin: 0,
         }}
       >
@@ -32,10 +34,10 @@ function TicketHeader() {
           marginTop: "10px",
         }}
       >
-        Happy Journey ❤️
+       Thank you for choosing Rular Bus
       </p>
 
-      <hr />
+     
     </div>
   );
 }

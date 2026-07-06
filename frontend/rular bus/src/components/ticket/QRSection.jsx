@@ -6,16 +6,17 @@ function QRSection({ booking, payment }) {
     <div
       style={{
         marginTop: "25px",
-        padding: "20px",
-        border: "2px dashed #16a34a",
-        borderRadius: "15px",
-        textAlign: "center",
-        background: "#f0fdf4",
+marginTop: "20px",
+padding: "20px",
+border: "1px solid #E5E7EB",
+borderRadius: "12px",
+textAlign: "center",
+background: "#F8FAFC",
       }}
     >
       <h2
         style={{
-          color: "#16a34a",
+          color: "#0B3D91",
           marginBottom: "10px",
         }}
       >
@@ -24,7 +25,8 @@ function QRSection({ booking, payment }) {
 
       <div
         style={{
-          background: "#fff",
+          background: "#FFFFFF",
+border: "1px solid #E5E7EB",
           display: "inline-block",
           padding: "12px",
           borderRadius: "12px",
@@ -41,7 +43,7 @@ function QRSection({ booking, payment }) {
         style={{
           marginTop: "15px",
           fontWeight: "bold",
-          color: "#2563eb",
+          color: "#0B3D91",
         }}
       >
         Verification Code
@@ -63,7 +65,7 @@ function QRSection({ booking, payment }) {
           marginTop: "10px",
         }}
       >
-        Scan this QR during boarding.
+        Scan this QR Code while boarding the bus.
       </p>
     </div>
   );

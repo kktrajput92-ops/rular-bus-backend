@@ -231,6 +231,13 @@ function AdminBus() {
             placeholder="Bus Name"
             value={form.bus_name}
             onChange={handleChange}
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
           />
 
           <input
@@ -238,13 +245,27 @@ function AdminBus() {
             placeholder="Bus Number"
             value={form.bus_number}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
           <input
             name="bus_type"
             placeholder="Bus Type"
             value={form.bus_type}
             onChange={handleChange}
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
           />
 
           <input
@@ -253,13 +274,32 @@ function AdminBus() {
             placeholder="Total Seats"
             value={form.total_seats}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
         </div>
 
         <button
           type="submit"
           disabled={loading}
+style={{
+  marginTop: "20px",
+  width: "100%",
+  padding: "14px",
+  background: "#0B3D91",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "bold",
+  cursor: "pointer",
+}}
         >
           {editingId ? "Update Bus" : "Add Bus"}
         </button>

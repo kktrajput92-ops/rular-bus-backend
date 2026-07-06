@@ -1,0 +1,229 @@
+import { useEffect, useState } from "react";
+import api from "../api/api";
+
+import AdminSidebar from "../components/admin/AdminSidebar";
+import AdminHeader from "../components/admin/AdminHeader";
+import DashboardCard from "../components/admin/DashboardCard";
+import QuickActions from "../components/admin/QuickActions";
+
+export default function Admin() {
+
+const [stats,setStats]=useState({
+
+total_buses:0,
+total_drivers:0,
+total_routes:0,
+total_schedules:0,
+total_passengers:0,
+total_bookings:0,
+total_tickets:0,
+total_revenue:0
+
+});
+
+useEffect(()=>{
+
+loadDashboard();
+
+},[]);
+
+const loadDashboard=async()=>{
+
+try{
+
+const res=await api.get("/dashboard");
+
+setStats(res.data.dashboard);
+
+}catch(err){
+
+console.log(err);
+
+}
+
+};
+
+return(
+
+<div
+style={{
+display:"flex",
+background:"#F5F7FA",
+minHeight:"100vh"
+}}
+>
+
+<AdminSidebar/>
+
+<div
+style={{
+flex:1,
+padding:25
+}}
+>
+
+<AdminHeader/>
+
+<div
+style={{
+display:"grid",
+gridTemplateColumns:"repeat(auto-fit,minmax(230px,1fr))",
+gap:20
+}}
+>
+
+<DashboardCard
+title="Total Buses"
+value={stats.total_buses}
+icon="🚌"
+color="#0B3D91"
+/>
+
+<DashboardCard
+title="Drivers"
+value={stats.total_drivers}
+icon="👨‍✈️"
+color="#198754"
+/>
+
+<DashboardCard
+title="Routes"
+value={stats.total_routes}
+icon="🛣️"
+color="#D62828"
+/>
+
+<DashboardCard
+title="Schedules"
+value={stats.total_schedules}
+icon="⏰"
+color="#6f42c1"
+/>
+<DashboardCard
+title="Passengers"
+value={stats.total_passengers}
+icon="👥"
+color="#FD7E14"
+/>
+
+<DashboardCard
+title="Bookings"
+value={stats.total_bookings}
+icon="📚"
+color="#20C997"
+/>
+
+<DashboardCard
+title="Tickets"
+value={stats.total_tickets}
+icon="🎫"
+color="#6F42C1"
+/>
+
+<DashboardCard
+title="Revenue"
+value={`₹ ${stats.total_revenue}`}
+icon="💰"
+color="#D4AF37"
+/>
+
+</div>
+
+<div
+style={{
+marginTop:30
+}}
+>
+
+<QuickActions/>
+
+</div>
+
+<div
+style={{
+marginTop:30,
+background:"#fff",
+borderRadius:20,
+padding:25,
+boxShadow:"0 10px 25px rgba(0,0,0,.08)"
+}}
+>
+
+<h2
+style={{
+marginBottom:20,
+color:"#0B3D91",
+fontSize:"28px",
+fontWeight:"700"
+}}
+>
+
+📈 Business Analytics
+
+</h2>
+
+
+<div
+  style={{
+    display:"grid",
+    gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
+    gap:20
+  }}
+>
+<div>
+
+<h3 style={{color:"#0B3D91"}}>
+🚌 Fleet Statistics
+</h3>
+
+<p>Total Buses : {stats.total_buses}</p>
+
+<p>Total Drivers : {stats.total_drivers}</p>
+
+<p>Total Routes : {stats.total_routes}</p>
+
+</div>
+
+<div>
+
+<h3 style={{color:"#198754"}}>
+🎫 Booking Statistics
+</h3>
+
+<p>Total Bookings : {stats.total_bookings}</p>
+
+<p>Total Tickets : {stats.total_tickets}</p>
+
+<p>Passengers : {stats.total_passengers}</p>
+
+</div>
+
+<div>
+
+<h3 style={{color:"#D4AF37"}}>
+💰 Revenue Summary
+</h3>
+
+<h1
+style={{
+color:"#198754"
+}}
+>
+
+₹ {stats.total_revenue}
+
+</h1>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+);
+
+}

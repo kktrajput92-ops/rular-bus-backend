@@ -10,7 +10,7 @@ function TicketActions({
       style={{
         display: "flex",
         gap: "12px",
-        marginTop: "30px",
+        marginTop: "20px",
         flexWrap: "wrap",
       }}
     >
@@ -19,7 +19,7 @@ function TicketActions({
         style={{
           flex: 1,
           padding: "15px",
-          background: "#2563eb",
+         background: "#0B3D91",
           color: "#fff",
           border: "none",
           borderRadius: "10px",
@@ -36,7 +36,7 @@ function TicketActions({
         style={{
           flex: 1,
           padding: "15px",
-          background: "#16a34a",
+         background: "#198754",
           color: "#fff",
           border: "none",
           borderRadius: "10px",
@@ -53,7 +53,7 @@ function TicketActions({
         style={{
           width: "100%",
           padding: "15px",
-          background: "#d62828",
+          background: "#6C757D",
           color: "#fff",
           border: "none",
           borderRadius: "10px",
@@ -62,7 +62,7 @@ function TicketActions({
           fontWeight: "bold",
         }}
       >
-        🏠 Back to Home
+       🏠 Go to Home
       </button>
     </div>
   );

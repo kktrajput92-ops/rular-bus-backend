@@ -225,6 +225,13 @@ function AdminDriver() {
             placeholder="Driver Name"
             value={form.full_name}
             onChange={handleChange}
+           style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}
           />
 
           <input
@@ -232,28 +239,61 @@ function AdminDriver() {
             placeholder="Phone"
             value={form.phone}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
           <input
             name="license_number"
             placeholder="License Number"
             value={form.license_number}
             onChange={handleChange}
-          />
+  
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}        />
 
           <input
             name="address"
             placeholder="Address"
             value={form.address}
             onChange={handleChange}
-          />
+style={{
+  width: "100%",
+  padding: "12px",
+  border: "1px solid #ddd",
+  borderRadius: "8px",
+  outline: "none",
+}}  
+        />
 
         </div>
 
         <button
           type="submit"
           disabled={loading}
-        >
+style={{
+  marginTop: "20px",
+  width: "100%",
+  padding: "14px",
+  background: "#0B3D91",
+  color: "#fff",
+  border: "none",
+  borderRadius: "8px",
+  fontSize: "16px",
+  fontWeight: "bold",
+  cursor: "pointer",
+}}  
+      >
           {editingId ? "Update Driver" : "Add Driver"}
         </button>
 
