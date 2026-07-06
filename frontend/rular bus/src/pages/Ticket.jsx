@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -8,7 +8,8 @@ import JourneyCard from "../components/ticket/JourneyCard";
 import PaymentCard from "../components/ticket/PaymentCard";
 import QRSection from "../components/ticket/QRSection";
 import TicketActions from "../components/ticket/TicketActions";
-
+import BusCard from "../components/ticket/BusCard";
+import BoardingCard from "../components/ticket/BoardingCard";
 function Ticket() {
 
   const navigate = useNavigate();
@@ -148,8 +149,9 @@ Status : Confirmed ✅`;
         <PassengerCard booking={booking} />
 
         <JourneyCard booking={booking} />
-
-        <QRSection
+        <BusCard booking={booking} />
+        <BoardingCard booking={booking} />
+          <QRSection
           booking={booking}
           payment={payment}
         />

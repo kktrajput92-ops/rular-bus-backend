@@ -5,7 +5,7 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminHeader from "../components/admin/AdminHeader";
 import DashboardCard from "../components/admin/DashboardCard";
 import QuickActions from "../components/admin/QuickActions";
-
+import RevenueChart from "../components/admin/RevenueChart";
 export default function Admin() {
 
 const [stats,setStats]=useState({
@@ -150,16 +150,17 @@ boxShadow:"0 10px 25px rgba(0,0,0,.08)"
 >
 
 <h2
-style={{
-  marginBottom:20,
-  color:"#0B3D91",
-  fontSize:"28px",
-  fontWeight:"700"
-}}
-📈 Dashboard Overview
-
+  style={{
+    marginBottom: 25,
+    color: "#0B3D91",
+    fontSize: "30px",
+    fontWeight: "700",
+    borderBottom: "3px solid #0B3D91",
+    paddingBottom: "12px",
+  }}
+>
+  📈 Business Analytics Dashboard
 </h2>
-
 <div
 style={{
 display:"grid",
@@ -167,10 +168,24 @@ gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
 gap:20
 }}
 >
+<div
+  style={{
+    background:"#F8FAFC",
+    borderRadius:"16px",
+    padding:"20px",
+    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+  }}
+>
 
-<div>
-
-<h3>🚌 Fleet</h3>
+<h3
+  style={{
+    color:"#0B3D91",
+    fontSize:"22px",
+    marginBottom:"15px"
+  }}
+>
+  🚌 Fleet Statistics
+</h3>
 
 <p>Total Buses : {stats.total_buses}</p>
 
@@ -180,9 +195,24 @@ gap:20
 
 </div>
 
-<div>
+<div
+  style={{
+    background:"#F8FAFC",
+    borderRadius:"16px",
+    padding:"20px",
+    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+  }}
+>
 
-<h3>🎫 Booking</h3>
+<h3
+  style={{
+    color:"#198754",
+    fontSize:"22px",
+    marginBottom:"15px"
+  }}
+>
+  🎫 Booking Statistics
+</h3>
 
 <p>Total Bookings : {stats.total_bookings}</p>
 
@@ -192,9 +222,24 @@ gap:20
 
 </div>
 
-<div>
+<div
+  style={{
+    background:"#F8FAFC",
+    borderRadius:"16px",
+    padding:"20px",
+    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+  }}
+>
 
-<h3>💰 Revenue</h3>
+<h3
+  style={{
+    color:"#D4AF37",
+    fontSize:"22px",
+    marginBottom:"15px"
+  }}
+>
+  💰 Revenue Summary
+</h3>
 
 <h1
 style={{

@@ -5,7 +5,9 @@ import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminHeader from "../components/admin/AdminHeader";
 import DashboardCard from "../components/admin/DashboardCard";
 import QuickActions from "../components/admin/QuickActions";
-
+import RevenueChart from "../components/admin/RevenueChart";
+import DashboardAnalytics from "../components/admin/dashboard/DashboardAnalytics";
+import RecentBookingsContainer from "../components/admin/RecentBookingsContainer";
 export default function Admin() {
 
 const [stats,setStats]=useState({
@@ -20,7 +22,7 @@ total_tickets:0,
 total_revenue:0
 
 });
-
+const [recentBookings, setRecentBookings] = useState([]);
 useEffect(()=>{
 
 loadDashboard();
@@ -32,15 +34,17 @@ const loadDashboard=async()=>{
 try{
 
 const res=await api.get("/dashboard");
-
 setStats(res.data.dashboard);
+
+const recent = await api.get("/dashboard/recent-bookings");
+setRecentBookings(recent.data.bookings);
 
 }catch(err){
 
 console.log(err);
 
 }
-ó
+
 };
 
 return(
@@ -254,7 +258,11 @@ color:"#198754"
 </div>
 
 </div>
+<DashboardAnalytics stats={stats} />
 
+<RevenueChart />
+
+<RecentBookingsContainer bookings={recentBookings} />
 </div>
 
 </div>
