@@ -3,42 +3,77 @@ import React from "react";
 function TicketHeader() {
   return (
     <div
+  style={{
+    background:
+      "linear-gradient(135deg,#0B3D91,#1565C0)",
+    color: "#fff",
+    borderRadius: "22px",
+    padding: "28px",
+    textAlign: "center",
+    marginBottom: "30px",
+    boxShadow: "0 18px 40px rgba(11,61,145,.25)",
+    position: "relative",
+    overflow: "hidden",
+  }}
+>
+  <div
     style={{
-  textAlign: "center",
-  marginBottom: "30px",
-  paddingBottom: "20px",
-  borderBottom: "2px dashed #dbe4ee",
-}}
-    >
-      <h1
-        style={{
-          color: "#0B3D91",
-          marginBottom: "8px",
-        }}
-      >
-        🚌 Rular Bus
-      </h1>
+      position: "absolute",
+      top: "-35px",
+      right: "-35px",
+      width: "120px",
+      height: "120px",
+      borderRadius: "50%",
+      background: "rgba(255,255,255,.08)",
+    }}
+  />
 
-      <h2
-        style={{
-          color: "#198754",
-          margin: 0,
-        }}
-      >
-        Smart Digital Ticket
-      </h2>
+  <div
+    style={{
+      display: "inline-block",
+      padding: "6px 14px",
+      borderRadius: "30px",
+      background: "#F4B400",
+      color: "#1F2937",
+      fontWeight: "bold",
+      fontSize: "13px",
+      marginBottom: "15px",
+    }}
+  >
+    PREMIUM DIGITAL TICKET
+  </div>
 
-      <p
-        style={{
-          color: "#6b7280",
-          marginTop: "10px",
-        }}
-      >
-       Thank you for choosing Rular Bus
-      </p>
+  <h1
+    style={{
+      margin: 0,
+      fontSize: "34px",
+      fontWeight: "800",
+    }}
+  >
+    🚌 Rular Bus
+  </h1>
 
-     
-    </div>
+  <h3
+    style={{
+      marginTop: "12px",
+      fontWeight: "500",
+      color: "#EAF2FF",
+    }}
+  >
+    Travel Beyond Expectations
+  </h3>
+
+  <p
+    style={{
+      marginTop: "18px",
+      opacity: ".95",
+      fontSize: "15px",
+    }}
+  >
+    Your journey has been successfully confirmed.
+  </p>
+</div>
+         
   );
 }
 

@@ -11,6 +11,7 @@ import AdminBus from "./pages/AdminBus";
 import AdminRoute from "./pages/AdminRoute";
 import AdminSchedule from "./pages/AdminSchedule";
 import AdminDriver from "./pages/AdminDriver";
+import QRScanner from "./pages/QRScanner";
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +21,7 @@ function App() {
         <Route path="/passenger" element={<Passenger />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/ticket" element={<Ticket />} />
+        <Route path="/qr-scanner" element={<QRScanner />} />
         <Route path="/bookings" element={<BookingHistory />} />
         <Route path="/admin" element={<Admin />} />
         <Route path="/admin/buses" element={<AdminBus />} />

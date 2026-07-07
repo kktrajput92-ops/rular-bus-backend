@@ -1,4 +1,15 @@
 export default function BoardingCard({ booking }) {
+const formatDateTime = (date) => {
+  if (!date) return "--";
+
+  return new Date(date).toLocaleString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+};
   return (
     <div
       style={{
@@ -24,7 +35,7 @@ export default function BoardingCard({ booking }) {
 
       <p>
         <b>Departure :</b>{" "}
-        {booking.departure_time || "06:00 AM"}
+        {formatDateTime(booking.departure_time)}
       </p>
 
       <p>
@@ -34,7 +45,7 @@ export default function BoardingCard({ booking }) {
 
       <p>
         <b>Estimated Arrival :</b>{" "}
-        {booking.arrival_time || "02:00 PM"}
+        {formatDateTime(booking.arrival_time)}
       </p>
     </div>
   );

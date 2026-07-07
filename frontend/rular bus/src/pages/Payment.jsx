@@ -69,6 +69,12 @@ function Payment() {
         payment_method: paymentMethod,
 
       });
+const ticketRes = await api.post("/tickets", {
+  booking_id: booking.id,
+});
+
+console.log(ticketRes.data);
+const bookingRes = await api.get(`/bookings/${booking.id}`);
 
       setTimeout(() => {
 
@@ -76,7 +82,7 @@ function Payment() {
 
           state: {
 
-            booking,
+           booking: bookingRes.data[0],
 
             payment: res.data.payment,
 

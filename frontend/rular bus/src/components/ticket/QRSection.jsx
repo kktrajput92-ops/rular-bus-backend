@@ -33,10 +33,13 @@ border: "1px solid #E5E7EB",
         }}
       >
         <QRCodeSVG
-          value={`RB-${booking.id}-${payment.id}`}
-          size={170}
-          includeMargin={true}
-        />
+  value={JSON.stringify({
+    ticket_number: booking.ticket_number,
+    booking_id: booking.id,
+  })}
+  size={170}
+  includeMargin={true}
+/>
       </div>
 
       <p
@@ -56,7 +59,7 @@ border: "1px solid #E5E7EB",
           fontWeight: "bold",
         }}
       >
-        RB-{booking.id}-{payment.id}
+        {booking.ticket_number}
       </p>
 
       <p
