@@ -39,17 +39,24 @@ const addPayment = async (req, res) => {
       "TXN" + Date.now();
 
     const result = await pool.query(
-      `INSERT INTO payments
-      (booking_id, amount, payment_method, transaction_id)
-      VALUES ($1,$2,$3,$4)
-      RETURNING *`,
-      [
-        booking_id,
-        amount,
-        payment_method,
-        transaction_id,
-      ]
-    );
+  `INSERT INTO payments
+  (
+    booking_id,
+    amount,
+    payment_method,
+    payment_status,
+    transaction_id
+  )
+  VALUES ($1,$2,$3,$4,$5)
+  RETURNING *`,
+  [
+    booking_id,
+    amount,
+    payment_method,
+    "paid",
+    transaction_id,
+  ]
+);
 
     res.json({
       success: true,

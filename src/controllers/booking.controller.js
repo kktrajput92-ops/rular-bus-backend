@@ -65,18 +65,56 @@ const addBooking = async (req, res) => {
     }
 
     const result = await pool.query(
-      `INSERT INTO bookings
-      (passenger_id,schedule_id,seat_number)
-      VALUES($1,$2,$3)
-      RETURNING *`,
-      [passenger_id,schedule_id,seat_number]
-    );
+  `INSERT INTO bookings
+  (passenger_id,schedule_id,seat_number)
+  VALUES($1,$2,$3)
+  RETURNING id`,
+  [passenger_id, schedule_id, seat_number]
+);
 
-    res.json({
-      success:true,
-      message:"Booking Created Successfully",
-      booking:result.rows[0],
-    });
+const booking = await pool.query(
+  `
+  SELECT
+    b.id,
+    b.seat_number,
+    b.booking_status,
+
+    p.full_name,
+    p.phone,
+
+    s.departure_time,
+    s.arrival_time,
+
+    bus.bus_name,
+    bus.bus_number,
+
+    r.source,
+    r.destination
+
+  FROM bookings b
+
+  JOIN passengers p
+  ON b.passenger_id = p.id
+
+  JOIN schedules s
+  ON b.schedule_id = s.id
+
+  JOIN buses bus
+  ON s.bus_id = bus.id
+
+  JOIN routes r
+  ON s.route_id = r.id
+
+  WHERE b.id = $1
+  `,
+  [result.rows[0].id]
+);
+
+res.json({
+  success: true,
+  message: "Booking Created Successfully",
+  booking: booking.rows[0],
+});
 
   } catch(err){
 
@@ -147,7 +185,7 @@ const getBookingById = async (req, res) => {
         b.id,
         b.seat_number,
         b.booking_status,
-
+        b.created_at,
         p.id AS passenger_id,
         p.full_name,
         p.phone,

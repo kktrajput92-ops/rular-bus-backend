@@ -71,8 +71,9 @@ const getAllTickets = async (req, res) => {
       routes.destination,
       bookings.seat_number,
       bookings.booking_status,
-      schedules.departure_time
-
+      schedules.departure_time,
+buses.bus_name,
+buses.bus_number,
       FROM tickets
 
       JOIN bookings
@@ -83,6 +84,9 @@ const getAllTickets = async (req, res) => {
 
       JOIN schedules
       ON bookings.schedule_id=schedules.id
+
+       JOIN buses
+       ON schedules.bus_id = buses.id
 
       JOIN routes
       ON schedules.route_id=routes.id
@@ -113,34 +117,35 @@ const verifyTicket = async (req, res) => {
 
     const { ticket_number } = req.params;
 
-    const result = await pool.query(`
-      SELECT
-      tickets.ticket_number,
-      tickets.qr_code,
-      passengers.full_name,
-      passengers.phone,
-      routes.source,
-      routes.destination,
-      bookings.seat_number,
-      bookings.booking_status,
-      schedules.departure_time
-
-      FROM tickets
-
-      JOIN bookings
-      ON tickets.booking_id=bookings.id
-
-      JOIN passengers
-      ON bookings.passenger_id=passengers.id
-
-      JOIN schedules
-      ON bookings.schedule_id=schedules.id
-
-      JOIN routes
-      ON schedules.route_id=routes.id
-
-      WHERE tickets.ticket_number=$1
-    `,[ticket_number]);
+const result = await pool.query(
+  `
+  SELECT
+    tickets.ticket_number,
+    tickets.qr_code,
+    passengers.full_name,
+    passengers.phone,
+    routes.source,
+    routes.destination,
+    bookings.seat_number,
+    bookings.booking_status,
+    schedules.departure_time,
+    buses.bus_name,
+    buses.bus_number
+  FROM tickets
+  JOIN bookings
+    ON tickets.booking_id = bookings.id
+  JOIN passengers
+    ON bookings.passenger_id = passengers.id
+  JOIN schedules
+    ON bookings.schedule_id = schedules.id
+  JOIN buses
+    ON schedules.bus_id = buses.id
+  JOIN routes
+    ON schedules.route_id = routes.id
+  WHERE tickets.ticket_number = $1
+  `,
+  [ticket_number]
+);    
 
     if(result.rows.length===0){
       return res.status(404).json({
@@ -183,8 +188,9 @@ const downloadTicket = async (req,res)=>{
       routes.destination,
       bookings.seat_number,
       bookings.booking_status,
-      schedules.departure_time
-
+      schedules.departure_time,
+       buses.bus_name,
+       buses.bus_number
       FROM tickets
 
       JOIN bookings
@@ -195,6 +201,9 @@ const downloadTicket = async (req,res)=>{
 
       JOIN schedules
       ON bookings.schedule_id=schedules.id
+
+       JOIN buses
+       ON schedules.bus_id=buses.id
 
       JOIN routes
       ON schedules.route_id=routes.id
