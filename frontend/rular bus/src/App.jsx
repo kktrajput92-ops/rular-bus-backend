@@ -13,24 +13,24 @@ import AdminSchedule from "./pages/AdminSchedule";
 import AdminDriver from "./pages/AdminDriver";
 import QRScanner from "./pages/QRScanner";
 function App() {
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/seats" element={<Seats />} />
-        <Route path="/passenger" element={<Passenger />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/ticket" element={<Ticket />} />
-        <Route path="/qr-scanner" element={<QRScanner />} />
-        <Route path="/bookings" element={<BookingHistory />} />
-        <Route path="/admin" element={<Admin />} />
-        <Route path="/admin/buses" element={<AdminBus />} />
-        <Route path="/admin/routes" element={<AdminRoute />} />
-        <Route path="/admin/schedules" element={<AdminSchedule />} />
-        <Route path="/admin/drivers" element={<AdminDriver />} />
-      </Routes>
-    </BrowserRouter>
-  );
+    return (
+  <BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/seats" element={<Seats />} />
+      <Route path="/passenger" element={<Passenger />} />
+      <Route path="/payment" element={<Payment />} />
+      <Route path="/ticket" element={<Ticket />} />
+      <Route path="/qr-scanner" element={<QRScanner />} />
+      <Route path="/bookings" element={<BookingHistory />} />
+      <Route path="/admin" element={<Admin />} />
+      <Route path="/admin/buses" element={<AdminBus />} />
+      <Route path="/admin/routes" element={<AdminRoute />} />
+      <Route path="/admin/schedules" element={<AdminSchedule />} />
+      <Route path="/admin/drivers" element={<AdminDriver />} />
+    </Routes>
+  </BrowserRouter>
+);
 }
 
 export default App;

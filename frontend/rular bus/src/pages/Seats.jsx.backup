@@ -29,13 +29,16 @@ const loadSeats = async () => {
   }
 };
 useEffect(() => {
-  loadSeats();
+  if (!bus.schedule_id) return;
 
-  const interval = setInterval(() => {
-    loadSeats();
-  }, 5000);
-
-  return () => clearInterval(interval);
+  api
+    .get(`/seats/${bus.schedule_id}`)
+    .then((res) => {
+      setBookedSeats(res.data.booked_seats || []);
+    })
+    .catch((err) => {
+      console.error(err);
+    });
 }, [bus.schedule_id]);
 
   const toggleSeat = (seat) => {
@@ -70,6 +73,12 @@ useEffect(() => {
       return;
 
     }
+try {
+  const res = await api.get(`/seats/${bus.schedule_id}`);
+  setBookedSeats(res.data.booked_seats || []);
+} catch (err) {
+  console.error(err);
+}
 
     navigate("/passenger", {
       state: {
