@@ -30,6 +30,7 @@ const designationRoutes = require("./routes/designation.routes");
 const staffRoutes = require("./routes/staff.routes");
 const attendanceRoutes = require("./routes/attendance.routes");
 const leaveRoutes = require("./routes/leave.routes");
+const shiftRoutes = require("./routes/shift.routes");
 const roleRoutes = require("./routes/role.routes");
 const permissionRoutes = require("./routes/permission.routes");
 const userRoutes = require("./routes/user.routes");
@@ -76,6 +77,7 @@ app.use("/api/departments", departmentRoutes);
 app.use("/api/designations", designationRoutes);
 app.use("/api/staff", staffRoutes);
 app.use("/api/attendance", attendanceRoutes);
+app.use("/api/shifts", shiftRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
 
