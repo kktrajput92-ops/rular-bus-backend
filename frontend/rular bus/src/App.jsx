@@ -13,6 +13,8 @@ import AdminSchedule from "./pages/AdminSchedule";
 import AdminDriver from "./pages/AdminDriver";
 import QRScanner from "./pages/QRScanner";
 import ConductorDashboard from "./pages/ConductorDashboard";
+import Login from "./pages/Login";
+import ProtectedRoute from "./components/auth/ProtectedRoute";
 function App() {
     return (
   <BrowserRouter>
@@ -24,7 +26,15 @@ function App() {
       <Route path="/ticket" element={<Ticket />} />
       <Route path="/qr-scanner" element={<QRScanner />} />
       <Route path="/bookings" element={<BookingHistory />} />
-      <Route path="/admin" element={<Admin />} />
+      <Route path="/login" element={<Login />} />
+      <Route
+  path="/admin"
+  element={
+    <ProtectedRoute>
+      <Admin />
+    </ProtectedRoute>
+  }
+/>
       <Route path="/admin/buses" element={<AdminBus />} />
       <Route path="/admin/routes" element={<AdminRoute />} />
       <Route path="/admin/schedules" element={<AdminSchedule />} />

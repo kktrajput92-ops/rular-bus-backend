@@ -1,4 +1,11 @@
+import { useNavigate } from "react-router-dom";
 export default function AdminHeader() {
+const navigate = useNavigate();
+
+const logout = () => {
+  localStorage.removeItem("token");
+  navigate("/login");
+};
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
     day: "numeric",
@@ -67,6 +74,20 @@ export default function AdminHeader() {
           }}
         >
           ⚙️
+<button
+  onClick={logout}
+  style={{
+    background: "#DC3545",
+    color: "#fff",
+    border: "none",
+    padding: "10px 18px",
+    borderRadius: "10px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  }}
+>
+  Logout
+</button>
         </div>
 
         <div

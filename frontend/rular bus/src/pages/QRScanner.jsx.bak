@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Html5QrcodeScanner } from "html5-qrcode";
 import api from "../api/api";
+
 export default function QRScanner() {
   const [ticket, setTicket] = useState(null);
   const [message, setMessage] = useState("");
-  const navigate = useNavigate();  
-useEffect(() => {
+
+  useEffect(() => {
+
     const scanner = new Html5QrcodeScanner(
-    
       "reader",
       {
         fps: 10,
@@ -67,9 +67,6 @@ useEffect(() => {
       );
 
       setMessage(res.data.message);
-setTimeout(() => {
-  navigate("/conductor-dashboard");
-}, 1000);
 
     } catch (err) {
 

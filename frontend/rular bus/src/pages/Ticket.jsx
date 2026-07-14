@@ -157,6 +157,7 @@ overflow: "hidden",
   RULAR BUS
 </div>
         <TicketHeader />
+
 <div
   style={{
     margin: "20px 0",
@@ -169,59 +170,41 @@ overflow: "hidden",
     alignItems: "center",
     boxShadow: "0 10px 25px rgba(11,61,145,.20)",
   }}
->
-  <div>
-    <div
-      style={{
-        fontSize: "12px",
-        opacity: 0.85,
-        textTransform: "uppercase",
-      }}
-    >
-      Premium Digital Ticket
-    </div>
+><div>
+  <h2 style={{ margin: 0 }}>
+    {booking.ticket_number}
+  </h2>
 
-    <h2
-      style={{
-        margin: "6px 0",
-        letterSpacing: "1px",
-      }}
-    >
-      RB-{booking.id}
-    </h2>
-
-    <div style={{ fontSize: "13px", opacity: 0.9 }}>
-      Booking #{booking.id}
-    </div>
+  <div style={{ marginTop: "8px", fontSize: "14px" }}>
+    Booking ID : {booking.id}
   </div>
 
-  <div
-    style={{
-      textAlign: "right",
-    }}
-  >
-    <div
-      style={{
-        background: "#16A34A",
-        padding: "6px 12px",
-        borderRadius: "30px",
-        fontWeight: "bold",
-        display: "inline-block",
-      }}
-    >
-      VERIFIED ✓
-    </div>
+  <div style={{ marginTop: "6px", fontSize: "14px" }}>
+    Bus : {booking.bus_name}
+  </div>
 
-    <div
-      style={{
-        marginTop: "12px",
-        fontSize: "15px",
-      }}
-    >
-      Seat {booking.seat_number}
-    </div>
+  <div style={{ marginTop: "6px", fontSize: "14px" }}>
+    Bus No : {booking.bus_number}
   </div>
 </div>
+
+<div style={{ textAlign: "right" }}>
+  <div
+    style={{
+      background: "#16A34A",
+      padding: "8px 14px",
+      borderRadius: "30px",
+      fontWeight: "bold",
+    }}
+  >
+    PAID ✓
+  </div>
+
+  <div style={{ marginTop: "12px" }}>
+    Seat {booking.seat_number}
+  </div>
+</div>
+</div>      
 
        <div
   style={{
