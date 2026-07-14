@@ -1,5 +1,5 @@
 const Staff = require("../models/staff.model");
-
+const Audit = require("../models/audit.model");
 // Get All Staff
 const getStaff = async (req, res) => {
   try {
@@ -59,7 +59,17 @@ const getStaffById = async (req, res) => {
 const createStaff = async (req, res) => {
   try {
     const staff = await Staff.create(req.body);
+console.log("REQ USER =", req.user);
 
+await Audit.create({
+  company_id: req.user.company_id,
+  user_id: req.user.id,
+  module_name: "Staff",
+  action: "CREATE",
+  record_id: staff.id,
+  ip_address: req.ip,
+  user_agent: req.headers["user-agent"],
+});
     res.status(201).json({
       success: true,
       message: "Staff created successfully",
