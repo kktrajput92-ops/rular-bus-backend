@@ -27,6 +27,7 @@ const officeRoutes = require("./routes/office.routes");
 const counterRoutes = require("./routes/counter.routes");
 const errorMiddleware = require("./middleware/error.middleware");
 const designationRoutes = require("./routes/designation.routes");
+const staffRoutes = require("./routes/staff.routes");
 const roleRoutes = require("./routes/role.routes");
 const permissionRoutes = require("./routes/permission.routes");
 const userRoutes = require("./routes/user.routes");
@@ -71,6 +72,7 @@ app.use("/api/permissions", permissionRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/designations", designationRoutes);
+app.use("/api/staff", staffRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
 
 
