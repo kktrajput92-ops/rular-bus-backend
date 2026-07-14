@@ -9,7 +9,6 @@ const {
   downloadTicket,
   deleteTicket,
   boardPassenger,
-getConductorDashboard,
 } = require("../controllers/ticket.controller");
 
 // Create Ticket
@@ -26,9 +25,8 @@ router.get("/pdf/:ticket_number", downloadTicket);
 
 // Board Passenger
 router.post("/board/:ticket_number", boardPassenger);
-router.get("/conductor-dashboard", getConductorDashboard);
+
 // Delete Ticket
 router.delete("/:id", deleteTicket);
 
 module.exports = router;
-

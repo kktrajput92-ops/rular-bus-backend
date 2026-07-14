@@ -13,42 +13,17 @@ const addPassenger = async (req, res) => {
       gender,
       age,
     } = req.body;
-      if (!full_name || !full_name.trim()) {
-        return res.status(400).json({
-          success: false,
-          message: "Passenger name is required",
-        });
-      }
-
-      if (!phone || phone.length !== 10) {
-        return res.status(400).json({
-          success: false,
-          message: "Valid mobile number is required",
-        });
-      }
-console.log("PHONE RECEIVED =", phone);
-console.log("PHONE TYPE =", typeof phone);
-
-const check = await pool.query(
-  "SELECT id, phone FROM passengers WHERE phone = $1",
-  [phone]
-);
-
-console.log("MATCH =", check.rows);
-      const existingPassenger = await pool.query(
-        `SELECT * FROM passengers
-         WHERE phone = $1
-         LIMIT 1`,
-        [phone]
-      );
-
-      if (existingPassenger.rows.length > 0) {
-        return res.json({
-          success: true,
-          message: "Passenger already exists",
-          passenger: existingPassenger.rows[0],
-        });
-      }
+console.log("BODY =", req.body);
+console.log("AGE =", age);
+console.log("PARAMS =", [
+  full_name,
+  phone,
+  email,
+  gender,
+  age,
+]);
+console.log("BODY =", req.body);
+console.log("AGE =", age, typeof age);
     const result = await pool.query(
       `
       INSERT INTO passengers

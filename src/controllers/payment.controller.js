@@ -8,7 +8,7 @@ const addPayment = async (req, res) => {
       amount,
       payment_method,
     } = req.body;
-
+console.log("BOOKING ID RECEIVED =", booking_id);
     // Check booking exists
     const booking = await pool.query(
       "SELECT * FROM bookings WHERE id=$1",
@@ -27,7 +27,7 @@ const addPayment = async (req, res) => {
       "SELECT * FROM payments WHERE booking_id=$1",
       [booking_id]
     );
-
+console.log("PAYMENT CHECK =", payment.rows);
     if (payment.rows.length > 0) {
       return res.status(400).json({
         success: false,

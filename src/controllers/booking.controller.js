@@ -71,7 +71,21 @@ const addBooking = async (req, res) => {
   RETURNING id`,
   [passenger_id, schedule_id, seat_number]
 );
+const bookingId = result.rows[0].id;
 
+const ticketNumber =
+  "RB" +
+  Date.now().toString().slice(-8) +
+  Math.floor(Math.random() * 1000);
+
+const qrCode = ticketNumber;
+
+await pool.query(
+  `INSERT INTO tickets
+  (booking_id, ticket_number, qr_code)
+  VALUES ($1,$2,$3)`,
+  [bookingId, ticketNumber, qrCode]
+);
 const booking = await pool.query(
   `
   SELECT
@@ -86,10 +100,12 @@ const booking = await pool.query(
     s.arrival_time,
 
     bus.bus_name,
-    bus.bus_number,
+bus.bus_number,
 
-    r.source,
-    r.destination
+r.source,
+r.destination,
+
+t.ticket_number
 
   FROM bookings b
 
@@ -102,14 +118,17 @@ const booking = await pool.query(
   JOIN buses bus
   ON s.bus_id = bus.id
 
-  JOIN routes r
-  ON s.route_id = r.id
+ JOIN routes r
+ON s.route_id = r.id
 
-  WHERE b.id = $1
+LEFT JOIN tickets t
+ON t.booking_id = b.id
+
+WHERE b.id = $1
   `,
   [result.rows[0].id]
 );
-
+console.log("BOOKING =", booking.rows[0]);
 res.json({
   success: true,
   message: "Booking Created Successfully",
@@ -203,8 +222,8 @@ const getBookingById = async (req, res) => {
 
         r.id AS route_id,
         r.source,
-        r.destination
-
+        r.destination,
+        t.ticket_number
       FROM bookings b
 
       JOIN passengers p
@@ -216,14 +235,17 @@ const getBookingById = async (req, res) => {
       JOIN buses bus
         ON s.bus_id = bus.id
 
-      JOIN routes r
-        ON s.route_id = r.id
+      LEFT JOIN tickets t
+  ON t.booking_id = b.id
+
+JOIN routes r
+  ON s.route_id = r.id 
 
       WHERE b.id = $1
       `,
       [id]
     );
-
+return res.json(result.rows);
     if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,

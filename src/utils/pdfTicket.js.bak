@@ -14,23 +14,15 @@ const generateTicket = (res, ticket) => {
 
   doc.pipe(res);
 
-  doc
-  .rect(0, 0, 595, 90)
-  .fill("#0B3D91");
+  doc.fontSize(22).text("RULAR BUS", {
+    align: "center",
+  });
 
-doc
-  .fillColor("#FFFFFF")
-  .fontSize(26)
-  .text("🚌 RULAR BUS", 40, 30);
+  doc.moveDown();
 
-doc
-  .fontSize(12)
-  .text("Official Digital Bus Ticket", 40, 60);
-
-doc.moveDown(3);
-
-doc.fillColor("#000000");
-    
+  doc.fontSize(18).text("BUS TICKET", {
+    align: "center",
+  });
 
   doc.moveDown();
 

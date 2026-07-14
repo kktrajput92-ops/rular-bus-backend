@@ -18,8 +18,12 @@ const searchRoutes = require("./routes/search.routes");
 const stopRoutes = require("./routes/stop.routes");
 const journeyRoutes = require("./routes/journey.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
+const conductorRoutes = require("./routes/conductor.routes");
 const seatLockRoutes = require("./routes/seat_lock.routes");
-
+const companyRoutes = require("./routes/company.routes");
+const regionRoutes = require("./routes/region.routes");
+const branchRoutes = require("./routes/branch.routes");
+const officeRoutes = require("./routes/office.routes");
 const app = express();
 
 app.use(cors());
@@ -46,8 +50,12 @@ app.use("/api/search", searchRoutes);
 app.use("/api/stops", stopRoutes);
 app.use("/api/journeys", journeyRoutes);
 app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/conductor", conductorRoutes);
 app.use("/api/seat-locks", seatLockRoutes);
-
+app.use("/api/companies", companyRoutes);
+app.use("/api/regions", regionRoutes);
+app.use("/api/branches", branchRoutes);
+app.use("/api/offices", officeRoutes);
 // Root Route
 app.get("/", (req, res) => {
   res.json({
@@ -78,6 +86,6 @@ app.use((err, req, res, next) => {
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
