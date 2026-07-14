@@ -25,6 +25,7 @@ const regionRoutes = require("./routes/region.routes");
 const branchRoutes = require("./routes/branch.routes");
 const officeRoutes = require("./routes/office.routes");
 const counterRoutes = require("./routes/counter.routes");
+const errorMiddleware = require("./middleware/error.middleware");
 const app = express();
 
 app.use(cors());
@@ -77,14 +78,7 @@ app.get("/api/health", (req, res) => {
 });
 
 // Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err);
-
-  res.status(500).json({
-    success: false,
-    message: err.message
-  });
-});
+app.use(errorMiddleware);
 
 const PORT = process.env.PORT || 5000;
 
