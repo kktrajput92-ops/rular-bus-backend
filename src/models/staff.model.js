@@ -2,21 +2,56 @@ const pool = require("../config/db");
 
 const Staff = {
 
-  async getAll() {
-    const result = await pool.query(`
-      SELECT
-        s.*,
-        d.department_name,
-        dg.designation_name,
-        r.role_name
-      FROM staff s
-      LEFT JOIN departments d ON s.department_id = d.id
-      LEFT JOIN designations dg ON s.designation_id = dg.id
-      LEFT JOIN roles r ON s.role_id = r.id
-      ORDER BY s.id ASC
-    `);
+  async getAll(filters = {}) {
+    const {
+  page = 1,
+  limit = 10,
+  search = "",
+  status = ""
+} = filters;
 
-    return result.rows;
+const offset = (page - 1) * limit;
+
+let query = `
+SELECT
+  s.*,
+  d.department_name,
+  dg.designation_name,
+  r.role_name
+FROM staff s
+LEFT JOIN departments d ON s.department_id = d.id
+LEFT JOIN designations dg ON s.designation_id = dg.id
+LEFT JOIN roles r ON s.role_id = r.id
+WHERE 1=1
+`;
+
+const values = [];
+
+if (search) {
+  values.push(`%${search}%`);
+  query += `
+    AND (
+      s.full_name ILIKE $${values.length}
+      OR s.employee_code ILIKE $${values.length}
+      OR s.mobile ILIKE $${values.length}
+    )
+  `;
+}
+
+if (status) {
+  values.push(status);
+  query += ` AND s.status = $${values.length}`;
+}
+
+values.push(limit);
+query += ` LIMIT $${values.length}`;
+
+values.push(offset);
+query += ` OFFSET $${values.length}`;
+
+const result = await pool.query(query, values);
+
+return result.rows;
   },
 
   async getById(id) {

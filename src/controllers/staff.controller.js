@@ -3,12 +3,26 @@ const Staff = require("../models/staff.model");
 // Get All Staff
 const getStaff = async (req, res) => {
   try {
-    const staff = await Staff.getAll();
+
+    const {
+      page = 1,
+      limit = 10,
+      search = "",
+      status = "",
+    } = req.query;
+
+    const staff = await Staff.getAll({
+      page,
+      limit,
+      search,
+      status,
+    });
 
     res.json({
       success: true,
       data: staff,
     });
+
   } catch (err) {
     res.status(500).json({
       success: false,
