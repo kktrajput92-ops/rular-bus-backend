@@ -6,10 +6,10 @@ const {
   getStaffById,
   createStaff,
 } = require("../controllers/staff.controller");
-
-router.get("/", getStaff);
-router.get("/:id", getStaffById);
-router.post("/", createStaff);
+const auth = require("../middleware/auth.middleware");
+router.get("/", auth, getStaff);
+router.get("/:id", auth, getStaffById);
+router.post("/", auth, createStaff);
 
 module.exports = router;
 

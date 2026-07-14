@@ -54,10 +54,20 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    const result = await pool.query(
-      "SELECT * FROM users WHERE email=$1",
-      [email]
-    );
+   const result = await pool.query(
+  `SELECT
+    id,
+    company_id,
+    role_id,
+    full_name,
+    username,
+    email,
+    mobile,
+    password_hash
+   FROM users
+   WHERE email = $1`,
+  [email]
+);
 
     if (result.rows.length === 0) {
       return res.status(401).json({
@@ -68,7 +78,8 @@ const login = async (req, res) => {
 
     const user = result.rows[0];
 
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password_hash);
+
 
     if (!match) {
       return res.status(401).json({
@@ -79,9 +90,10 @@ const login = async (req, res) => {
 
     const token = jwt.sign(
       {
-        id: user.id,
-        email: user.email,
-        role: user.role,
+       id: user.id,
+company_id: user.company_id,
+role_id: user.role_id,
+email: user.email,
       },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
@@ -93,10 +105,11 @@ const login = async (req, res) => {
       token,
       user: {
         id: user.id,
-        full_name: user.full_name,
-        email: user.email,
-        phone: user.phone,
-        role: user.role,
+full_name: user.full_name,
+username: user.username,
+email: user.email,
+mobile: user.mobile,
+role_id: user.role_id,
       },
     });
 
