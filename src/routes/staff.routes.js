@@ -7,9 +7,12 @@ const {
   createStaff,
 } = require("../controllers/staff.controller");
 const auth = require("../middleware/auth.middleware");
-router.get("/", auth, getStaff);
-router.get("/:id", auth, getStaffById);
-router.post("/", auth, createStaff);
+const authorize = require("../middleware/role.middleware");
+
+router.get("/", auth, authorize(1,2,3), getStaff);
+router.get("/:id", auth, authorize(1,2,3), getStaffById);
+router.post("/", auth, authorize(1,2), createStaff);
+
 
 module.exports = router;
 
