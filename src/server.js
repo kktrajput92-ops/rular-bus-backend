@@ -3,7 +3,8 @@ const cors = require("cors");
 require("dotenv").config();
 
 require("./config/db");
-
+const swaggerUi = require("swagger-ui-express");
+const swaggerSpec = require("./config/swagger");
 const authRoutes = require("./routes/auth.routes");
 const busRoutes = require("./routes/bus.routes");
 const driverRoutes = require("./routes/driver.routes");
@@ -79,6 +80,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/departments", departmentRoutes);
 app.use("/api/designations", designationRoutes);
 app.use("/api/staff", staffRoutes);
+
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/shifts", shiftRoutes);
 app.use("/api/payroll", payrollRoutes);
@@ -87,7 +89,7 @@ app.use("/api/assets", assetRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
-
+app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Root Route
 app.get("/", (req, res) => {
