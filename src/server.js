@@ -26,6 +26,13 @@ const branchRoutes = require("./routes/branch.routes");
 const officeRoutes = require("./routes/office.routes");
 const counterRoutes = require("./routes/counter.routes");
 const errorMiddleware = require("./middleware/error.middleware");
+const designationRoutes = require("./routes/designation.routes");
+const roleRoutes = require("./routes/role.routes");
+const permissionRoutes = require("./routes/permission.routes");
+const userRoutes = require("./routes/user.routes");
+const departmentRoutes = require("./routes/department.routes");
+const rolePermissionRoutes = require("./routes/rolePermission.routes");
+
 const app = express();
 
 app.use(cors());
@@ -59,6 +66,15 @@ app.use("/api/regions", regionRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/offices", officeRoutes);
 app.use("/api/counters", counterRoutes);
+app.use("/api/roles", roleRoutes);
+app.use("/api/permissions", permissionRoutes);
+app.use("/api/users", userRoutes);
+app.use("/api/departments", departmentRoutes);
+app.use("/api/designations", designationRoutes);
+app.use("/api/role-permissions", rolePermissionRoutes);
+
+
+
 // Root Route
 app.get("/", (req, res) => {
   res.json({
