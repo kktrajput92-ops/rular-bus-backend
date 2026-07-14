@@ -19,8 +19,14 @@ total_schedules:0,
 total_passengers:0,
 total_bookings:0,
 total_tickets:0,
-total_revenue:0
-
+total_revenue:0,
+total_staff:0,
+total_users:0,
+total_branches:0,
+total_offices:0,
+total_assets:0,
+pending_leaves:0,
+today_attendance:0,
 });
 const [recentBookings, setRecentBookings] = useState([]);
 useEffect(()=>{
@@ -130,7 +136,54 @@ value={`₹ ${stats.total_revenue}`}
 icon="💰"
 color="#D4AF37"
 />
+<DashboardCard
+title="Staff"
+value={stats.total_staff}
+icon="👨‍💼"
+color="#0D6EFD"
+/>
 
+<DashboardCard
+title="Users"
+value={stats.total_users}
+icon="👤"
+color="#198754"
+/>
+
+<DashboardCard
+title="Branches"
+value={stats.total_branches}
+icon="🏢"
+color="#FD7E14"
+/>
+
+<DashboardCard
+title="Offices"
+value={stats.total_offices}
+icon="🏬"
+color="#6F42C1"
+/>
+
+<DashboardCard
+title="Assets"
+value={stats.total_assets}
+icon="💻"
+color="#20C997"
+/>
+
+<DashboardCard
+title="Pending Leaves"
+value={stats.pending_leaves}
+icon="📝"
+color="#DC3545"
+/>
+
+<DashboardCard
+title="Today's Attendance"
+value={stats.today_attendance}
+icon="✅"
+color="#198754"
+/>
 </div>
 
 <div

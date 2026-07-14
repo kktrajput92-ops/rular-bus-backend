@@ -12,6 +12,7 @@ import AdminRoute from "./pages/AdminRoute";
 import AdminSchedule from "./pages/AdminSchedule";
 import AdminDriver from "./pages/AdminDriver";
 import QRScanner from "./pages/QRScanner";
+import ConductorDashboard from "./pages/ConductorDashboard";
 function App() {
     return (
   <BrowserRouter>
@@ -28,7 +29,9 @@ function App() {
       <Route path="/admin/routes" element={<AdminRoute />} />
       <Route path="/admin/schedules" element={<AdminSchedule />} />
       <Route path="/admin/drivers" element={<AdminDriver />} />
-    </Routes>
+      <Route path="/conductor-dashboard"element={<ConductorDashboard />}
+/>    
+</Routes>
   </BrowserRouter>
 );
 }

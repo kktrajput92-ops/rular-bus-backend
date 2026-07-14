@@ -1,5 +1,5 @@
 import React from "react";
-
+import logo from "../../assets/logo/rular-logo.png";
 function TicketHeader() {
   return (
     <div
@@ -43,6 +43,27 @@ function TicketHeader() {
     PREMIUM DIGITAL TICKET
   </div>
 
+    <div
+  style={{
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "12px",
+  }}
+>
+  <img
+    src={logo}
+    alt="Rular Bus"
+    style={{
+      width: "52px",
+      height: "52px",
+      background: "#fff",
+      borderRadius: "50%",
+      padding: "6px",
+      objectFit: "contain",
+    }}
+  />
+
   <h1
     style={{
       margin: 0,
@@ -50,8 +71,9 @@ function TicketHeader() {
       fontWeight: "800",
     }}
   >
-    🚌 Rular Bus
+    Rular Bus
   </h1>
+</div>
 
   <h3
     style={{
