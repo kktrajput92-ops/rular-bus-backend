@@ -13,9 +13,30 @@ const getDashboard = async (req, res) => {
     const passengers = await pool.query("SELECT COUNT(*) FROM passengers");
     const bookings = await pool.query("SELECT COUNT(*) FROM bookings");
     const tickets = await pool.query("SELECT COUNT(*) FROM tickets");
+const staff = await pool.query("SELECT COUNT(*) FROM staff");
 
+const users = await pool.query("SELECT COUNT(*) FROM users");
+
+const branches = await pool.query("SELECT COUNT(*) FROM branches");
+
+const offices = await pool.query("SELECT COUNT(*) FROM offices");
+
+const assets = await pool.query("SELECT COUNT(*) FROM assets");
+
+const pendingLeaves = await pool.query(`
+SELECT COUNT(*)
+FROM leave_requests
+WHERE approval_status='PENDING'
+`);
+
+const todayAttendance = await pool.query(`
+SELECT COUNT(*)
+FROM attendance
+WHERE attendance_date = CURRENT_DATE
+`);
     const revenue = await pool.query(`
-      SELECT COALESCE(SUM(amount),0) AS total
+   
+   SELECT COALESCE(SUM(amount),0) AS total
       FROM payments
       WHERE payment_status='paid'
     `);
@@ -31,7 +52,14 @@ const getDashboard = async (req, res) => {
         total_bookings: Number(bookings.rows[0].count),
         total_tickets: Number(tickets.rows[0].count),
         total_revenue: Number(revenue.rows[0].total),
-      },
+total_staff: Number(staff.rows[0].count),
+total_users: Number(users.rows[0].count),
+total_branches: Number(branches.rows[0].count),
+total_offices: Number(offices.rows[0].count),
+total_assets: Number(assets.rows[0].count),
+pending_leaves: Number(pendingLeaves.rows[0].count),
+today_attendance: Number(todayAttendance.rows[0].count),      
+},
     });
   } catch (err) {
     console.error(err);
