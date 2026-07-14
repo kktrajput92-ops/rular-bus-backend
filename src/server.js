@@ -32,12 +32,13 @@ const attendanceRoutes = require("./routes/attendance.routes");
 const leaveRoutes = require("./routes/leave.routes");
 const shiftRoutes = require("./routes/shift.routes");
 const payrollRoutes = require("./routes/payroll.routes");
+const employeeDocumentRoutes = require("./routes/employeeDocument.routes");
 const roleRoutes = require("./routes/role.routes");
 const permissionRoutes = require("./routes/permission.routes");
 const userRoutes = require("./routes/user.routes");
 const departmentRoutes = require("./routes/department.routes");
 const rolePermissionRoutes = require("./routes/rolePermission.routes");
-
+const path = require("path");
 const app = express();
 
 app.use(cors());
@@ -80,9 +81,10 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/attendance", attendanceRoutes);
 app.use("/api/shifts", shiftRoutes);
 app.use("/api/payroll", payrollRoutes);
+app.use("/api/employee-documents", employeeDocumentRoutes);
 app.use("/api/leaves", leaveRoutes);
 app.use("/api/role-permissions", rolePermissionRoutes);
-
+app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 
 
 // Root Route
