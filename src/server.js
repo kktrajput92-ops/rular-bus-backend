@@ -24,6 +24,7 @@ const companyRoutes = require("./routes/company.routes");
 const regionRoutes = require("./routes/region.routes");
 const branchRoutes = require("./routes/branch.routes");
 const officeRoutes = require("./routes/office.routes");
+const counterRoutes = require("./routes/counter.routes");
 const app = express();
 
 app.use(cors());
@@ -56,6 +57,7 @@ app.use("/api/companies", companyRoutes);
 app.use("/api/regions", regionRoutes);
 app.use("/api/branches", branchRoutes);
 app.use("/api/offices", officeRoutes);
+app.use("/api/counters", counterRoutes);
 // Root Route
 app.get("/", (req, res) => {
   res.json({
