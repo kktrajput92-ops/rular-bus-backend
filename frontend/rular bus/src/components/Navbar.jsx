@@ -1,6 +1,7 @@
 import logo from "../assets/logo/rular-logo.png";
-
+import { useNavigate } from "react-router-dom";
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <nav
       style={{
@@ -55,7 +56,8 @@ export default function Navbar() {
       </div>
 
       <button
-        style={{
+  onClick={() => navigate("/login")}
+  style={{
           background: "#0B3D91",
           color: "#fff",
           border: "none",

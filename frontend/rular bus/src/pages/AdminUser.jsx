@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import { usePermission } from "../context/PermissionContext";
 export default function AdminUser() {
   const [users, setUsers] = useState([]);
 const [showForm, setShowForm] = useState(false);
 const [editingId, setEditingId] = useState(null);
-
+const { hasPermission } = usePermission();
 const [form, setForm] = useState({
   company_id: "",
   role_id: "",
@@ -119,6 +119,7 @@ const saveUser = async () => {
     }}
   />
 
+  {hasPermission("user.create") && (
   <button
     onClick={() => {
       setEditingId(null);
@@ -151,6 +152,7 @@ const saveUser = async () => {
   >
     ➕ Add User
   </button>
+)}
 </div>
 
 <table
@@ -186,16 +188,20 @@ const saveUser = async () => {
               <td>{item.role_name}</td>
               <td>{item.status}</td>
          <td>
+  {hasPermission("user.update") && (
   <button
     onClick={() => editUser(item)}
     style={{ marginRight: 8 }}
   >
     ✏️ Edit
   </button>
+)}
 
+  {hasPermission("user.delete") && (
   <button>
     🗑 Delete
   </button>
+)}
 </td>   
          </tr>
           ))}

@@ -22,7 +22,8 @@ import AdminRole from "./pages/AdminRole";
 import AdminRolePermission from "./pages/AdminRolePermission";
 import AdminPermission from "./pages/AdminPermission";
 import AdminUser from "./pages/AdminUser";
-
+import PermissionRoute from "./components/auth/PermissionRoute";
+import Unauthorized from "./pages/Unauthorized";
 function App() {
     return (
   <BrowserRouter>
@@ -35,7 +36,8 @@ function App() {
       <Route path="/qr-scanner" element={<QRScanner />} />
       <Route path="/bookings" element={<BookingHistory />} />
       <Route path="/login" element={<Login />} />
-      <Route
+<Route path="/unauthorized" element={<Unauthorized />} />      
+<Route
   path="/admin"
   element={
     <ProtectedRoute>
@@ -72,7 +74,9 @@ function App() {
   path="/admin/roles"
   element={
     <ProtectedRoute>
-      <AdminRole />
+      <PermissionRoute permission="role.view">
+  <AdminRole />
+</PermissionRoute>
     </ProtectedRoute>
   }
 />
@@ -81,7 +85,9 @@ function App() {
   path="/admin/role-permissions"
   element={
     <ProtectedRoute>
-      <AdminRolePermission />
+      <PermissionRoute permission="role.view">
+  <AdminRolePermission />
+</PermissionRoute>
     </ProtectedRoute>
   }
 />
@@ -90,15 +96,19 @@ function App() {
   path="/admin/permissions"
   element={
     <ProtectedRoute>
-      <AdminPermission />
+      <PermissionRoute permission="permission.view">
+  <AdminPermission />
+</PermissionRoute>
     </ProtectedRoute>
   }
 />
-    <Route
+   <Route
   path="/admin/users"
   element={
     <ProtectedRoute>
-      <AdminUser />
+      <PermissionRoute permission="user.view">
+  <AdminUser />
+</PermissionRoute>
     </ProtectedRoute>
   }
 />
