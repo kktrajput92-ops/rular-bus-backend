@@ -18,6 +18,11 @@ import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminStaff from "./pages/AdminStaff";
 import AdminDepartment from "./pages/AdminDepartment";
 import AdminDesignation from "./pages/AdminDesignation";
+import AdminRole from "./pages/AdminRole";
+import AdminRolePermission from "./pages/AdminRolePermission";
+import AdminPermission from "./pages/AdminPermission";
+import AdminUser from "./pages/AdminUser";
+
 function App() {
     return (
   <BrowserRouter>
@@ -63,6 +68,40 @@ function App() {
     </ProtectedRoute>
   }
 />
+<Route
+  path="/admin/roles"
+  element={
+    <ProtectedRoute>
+      <AdminRole />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/role-permissions"
+  element={
+    <ProtectedRoute>
+      <AdminRolePermission />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/permissions"
+  element={
+    <ProtectedRoute>
+      <AdminPermission />
+    </ProtectedRoute>
+  }
+/>
+    <Route
+  path="/admin/users"
+  element={
+    <ProtectedRoute>
+      <AdminUser />
+    </ProtectedRoute>
+  }
+/>
       <Route path="/admin/buses" element={<AdminBus />} />
       <Route path="/admin/routes" element={<AdminRoute />} />
       <Route path="/admin/schedules" element={<AdminSchedule />} />
@@ -75,3 +114,4 @@ function App() {
 }
 
 export default App;
+
