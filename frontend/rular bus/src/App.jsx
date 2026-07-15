@@ -17,6 +17,7 @@ import Login from "./pages/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminStaff from "./pages/AdminStaff";
 import AdminDepartment from "./pages/AdminDepartment";
+import AdminDesignation from "./pages/AdminDesignation";
 function App() {
     return (
   <BrowserRouter>
@@ -51,8 +52,16 @@ function App() {
     <ProtectedRoute>
       <AdminDepartment />
     </ProtectedRoute>
+     }
+  />
+  
+<Route
+  path="/admin/designations"
+  element={
+    <ProtectedRoute>
+      <AdminDesignation />
+    </ProtectedRoute>
   }
-
 />
       <Route path="/admin/buses" element={<AdminBus />} />
       <Route path="/admin/routes" element={<AdminRoute />} />
