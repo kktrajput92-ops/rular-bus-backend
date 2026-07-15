@@ -5,6 +5,7 @@ const menus = [
   { name: "Buses", icon: "🚌", path: "/admin/buses" },
   { name: "Drivers", icon: "👨‍✈️", path: "/admin/drivers" },
   { name: "Staff", icon: "👥", path: "/admin/staff" },
+{ name: "Departments", icon: "🏢", path: "/admin/departments" },
   { name: "Routes", icon: "🛣️", path: "/admin/routes" },
   { name: "Schedules", icon: "⏰", path: "/admin/schedules" },
   { name: "Passengers", icon: "👥", path: "/admin/passengers" },

@@ -16,6 +16,7 @@ import ConductorDashboard from "./pages/ConductorDashboard";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import AdminStaff from "./pages/AdminStaff";
+import AdminDepartment from "./pages/AdminDepartment";
 function App() {
     return (
   <BrowserRouter>
@@ -43,6 +44,15 @@ function App() {
       <AdminStaff />
     </ProtectedRoute>
   }
+/>
+<Route
+  path="/admin/departments"
+  element={
+    <ProtectedRoute>
+      <AdminDepartment />
+    </ProtectedRoute>
+  }
+
 />
       <Route path="/admin/buses" element={<AdminBus />} />
       <Route path="/admin/routes" element={<AdminRoute />} />
