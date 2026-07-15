@@ -1,29 +1,66 @@
 import { Link, useLocation } from "react-router-dom";
-
+import { usePermission } from "../../context/PermissionContext";
 const menus = [
   { name: "Dashboard", icon: "🏠", path: "/admin" },
+
   { name: "Buses", icon: "🚌", path: "/admin/buses" },
+
   { name: "Drivers", icon: "👨‍✈️", path: "/admin/drivers" },
+
   { name: "Staff", icon: "👥", path: "/admin/staff" },
-{ name: "Departments", icon: "🏢", path: "/admin/departments" },
-{ name: "Designations", icon: "🏷️", path: "/admin/designations" },
-{ name: "Roles", icon: "🔐", path: "/admin/roles" },
-{ name: "Role Permissions", icon: "🔑", path: "/admin/role-permissions" },
-{ name: "Permissions", icon: "🛡️", path: "/admin/permissions" },
-{ name: "Users", icon: "👤", path: "/admin/users" },
+
+  { name: "Departments", icon: "🏢", path: "/admin/departments" },
+
+  { name: "Designations", icon: "🏷️", path: "/admin/designations" },
+
+  {
+    name: "Roles",
+    icon: "🔐",
+    path: "/admin/roles",
+    permission: "role.view",
+  },
+
+  {
+    name: "Role Permissions",
+    icon: "🔑",
+    path: "/admin/role-permissions",
+    permission: "role.view",
+  },
+
+  {
+    name: "Permissions",
+    icon: "🛡️",
+    path: "/admin/permissions",
+    permission: "permission.view",
+  },
+
+  {
+    name: "Users",
+    icon: "👤",
+    path: "/admin/users",
+    permission: "user.view",
+  },
+
   { name: "Routes", icon: "🛣️", path: "/admin/routes" },
+
   { name: "Schedules", icon: "⏰", path: "/admin/schedules" },
+
   { name: "Passengers", icon: "👥", path: "/admin/passengers" },
- { name: "Bookings", icon: "📚", path: "/bookings" },
+
+  { name: "Bookings", icon: "📚", path: "/bookings" },
+
   { name: "Tickets", icon: "🎫", path: "/admin/tickets" },
+
   { name: "Payments", icon: "💳", path: "/admin/payments" },
+
   { name: "Reports", icon: "📊", path: "/admin/reports" },
+
   { name: "Live Tracking", icon: "📍", path: "/admin/tracking" },
 ];
 
 export default function AdminSidebar() {
   const location = useLocation();
-
+const { hasPermission } = usePermission();
   return (
     <div
       style={{
@@ -71,7 +108,12 @@ export default function AdminSidebar() {
       </div>
 
       <div style={{ padding: 12, flex: 1 }}>
-        {menus.map((item) => (
+        {menus
+  .filter(
+    (item) =>
+      !item.permission || hasPermission(item.permission)
+  )
+  .map((item) => (
           <Link
             key={item.path}
             to={item.path}

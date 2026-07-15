@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
-
+import { usePermission } from "../context/PermissionContext";
 export default function Login(){
 
 const navigate=useNavigate();
-
+const { setPermissions } = usePermission();
 const[email,setEmail]=useState("");
 
 const[password,setPassword]=useState("");
@@ -22,7 +22,15 @@ password
 });
 
 localStorage.setItem("token",res.data.token);
+localStorage.setItem("user", JSON.stringify(res.data.user));
 
+if (res.data.permissions) {
+  setPermissions(res.data.permissions);
+  localStorage.setItem(
+    "permissions",
+    JSON.stringify(res.data.permissions)
+  );
+}
 navigate("/admin");
 
 }catch(err){
