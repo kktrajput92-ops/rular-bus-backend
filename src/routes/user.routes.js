@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-
+const auth = require("../middleware/auth.middleware");
+const hasPermission = require("../middleware/role.middleware");
 const {
   getUsers,
   createUser,
@@ -8,10 +9,26 @@ const {
   updateUser,
 } = require("../controllers/user.controller");
 
-router.get("/", getUsers);
-router.post("/", createUser);
-router.put("/:id", updateUser);
-router.post("/login", login);
+router.get(
+  "/",
+  auth,
+  hasPermission("user.view"),
+  getUsers
+);
 
+router.post(
+  "/",
+  auth,
+  hasPermission("user.create"),
+  createUser
+);
+
+router.put(
+  "/:id",
+  auth,
+  hasPermission("user.update"),
+  updateUser
+);
+router.post("/login", login);
 module.exports = router;
 
