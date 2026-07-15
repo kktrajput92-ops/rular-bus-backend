@@ -15,6 +15,7 @@ import QRScanner from "./pages/QRScanner";
 import ConductorDashboard from "./pages/ConductorDashboard";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AdminStaff from "./pages/AdminStaff";
 function App() {
     return (
   <BrowserRouter>
@@ -32,6 +33,14 @@ function App() {
   element={
     <ProtectedRoute>
       <Admin />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/admin/staff"
+  element={
+    <ProtectedRoute>
+      <AdminStaff />
     </ProtectedRoute>
   }
 />
