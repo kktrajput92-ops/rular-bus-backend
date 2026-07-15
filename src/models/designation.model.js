@@ -56,7 +56,37 @@ const Designation = {
 
     return result.rows[0];
   }
+,
 
+  async update(id, data) {
+
+    const {
+      designation_code,
+      designation_name,
+      description
+    } = data;
+
+    const result = await pool.query(
+      `
+      UPDATE designations
+      SET
+        designation_code = $1,
+        designation_name = $2,
+        description = $3,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE id = $4
+      RETURNING *
+      `,
+      [
+        designation_code,
+        designation_name,
+        description,
+        id
+      ]
+    );
+
+    return result.rows[0];
+  }
 };
 
 module.exports = Designation;

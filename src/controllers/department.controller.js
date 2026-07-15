@@ -58,10 +58,27 @@ const createDepartment = async (req, res) => {
     });
   }
 };
+// Update Department
+const updateDepartment = async (req, res) => {
+  try {
+    const department = await Department.update(req.params.id, req.body);
 
+    res.json({
+      success: true,
+      message: "Department updated successfully",
+      data: department,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getDepartments,
   getDepartmentById,
   createDepartment,
+  updateDepartment,
 };
 

@@ -82,10 +82,27 @@ await Audit.create({
     });
   }
 };
+// Update Staff
+const updateStaff = async (req, res) => {
+  try {
+    const staff = await Staff.update(req.params.id, req.body);
 
+    res.json({
+      success: true,
+      message: "Staff updated successfully",
+      data: staff,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getStaff,
   getStaffById,
   createStaff,
+  updateStaff,
 };
 

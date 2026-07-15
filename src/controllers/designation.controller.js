@@ -58,9 +58,26 @@ const createDesignation = async (req, res) => {
     });
   }
 };
+// Update Designation
+const updateDesignation = async (req, res) => {
+  try {
+    const designation = await Designation.update(req.params.id, req.body);
 
+    res.json({
+      success: true,
+      message: "Designation updated successfully",
+      data: designation,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getDesignations,
   getDesignationById,
   createDesignation,
+  updateDesignation,
 };

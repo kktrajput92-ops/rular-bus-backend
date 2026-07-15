@@ -5,7 +5,9 @@ const {
   getStaff,
   getStaffById,
   createStaff,
+  updateStaff,
 } = require("../controllers/staff.controller");
+
 const auth = require("../middleware/auth.middleware");
 const authorize = require("../middleware/role.middleware");
 /**
@@ -56,7 +58,7 @@ const authorize = require("../middleware/role.middleware");
 router.get("/", auth, authorize(1,2,3), getStaff);
 router.get("/:id", auth, authorize(1,2,3), getStaffById);
 router.post("/", auth, authorize(1,2), createStaff);
-
+router.put("/:id", auth, authorize(1,2), updateStaff);
 
 module.exports = router;
 

@@ -51,7 +51,37 @@ const Department = {
 
     return result.rows[0];
   }
+,
 
+async update(id, data) {
+
+  const {
+  department_code,
+  department_name,
+  description
+} = data;
+
+  const result = await pool.query(
+    `
+    UPDATE departments
+SET
+  department_code = $1,
+  department_name = $2,
+  description = $3,
+  updated_at = CURRENT_TIMESTAMP
+WHERE id = $4
+RETURNING *
+    `,
+    [
+  department_code,
+  department_name,
+  description,
+  id
+]
+  );
+
+  return result.rows[0];
+}
 };
 
 module.exports = Department;

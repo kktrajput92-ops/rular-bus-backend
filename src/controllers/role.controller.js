@@ -14,7 +14,7 @@ const getRoles = async (req, res) => {
       success: false,
       message: err.message,
     });
-  }
+   }
 };
 
 // Get Role By ID
@@ -58,9 +58,26 @@ const createRole = async (req, res) => {
     });
   }
 };
+// Update Role
+const updateRole = async (req, res) => {
+  try {
+    const role = await Role.update(req.params.id, req.body);
 
+    res.json({
+      success: true,
+      message: "Role updated successfully",
+      data: role,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getRoles,
   getRoleById,
   createRole,
+  updateRole,
 };

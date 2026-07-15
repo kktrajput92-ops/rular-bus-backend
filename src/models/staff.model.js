@@ -143,7 +143,40 @@ return result.rows;
 
     return result.rows[0];
   }
+,
 
+async update(id, data) {
+
+  const {
+    full_name,
+    mobile,
+    email,
+    address
+  } = data;
+
+  const result = await pool.query(
+    `
+    UPDATE staff
+    SET
+      full_name = $1,
+      mobile = $2,
+      email = $3,
+      address = $4,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = $5
+    RETURNING *
+    `,
+    [
+      full_name,
+      mobile,
+      email,
+      address,
+      id
+    ]
+  );
+
+  return result.rows[0];
+}
 };
 
 module.exports = Staff;

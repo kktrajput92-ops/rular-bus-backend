@@ -48,7 +48,37 @@ const Role = {
 
     return result.rows[0];
   }
+,
 
+async update(id, data) {
+
+  const {
+    role_code,
+    role_name,
+    description
+  } = data;
+
+  const result = await pool.query(
+    `
+    UPDATE roles
+    SET
+      role_code = $1,
+      role_name = $2,
+      description = $3,
+      updated_at = CURRENT_TIMESTAMP
+    WHERE id = $4
+    RETURNING *
+    `,
+    [
+      role_code,
+      role_name,
+      description,
+      id
+    ]
+  );
+
+  return result.rows[0];
+}
 };
 
 module.exports = Role;
