@@ -96,9 +96,26 @@ const login = async (req, res) => {
     });
   }
 };
+// Update User
+const updateUser = async (req, res) => {
+  try {
+    const user = await User.update(req.params.id, req.body);
 
+    res.json({
+      success: true,
+      message: "User updated successfully",
+      data: user,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getUsers,
   createUser,
   login,
+  updateUser,
 };

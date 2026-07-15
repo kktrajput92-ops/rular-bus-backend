@@ -39,8 +39,24 @@ const assignPermission = async (req, res) => {
     });
   }
 };
+// Remove Permission
+const removePermission = async (req, res) => {
+  try {
+    await RolePermission.remove(req.params.id);
 
+    res.json({
+      success: true,
+      message: "Permission removed successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 module.exports = {
   getRolePermissions,
   assignPermission,
+  removePermission,
 };

@@ -58,9 +58,27 @@ const createPermission = async (req, res) => {
     });
   }
 };
+// Update Permission
+const updatePermission = async (req, res) => {
+  try {
+    const permission = await Permission.update(req.params.id, req.body);
+
+    res.json({
+      success: true,
+      message: "Permission updated successfully",
+      data: permission,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 
 module.exports = {
   getPermissions,
   getPermissionById,
   createPermission,
+  updatePermission,
 };

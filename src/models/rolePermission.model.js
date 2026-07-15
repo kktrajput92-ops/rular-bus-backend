@@ -18,7 +18,7 @@ const RolePermission = {
     return result.rows;
   },
 
-  async create(role_id, permission_id) {
+    async create(role_id, permission_id) {
     const result = await pool.query(
       `
       INSERT INTO role_permissions
@@ -32,7 +32,20 @@ const RolePermission = {
     );
 
     return result.rows[0];
-  }
+  },
+
+  async remove(id) {
+
+    await pool.query(
+      `
+      DELETE FROM role_permissions
+      WHERE id = $1
+      `,
+      [id]
+    );
+
+    return true;
+  }    
 
 };
 
