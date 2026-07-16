@@ -300,24 +300,36 @@ alert(JSON.stringify(err.response?.data || err.message));
   >
     <thead>
       <tr>
-        <th>ID</th>
         <th>Employee Code</th>
-        <th>Name</th>
-        <th>Mobile</th>
-        <th>Status</th>
-        <th>Actions</th>
+<th>Name</th>
+<th>Company</th>
+<th>Region</th>
+<th>Branch</th>
+<th>Office</th>
+<th>Department</th>
+<th>Designation</th>
+<th>Role</th>
+<th>Mobile</th>
+<th>Status</th>
+<th>Actions</th>
       </tr>
     </thead>
 
     <tbody>
       {staff.map((item) => (
         <tr key={item.id}>
-          <td>{item.id}</td>
           <td>{item.employee_code}</td>
-          <td>{item.full_name}</td>
-          <td>{item.mobile}</td>
-          <td>{item.status}</td>
-          <td>
+<td>{item.full_name}</td>
+<td>{item.company_name || "-"}</td>
+<td>{item.region_name || "-"}</td>
+<td>{item.branch_name || "-"}</td>
+<td>{item.office_name || "-"}</td>
+<td>{item.department_name || "-"}</td>
+<td>{item.designation_name || "-"}</td>
+<td>{item.role_name || "-"}</td>
+<td>{item.mobile}</td>
+<td>{item.status}</td>
+<td>
             <button
   onClick={() => editStaff(item)}
   style={{ marginRight: 8 }}
