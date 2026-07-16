@@ -12,14 +12,16 @@ const [branches, setBranches] = useState([]);
 const [offices, setOffices] = useState([]);
 const [departments, setDepartments] = useState([]);
 const [designations, setDesignations] = useState([]);
-
+const [roles, setRoles] = useState([]);
   const [form, setForm] = useState({
 company_id: "",  
 region_id: "",
 branch_id: "",
 office_id: "",
 department_id: "",
-  employee_code: "",
+designation_id: "",
+role_id: "",  
+employee_code: "",
     full_name: "",
     mobile: "",
     email: "",
@@ -123,6 +125,19 @@ const loadDesignations = async (departmentId) => {
     console.log(err);
   }
 };
+const loadRoles = async (departmentId) => {
+  if (!departmentId) {
+    setRoles([]);
+    return;
+  }
+
+  try {
+    const res = await api.get(`/roles?department_id=${departmentId}`);
+    setRoles(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const editStaff = (item) => {
   setEditingId(item.id);
 
@@ -148,7 +163,7 @@ const editStaff = (item) => {
   office_id: Number(form.office_id),
   department_id: Number(form.department_id),
   designation_id: Number(form.designation_id),
-  role_id: 1,
+ role_id: Number(form.role_id),
 
   employee_code: form.employee_code,
   full_name: form.full_name,
@@ -449,12 +464,17 @@ loadRegions(companyId);
 
 <select
   value={form.designation_id}
-  onChange={(e) =>
-    setForm((prev) => ({
-      ...prev,
-      designation_id: e.target.value,
-    }))
-  }
+  onChange={(e) => {
+  const designationId = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    designation_id: designationId,
+    role_id: "",
+  }));
+
+  loadRoles(form.department_id);
+}}
   style={{
     width: "100%",
     padding: 10,
@@ -466,6 +486,30 @@ loadRegions(companyId);
   {designations.map((d) => (
     <option key={d.id} value={d.id}>
       {d.designation_name}
+    </option>
+  ))}
+</select>
+<p>Roles Count: {roles.length}</p>
+
+<select
+  value={form.role_id}
+  onChange={(e) =>
+    setForm((prev) => ({
+      ...prev,
+      role_id: e.target.value,
+    }))
+  }
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Role</option>
+
+  {roles.map((r) => (
+    <option key={r.id} value={r.id}>
+      {r.role_name}
     </option>
   ))}
 </select>
