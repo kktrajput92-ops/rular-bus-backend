@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminDesignation() {
   const [designations, setDesignations] = useState([]);
 const [showForm, setShowForm] = useState(false);
@@ -34,7 +39,17 @@ const editDesignation = (item) => {
 
   setShowForm(true);
 };
+const deleteDesignation = async (id) => {
+  if (!window.confirm("Delete this designation?")) return;
 
+  try {
+    await api.delete(`/designations/${id}`);
+    loadDesignations();
+  } catch (err) {
+    console.log(err);
+    alert(err.response?.data?.message || "Failed to delete designation");
+  }
+};
 const saveDesignation = async () => {
   try {
     const payload = {
@@ -68,6 +83,50 @@ const saveDesignation = async () => {
     alert(err.response?.data?.message || "Failed to save designation");
   }
 };
+const columns = [
+  { key: "id", title: "ID" },
+  { key: "designation_code", title: "Designation Code" },
+  { key: "designation_name", title: "Designation Name" },
+  {
+    key: "status",
+    title: "Status",
+    render: (item) => (
+      <RBBadge
+        variant={
+          item.status === "ACTIVE"
+            ? "success"
+            : item.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {item.status}
+      </RBBadge>
+    ),
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: (item) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editDesignation(item)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton
+          variant="danger"
+          onClick={() => deleteDesignation(item.id)}
+        >
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];
   return (
     <div style={{ padding: 30 }}>
       <h1>🏷️ Designation Management</h1>
@@ -79,84 +138,15 @@ const saveDesignation = async () => {
     margin: "20px 0",
   }}
 >
-  <input
-    type="text"
-    placeholder="🔍 Search designation..."
-    style={{
-      width: "320px",
-      padding: "10px 14px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
 
-  <button
-    onClick={() => {
-      setEditingId(null);
-
-      setForm({
-        designation_code: "",
-        designation_name: "",
-        description: "",
-      });
-
-      setShowForm(true);
-    }}
-    style={{
-      background: "#198754",
-      color: "#fff",
-      border: "none",
-      padding: "10px 18px",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
-  >
-    ➕ Add Designation
-  </button>
+<RBInput
+  placeholder="🔍 Search designation..."
+/>
 </div>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Designation Code</th>
-            <th>Designation Name</th>
-            <th>Status</th>
-             <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {designations.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.designation_code}</td>
-              <td>{item.designation_name}</td>
-              <td>{item.status}</td>
-<td>
-  <button
-    onClick={() => editDesignation(item)}
-    style={{ marginRight: 8 }}
-  >
-    ✏️ Edit
-  </button>
-
-  <button>
-    🗑 Delete
-  </button>
-</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <RBTable
+  columns={columns}
+  data={designations}
+/>
 {showForm && (
   <div
     style={{
@@ -181,23 +171,21 @@ const saveDesignation = async () => {
         {editingId ? "✏️ Edit Designation" : "➕ Add Designation"}
       </h2>
 
-      <input
-        placeholder="Designation Code"
-        value={form.designation_code}
-        onChange={(e) =>
-          setForm({ ...form, designation_code: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+     <RBInput
+  placeholder="Designation Code"
+  value={form.designation_code}
+  onChange={(e) =>
+    setForm({ ...form, designation_code: e.target.value })
+  }
+/>
 
-      <input
-        placeholder="Designation Name"
-        value={form.designation_name}
-        onChange={(e) =>
-          setForm({ ...form, designation_name: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+     <RBInput
+  placeholder="Designation Name"
+  value={form.designation_name}
+  onChange={(e) =>
+    setForm({ ...form, designation_name: e.target.value })
+  }
+/>
 
       <textarea
         placeholder="Description"
@@ -221,13 +209,20 @@ const saveDesignation = async () => {
           marginTop: 20,
         }}
       >
-        <button onClick={() => setShowForm(false)}>
-          Cancel
-        </button>
+        <RBButton
+  variant="secondary"
+  onClick={() => setShowForm(false)}
+>
+  Cancel
+</RBButton>
 
-        <button onClick={saveDesignation}>
-          Save
-        </button>
+<RBButton
+  variant="success"
+  onClick={saveDesignation}
+>
+  Save
+</RBButton>
+       
       </div>
     </div>
   </div>
