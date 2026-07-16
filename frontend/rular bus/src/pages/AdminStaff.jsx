@@ -35,7 +35,36 @@ employee_code: "",
   loadStaff();
   loadCompanies();
 }, []);
+useEffect(() => {
+  if (showForm && form.company_id) {
+    loadRegions(form.company_id);
+  }
+}, [showForm, form.company_id]);
 
+useEffect(() => {
+  if (showForm && form.region_id) {
+    loadBranches(form.region_id);
+  }
+}, [showForm, form.region_id]);
+
+useEffect(() => {
+  if (showForm && form.branch_id) {
+    loadOffices(form.branch_id);
+  }
+}, [showForm, form.branch_id]);
+
+useEffect(() => {
+  if (showForm && form.office_id) {
+    loadDepartments(form.office_id);
+  }
+}, [showForm, form.office_id]);
+
+useEffect(() => {
+  if (showForm && form.department_id) {
+    loadDesignations(form.department_id);
+    loadRoles(form.department_id);
+  }
+}, [showForm, form.department_id]);
  const loadStaff = async () => {
   try {
     const res = await api.get("/staff");
@@ -138,18 +167,27 @@ const loadRoles = async (departmentId) => {
     console.log(err);
   }
 };
-const editStaff = (item) => {
+const editStaff = async (item) => {
   setEditingId(item.id);
+console.log("Edit Item =", item);
 
   setForm({
-    employee_code: item.employee_code || "",
-    full_name: item.full_name || "",
-    mobile: item.mobile || "",
-    email: item.email || "",
-    gender: item.gender || "Male",
-    employment_type: item.employment_type || "PERMANENT",
-    salary: item.salary || "",
-    address: item.address || "",
+   company_id: String(item.company_id || ""),
+region_id: String(item.region_id || ""),
+branch_id: String(item.branch_id || ""),
+office_id: String(item.office_id || ""),
+department_id: String(item.department_id || ""),
+designation_id: String(item.designation_id || ""),
+role_id: String(item.role_id || ""),
+
+employee_code: item.employee_code || "",
+full_name: item.full_name || "",
+mobile: item.mobile || "",
+email: item.email || "",
+gender: item.gender || "Male",
+employment_type: item.employment_type || "PERMANENT",
+salary: item.salary || "",
+address: item.address || "",
   });
 
   setShowForm(true);
