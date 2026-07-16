@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminRole() {
   const [roles, setRoles] = useState([]);
 const [showForm, setShowForm] = useState(false);
@@ -34,7 +39,17 @@ const editRole = (item) => {
 
   setShowForm(true);
 };
+const deleteRole = async (id) => {
+  if (!window.confirm("Delete this role?")) return;
 
+  try {
+    await api.delete(`/roles/${id}`);
+    loadRoles();
+  } catch (err) {
+    console.log(err);
+    alert(err.response?.data?.message || "Failed to delete role");
+  }
+};
 const saveRole = async () => {
   try {
     const payload = {
@@ -66,7 +81,51 @@ const saveRole = async () => {
     alert(err.response?.data?.message || "Failed to save role");
   }
 };
-  return (
+const columns = [
+  { key: "id", title: "ID" },
+  { key: "role_code", title: "Role Code" },
+  { key: "role_name", title: "Role Name" },
+  {
+    key: "status",
+    title: "Status",
+    render: (item) => (
+      <RBBadge
+        variant={
+          item.status === "ACTIVE"
+            ? "success"
+            : item.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {item.status}
+      </RBBadge>
+    ),
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: (item) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editRole(item)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton
+          variant="danger"
+          onClick={() => deleteRole(item.id)}
+        >
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];  
+return (
     <div style={{ padding: 30 }}>
       <h1>🔐 Role Management</h1>
 <div
@@ -77,85 +136,25 @@ const saveRole = async () => {
     margin: "20px 0",
   }}
 >
-  <input
-    type="text"
-    placeholder="🔍 Search role..."
-    style={{
-      width: "320px",
-      padding: "10px 14px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
+    <RBInput
+  placeholder="🔍 Search role..."
+/>
 
-  <button
-    onClick={() => {
-      setEditingId(null);
+  <RBButton
+  variant="success"
+  onClick={() => {
+    // yahan existing onClick ka pura code same paste karna
+  }}
+>
+  ➕ Add Role
+</RBButton>
 
-      setForm({
-        role_code: "",
-        role_name: "",
-        description: "",
-      });
-
-      setShowForm(true);
-    }}
-    style={{
-      background: "#198754",
-      color: "#fff",
-      border: "none",
-      padding: "10px 18px",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
-  >
-    ➕ Add Role
-  </button>
+    
 </div>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Role Code</th>
-            <th>Role Name</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {roles.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.role_code}</td>
-              <td>{item.role_name}</td>
-              <td>{item.status}</td>
-<td>
-  <button
-    onClick={() => editRole(item)}
-    style={{ marginRight: 8 }}
-  >
-    ✏️ Edit
-  </button>
-
-  <button>
-    🗑 Delete
-  </button>
-</td>            
-
-</tr>
-          ))}
-        </tbody>
-      </table>
+     <RBTable
+  columns={columns}
+  data={roles}
+/>
 {showForm && (
   <div
     style={{
@@ -189,14 +188,13 @@ const saveRole = async () => {
         style={{ width: "100%", padding: 10, marginTop: 10 }}
       />
 
-      <input
-        placeholder="Role Name"
-        value={form.role_name}
-        onChange={(e) =>
-          setForm({ ...form, role_name: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+      <RBInput
+  placeholder="Role Name"
+  value={form.role_name}
+  onChange={(e) =>
+    setForm({ ...form, role_name: e.target.value })
+  }
+/>
 
       <textarea
         placeholder="Description"
@@ -220,13 +218,19 @@ const saveRole = async () => {
           marginTop: 20,
         }}
       >
-        <button onClick={() => setShowForm(false)}>
-          Cancel
-        </button>
+        <RBButton
+  variant="secondary"
+  onClick={() => setShowForm(false)}
+>
+  Cancel
+</RBButton>
 
-        <button onClick={saveRole}>
-          Save
-        </button>
+<RBButton
+  variant="success"
+  onClick={saveRole}
+>
+  Save
+</RBButton>
       </div>
     </div>
   </div>
