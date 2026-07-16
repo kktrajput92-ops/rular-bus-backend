@@ -3,8 +3,7 @@ const Branch = require("../models/branch.model");
 // Get All Branches
 const getBranches = async (req, res) => {
   try {
-    const branches = await Branch.getAll();
-
+    const branches = await Branch.getAll(req.query.region_id);
     res.json({
       success: true,
       data: branches,

@@ -3,7 +3,7 @@ const Region = require("../models/region.model");
 // Get All Regions
 const getRegions = async (req, res) => {
   try {
-    const regions = await Region.getAll();
+    const regions = await Region.getAll(req.query.company_id);
 
     res.json({
       success: true,

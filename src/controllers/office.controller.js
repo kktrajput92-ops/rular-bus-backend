@@ -3,7 +3,7 @@ const Office = require("../models/office.model");
 // Get All Offices
 const getOffices = async (req, res) => {
   try {
-    const offices = await Office.getAll();
+    const offices = await Office.getAll(req.query.branch_id);
 
     res.json({
       success: true,

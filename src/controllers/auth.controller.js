@@ -87,7 +87,21 @@ const login = async (req, res) => {
         message: "Invalid email or password",
       });
     }
+const permissionResult = await pool.query(
+  `
+  SELECT p.permission_code
+  FROM role_permissions rp
+  JOIN permissions p
+    ON rp.permission_id = p.id
+  WHERE rp.role_id = $1
+  ORDER BY p.permission_code
+  `,
+  [user.role_id]
+);
 
+const permissions = permissionResult.rows.map(
+  (item) => item.permission_code
+);
     const token = jwt.sign(
       {
        id: user.id,
@@ -100,18 +114,19 @@ email: user.email,
     );
 
     res.json({
-      success: true,
-      message: "Login Successful",
-      token,
-      user: {
-        id: user.id,
-full_name: user.full_name,
-username: user.username,
-email: user.email,
-mobile: user.mobile,
-role_id: user.role_id,
-      },
-    });
+  success: true,
+  message: "Login Successful",
+  token,
+  user: {
+    id: user.id,
+    full_name: user.full_name,
+    username: user.username,
+    email: user.email,
+    mobile: user.mobile,
+    role_id: user.role_id,
+  },
+  permissions,
+});
 
   } catch (err) {
     console.error(err);

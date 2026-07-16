@@ -23,7 +23,7 @@ const hasPermission = (permissionCode) => {
         LIMIT 1
         `,
         [
-          req.user.role,
+          req.user.role_id,
           permissionCode
         ]
       );

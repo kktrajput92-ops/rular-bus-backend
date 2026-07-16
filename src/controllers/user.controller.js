@@ -23,9 +23,13 @@ const getUsers = async (req, res) => {
 // Create User
 const createUser = async (req, res) => {
   try {
-
+console.log(req.body);
     const password_hash = await bcrypt.hash(req.body.password, 10);
-
+req.body.company_id = req.body.company_id || 1;
+req.body.region_id = req.body.region_id || null;
+req.body.branch_id = req.body.branch_id || null;
+req.body.office_id = req.body.office_id || null;
+req.body.counter_id = req.body.counter_id || null;
     const user = await User.create({
       ...req.body,
       password_hash,
@@ -113,9 +117,29 @@ const updateUser = async (req, res) => {
     });
   }
 };
+const deleteUser = async (req, res) => {
+  try {
+
+    await User.delete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "User deleted successfully",
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+
+  }
+};
 module.exports = {
   getUsers,
   createUser,
   login,
   updateUser,
+  deleteUser,
 };

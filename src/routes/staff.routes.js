@@ -55,10 +55,10 @@ const authorize = require("../middleware/role.middleware");
  *       201:
  *         description: Staff created successfully
  */
-router.get("/", auth, authorize(1,2,3), getStaff);
-router.get("/:id", auth, authorize(1,2,3), getStaffById);
-router.post("/", auth, authorize(1,2), createStaff);
-router.put("/:id", auth, authorize(1,2), updateStaff);
+router.get("/", auth, authorize("staff.view"), getStaff);
+router.get("/:id", auth, authorize("staff.view"), getStaffById);
+router.post("/", auth, authorize("staff.create"), createStaff);
+router.put("/:id", auth, authorize("staff.update"), updateStaff);
 
 module.exports = router;
 

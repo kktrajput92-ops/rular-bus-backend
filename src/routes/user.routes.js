@@ -5,8 +5,8 @@ const hasPermission = require("../middleware/role.middleware");
 const {
   getUsers,
   createUser,
-  login,
   updateUser,
+  deleteUser,
 } = require("../controllers/user.controller");
 
 router.get(
@@ -29,6 +29,14 @@ router.put(
   hasPermission("user.update"),
   updateUser
 );
-router.post("/login", login);
+router.delete(
+  "/:id",
+  auth,
+  hasPermission("user.delete"),
+  deleteUser
+);
+
+
 module.exports = router;
+
 

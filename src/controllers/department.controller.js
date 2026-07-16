@@ -75,10 +75,30 @@ const updateDepartment = async (req, res) => {
     });
   }
 };
+// Delete Department
+const deleteDepartment = async (req, res) => {
+  try {
+
+    await Department.delete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Department deleted successfully",
+    });
+
+  } catch (err) {
+
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+
+  }
+};
 module.exports = {
   getDepartments,
   getDepartmentById,
   createDepartment,
   updateDepartment,
+  deleteDepartment,
 };
-

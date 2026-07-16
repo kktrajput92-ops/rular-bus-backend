@@ -82,6 +82,19 @@ RETURNING *
 
   return result.rows[0];
 }
+,
+
+async delete(id) {
+
+  await pool.query(
+    `
+    DELETE FROM departments
+    WHERE id = $1
+    `,
+    [id]
+  );
+
+}
 };
 
 module.exports = Department;
