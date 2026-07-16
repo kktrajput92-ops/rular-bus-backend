@@ -1,4 +1,4 @@
-import BranchIcon from "../assets/ris/RBBranch.svg";
+import OfficeIcon from "../assets/ris/RBOffice.svg";
 
 export default function IconLab() {
   return (
@@ -6,7 +6,7 @@ export default function IconLab() {
       <h2>RIS Icon Lab</h2>
 
       <img
-        src={BranchIcon}
+        src={OfficeIcon}
         alt="RB Region"
         width={96}
         height={96}

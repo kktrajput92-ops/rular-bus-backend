@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     fill="none">
+
+  <!-- Building -->
+  <path
+    d="M6 21V6L12 3L18 6V21"
+    stroke="#0B3D91"
+    stroke-width="2"
+    stroke-linejoin="round"/>
+
+  <!-- Roof -->
+  <path
+    d="M9 6H15"
+    stroke="#D62828"
+    stroke-width="2"
+    stroke-linecap="round"/>
+
+  <!-- Windows -->
+  <rect x="8" y="8" width="2" height="2" rx="0.4" fill="#0B3D91"/>
+  <rect x="14" y="8" width="2" height="2" rx="0.4" fill="#0B3D91"/>
+
+  <rect x="8" y="12" width="2" height="2" rx="0.4" fill="#0B3D91"/>
+  <rect x="14" y="12" width="2" height="2" rx="0.4" fill="#0B3D91"/>
+
+  <!-- Door -->
+  <path
+    d="M11 21V16H13V21"
+    stroke="#D62828"
+    stroke-width="2"
+    stroke-linecap="round"/>
+
+</svg>
