@@ -2,12 +2,22 @@ const pool = require("../config/db");
 
 const Role = {
 
-  async getAll() {
-    const result = await pool.query(
-      "SELECT * FROM roles ORDER BY id ASC"
-    );
-    return result.rows;
-  },
+  async getAll(departmentId) {
+
+  let query = "SELECT * FROM roles";
+  const values = [];
+
+  if (departmentId) {
+    values.push(departmentId);
+    query += " WHERE department_id = $1";
+  }
+
+  query += " ORDER BY id ASC";
+
+  const result = await pool.query(query, values);
+
+  return result.rows;
+},
 
   async getById(id) {
     const result = await pool.query(

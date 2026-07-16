@@ -3,7 +3,7 @@ const Role = require("../models/role.model");
 // Get All Roles
 const getRoles = async (req, res) => {
   try {
-    const roles = await Role.getAll();
+    const roles = await Role.getAll(req.query.department_id);
 
     res.json({
       success: true,
