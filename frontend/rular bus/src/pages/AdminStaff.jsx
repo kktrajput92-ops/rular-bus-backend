@@ -10,12 +10,15 @@ const [companies, setCompanies] = useState([]);
 const [regions, setRegions] = useState([]);
 const [branches, setBranches] = useState([]);
 const [offices, setOffices] = useState([]);
+const [departments, setDepartments] = useState([]);
+const [designations, setDesignations] = useState([]);
 
   const [form, setForm] = useState({
 company_id: "",  
 region_id: "",
 branch_id: "",
 office_id: "",
+department_id: "",
   employee_code: "",
     full_name: "",
     mobile: "",
@@ -94,6 +97,32 @@ const loadOffices = async (branchId) => {
     console.log(err);
   }
 };
+const loadDepartments = async (officeId) => {
+  if (!officeId) {
+    setDepartments([]);
+    return;
+  }
+
+  try {
+    const res = await api.get(`/departments?office_id=${officeId}`);
+    setDepartments(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+const loadDesignations = async (departmentId) => {
+  if (!departmentId) {
+    setDesignations([]);
+    return;
+  }
+
+  try {
+    const res = await api.get(`/designations?department_id=${departmentId}`);
+    setDesignations(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const editStaff = (item) => {
   setEditingId(item.id);
 
@@ -117,8 +146,8 @@ const editStaff = (item) => {
   region_id: Number(form.region_id),
   branch_id: Number(form.branch_id),
   office_id: Number(form.office_id),
-  department_id: 1,
-  designation_id: 1,
+  department_id: Number(form.department_id),
+  designation_id: Number(form.designation_id),
   role_id: 1,
 
   employee_code: form.employee_code,
@@ -362,12 +391,17 @@ loadRegions(companyId);
 
 <select
   value={form.office_id}
-  onChange={(e) =>
-    setForm((prev) => ({
-      ...prev,
-      office_id: e.target.value,
-    }))
-  }
+  onChange={(e) => {
+  const officeId = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    office_id: officeId,
+    department_id: "",
+  }));
+
+  loadDepartments(officeId);
+}}
   style={{
     width: "100%",
     padding: 10,
@@ -379,6 +413,59 @@ loadRegions(companyId);
   {offices.map((o) => (
     <option key={o.id} value={o.id}>
       {o.office_name}
+    </option>
+  ))}
+</select>
+<p>Departments Count: {departments.length}</p>
+
+<select
+  value={form.department_id}
+  onChange={(e) => {
+  const departmentId = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    department_id: departmentId,
+    designation_id: "",
+  }));
+
+  loadDesignations(departmentId);
+}}
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Department</option>
+
+  {departments.map((d) => (
+    <option key={d.id} value={d.id}>
+      {d.department_name}
+    </option>
+  ))}
+</select>
+<p>Designations Count: {designations.length}</p>
+
+<select
+  value={form.designation_id}
+  onChange={(e) =>
+    setForm((prev) => ({
+      ...prev,
+      designation_id: e.target.value,
+    }))
+  }
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Designation</option>
+
+  {designations.map((d) => (
+    <option key={d.id} value={d.id}>
+      {d.designation_name}
     </option>
   ))}
 </select>
