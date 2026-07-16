@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+     viewBox="0 0 24 24"
+     fill="none">
+
+  <!-- Folded Map -->
+  <path
+    d="M5 6L9 4L15 6L19 4V18L15 20L9 18L5 20V6Z"
+    stroke="#0B3D91"
+    stroke-width="2"
+    stroke-linejoin="round"/>
+
+  <!-- Fold Lines -->
+  <path
+    d="M9 4V18"
+    stroke="#0B3D91"
+    stroke-width="2"
+    stroke-linecap="round"/>
+
+  <path
+    d="M15 6V20"
+    stroke="#0B3D91"
+    stroke-width="2"
+    stroke-linecap="round"/>
+
+  <!-- Region Pin -->
+  <path
+    d="M12 7
+       C13.4 7 14.5 8.1 14.5 9.5
+       C14.5 11.2 12 13.5 12 13.5
+       C12 13.5 9.5 11.2 9.5 9.5
+       C9.5 8.1 10.6 7 12 7Z"
+    fill="#D62828"/>
+
+  <circle
+    cx="12"
+    cy="9.5"
+    r="0.8"
+    fill="#FFFFFF"/>
+
+</svg>

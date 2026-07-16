@@ -24,6 +24,7 @@ import AdminPermission from "./pages/AdminPermission";
 import AdminUser from "./pages/AdminUser";
 import PermissionRoute from "./components/auth/PermissionRoute";
 import Unauthorized from "./pages/Unauthorized";
+import IconLab from "./pages/IconLab";
 function App() {
     return (
   <BrowserRouter>
@@ -118,6 +119,7 @@ function App() {
       <Route path="/admin/drivers" element={<AdminDriver />} />
       <Route path="/conductor-dashboard"element={<ConductorDashboard />}
 />    
+<Route path="/icon-lab" element={<IconLab />} />
 </Routes>
   </BrowserRouter>
 );
