@@ -35,6 +35,28 @@ const editDepartment = (item) => {
   setShowForm(true);
 };
 
+const deleteDepartment = async (id) => {
+
+  if (!window.confirm("Delete this department?")) return;
+
+  try {
+
+    await api.delete(`/departments/${id}`);
+
+    alert("Department deleted successfully");
+
+    loadDepartments();
+
+  } catch (err) {
+
+    alert(
+      err.response?.data?.message || "Delete failed"
+    );
+
+  }
+
+};
+
 const saveDepartment = async () => {
   try {
     const payload = {
@@ -148,9 +170,11 @@ const saveDepartment = async () => {
     ✏️ Edit
   </button>
 
-  <button>
-    🗑 Delete
-  </button>
+  <button
+  onClick={() => deleteDepartment(item.id)}
+>
+  🗑 Delete
+</button>
 </td>           
  </tr>
           ))}

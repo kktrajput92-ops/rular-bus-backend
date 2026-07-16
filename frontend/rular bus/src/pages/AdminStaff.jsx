@@ -6,8 +6,16 @@ export default function AdminStaff() {
 
   const [showForm, setShowForm] = useState(false);
 const [editingId, setEditingId] = useState(null);
+const [companies, setCompanies] = useState([]);
+const [regions, setRegions] = useState([]);
+const [branches, setBranches] = useState([]);
+
+
   const [form, setForm] = useState({
-    employee_code: "",
+company_id: "",  
+region_id: "",
+branch_id: "",
+  employee_code: "",
     full_name: "",
     mobile: "",
     email: "",
@@ -18,17 +26,60 @@ const [editingId, setEditingId] = useState(null);
   });
 
   useEffect(() => {
-    loadStaff();
-  }, []);
+  loadStaff();
+  loadCompanies();
+}, []);
 
-  const loadStaff = async () => {
-    try {
-      const res = await api.get("/staff");
-      setStaff(res.data.data);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+ const loadStaff = async () => {
+  try {
+    const res = await api.get("/staff");
+    setStaff(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+const loadCompanies = async () => {
+  try {
+    const res = await api.get("/companies");
+    setCompanies(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+const loadRegions = async (companyId) => {
+  if (!companyId) {
+    setRegions([]);
+    return;
+  }
+
+  try {
+   const res = await api.get(`/regions?company_id=${companyId}`);
+
+console.log("API Response =", JSON.stringify(res.data));
+
+const regionList = res.data?.data || [];
+
+console.log("Region List =", regionList);
+
+setRegions(regionList);
+  } catch (err) {
+    console.log(err);
+  }
+};
+const loadBranches = async (regionId) => {
+  if (!regionId) {
+    setBranches([]);
+    return;
+  }
+
+  try {
+    const res = await api.get(`/branches?region_id=${regionId}`);
+    setBranches(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const editStaff = (item) => {
   setEditingId(item.id);
 
@@ -48,9 +99,9 @@ const editStaff = (item) => {
   const saveStaff = async () => {
     try {
       const payload = {
-  company_id: 1,
-  region_id: 1,
-  branch_id: 1,
+  company_id: Number(form.company_id),
+  region_id: Number(form.region_id),
+  branch_id: Number(form.branch_id),
   office_id: 1,
   department_id: 1,
   designation_id: 1,
@@ -206,7 +257,88 @@ alert(JSON.stringify(err.response?.data || err.message));
         }}
       >
         <h2>Add Staff</h2>
+<select
+  value={form.company_id}
+  onChange={(e) => {
+  const companyId = e.target.value;
 
+ setForm((prev) => ({
+  ...prev,
+  company_id: companyId,
+  region_id: "",
+}));
+
+console.log("Company Selected =", companyId);
+
+loadRegions(companyId);
+}}
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Company</option>
+
+  {companies.map((c) => (
+    <option key={c.id} value={c.id}>
+      {c.company_name}
+    </option>
+  ))}
+</select>
+<p>Regions Count: {regions.length}</p>
+<select
+  value={form.region_id}
+  onChange={(e) => {
+  const regionId = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    region_id: regionId,
+    branch_id: "",
+  }));
+
+  loadBranches(regionId);
+}}
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Region</option>
+
+  {regions.map((r) => (
+
+    <option key={r.id} value={r.id}>
+      {r.region_name}
+    </option>
+  ))}
+</select>
+<p>Branches Count: {branches.length}</p>
+
+<select
+  value={form.branch_id}
+  onChange={(e) =>
+    setForm((prev) => ({
+      ...prev,
+      branch_id: e.target.value,
+    }))
+  }
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Branch</option>
+
+  {branches.map((b) => (
+    <option key={b.id} value={b.id}>
+      {b.branch_name}
+    </option>
+  ))}
+</select>
         <input
           placeholder="Employee Code"
           value={form.employee_code}

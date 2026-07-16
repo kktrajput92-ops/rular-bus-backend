@@ -61,6 +61,28 @@ const editUser = (item) => {
   setShowForm(true);
 };
 
+const deleteUser = async (id) => {
+
+  if (!window.confirm("Delete this user?")) return;
+
+  try {
+
+    await api.delete(`/users/${id}`);
+
+    alert("User deleted successfully");
+
+    loadUsers();
+
+  } catch (err) {
+
+    alert(
+      err.response?.data?.message || "Delete failed"
+    );
+
+  }
+
+};
+
 const saveUser = async () => {
   try {
     const payload = { ...form };
@@ -198,9 +220,11 @@ const saveUser = async () => {
 )}
 
   {hasPermission("user.delete") && (
-  <button>
-    🗑 Delete
-  </button>
+  <button
+  onClick={() => deleteUser(item.id)}
+>
+  🗑 Delete
+</button>
 )}
 </td>   
          </tr>
