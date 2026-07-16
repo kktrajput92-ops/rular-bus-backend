@@ -9,12 +9,13 @@ const [editingId, setEditingId] = useState(null);
 const [companies, setCompanies] = useState([]);
 const [regions, setRegions] = useState([]);
 const [branches, setBranches] = useState([]);
-
+const [offices, setOffices] = useState([]);
 
   const [form, setForm] = useState({
 company_id: "",  
 region_id: "",
 branch_id: "",
+office_id: "",
   employee_code: "",
     full_name: "",
     mobile: "",
@@ -80,6 +81,19 @@ const loadBranches = async (regionId) => {
     console.log(err);
   }
 };
+const loadOffices = async (branchId) => {
+  if (!branchId) {
+    setOffices([]);
+    return;
+  }
+
+  try {
+    const res = await api.get(`/offices?branch_id=${branchId}`);
+    setOffices(res.data.data);
+  } catch (err) {
+    console.log(err);
+  }
+};
 const editStaff = (item) => {
   setEditingId(item.id);
 
@@ -102,7 +116,7 @@ const editStaff = (item) => {
   company_id: Number(form.company_id),
   region_id: Number(form.region_id),
   branch_id: Number(form.branch_id),
-  office_id: 1,
+  office_id: Number(form.office_id),
   department_id: 1,
   designation_id: 1,
   role_id: 1,
@@ -319,12 +333,17 @@ loadRegions(companyId);
 
 <select
   value={form.branch_id}
-  onChange={(e) =>
-    setForm((prev) => ({
-      ...prev,
-      branch_id: e.target.value,
-    }))
-  }
+  onChange={(e) => {
+  const branchId = e.target.value;
+
+  setForm((prev) => ({
+    ...prev,
+    branch_id: branchId,
+    office_id: "",
+  }));
+
+  loadOffices(branchId);
+}}
   style={{
     width: "100%",
     padding: 10,
@@ -336,6 +355,30 @@ loadRegions(companyId);
   {branches.map((b) => (
     <option key={b.id} value={b.id}>
       {b.branch_name}
+    </option>
+  ))}
+</select>
+<p>Offices Count: {offices.length}</p>
+
+<select
+  value={form.office_id}
+  onChange={(e) =>
+    setForm((prev) => ({
+      ...prev,
+      office_id: e.target.value,
+    }))
+  }
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="">Select Office</option>
+
+  {offices.map((o) => (
+    <option key={o.id} value={o.id}>
+      {o.office_name}
     </option>
   ))}
 </select>
