@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBCard,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminStaff() {
   const [staff, setStaff] = useState([]);
 
@@ -236,7 +242,56 @@ console.log("ERROR =", err);
 alert(JSON.stringify(err.response?.data || err.message));
     }
   };
+const columns = [
+  { key: "employee_code", title: "Employee Code" },
+  { key: "full_name", title: "Name" },
+  { key: "company_name", title: "Company" },
+  { key: "region_name", title: "Region" },
+  { key: "branch_name", title: "Branch" },
+  { key: "office_name", title: "Office" },
+  { key: "department_name", title: "Department" },
+  { key: "designation_name", title: "Designation" },
+  { key: "role_name", title: "Role" },
+  { key: "mobile", title: "Mobile" },
 
+  {
+    key: "status",
+    title: "Status",
+    render: (row) => (
+      <RBBadge
+        variant={
+          row.status === "ACTIVE"
+            ? "success"
+            : row.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {row.status}
+      </RBBadge>
+    ),
+  },
+
+  {
+    key: "actions",
+    title: "Actions",
+    render: (row) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editStaff(row)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton variant="danger">
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];
   return (
 <div style={{ padding: 30 }}>
   <h1>👥 Staff Management</h1>
@@ -289,62 +344,10 @@ alert(JSON.stringify(err.response?.data || err.message));
     </button>
   </div>
 
-  <table
-    border="1"
-    cellPadding="10"
-    style={{
-      width: "100%",
-      borderCollapse: "collapse",
-      marginTop: 20,
-    }}
-  >
-    <thead>
-      <tr>
-        <th>Employee Code</th>
-<th>Name</th>
-<th>Company</th>
-<th>Region</th>
-<th>Branch</th>
-<th>Office</th>
-<th>Department</th>
-<th>Designation</th>
-<th>Role</th>
-<th>Mobile</th>
-<th>Status</th>
-<th>Actions</th>
-      </tr>
-    </thead>
-
-    <tbody>
-      {staff.map((item) => (
-        <tr key={item.id}>
-          <td>{item.employee_code}</td>
-<td>{item.full_name}</td>
-<td>{item.company_name || "-"}</td>
-<td>{item.region_name || "-"}</td>
-<td>{item.branch_name || "-"}</td>
-<td>{item.office_name || "-"}</td>
-<td>{item.department_name || "-"}</td>
-<td>{item.designation_name || "-"}</td>
-<td>{item.role_name || "-"}</td>
-<td>{item.mobile}</td>
-<td>{item.status}</td>
-<td>
-            <button
-  onClick={() => editStaff(item)}
-  style={{ marginRight: 8 }}
->
-  ✏️ Edit
-</button>
-
-            <button>
-              🗑 Delete
-            </button>
-          </td>
-        </tr>
-      ))}
-    </tbody>
-  </table>
+  <RBTable
+  columns={columns}
+  data={staff}
+/>
   {showForm && (
     <div
       style={{

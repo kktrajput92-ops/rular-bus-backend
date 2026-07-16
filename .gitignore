@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.*
+
+# Build
+dist/
+build/
+
+# Archives
+*.zip
+
+# Backup
+*.bak
+*.backup
+*.save
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads
+uploads/
+
+# Coverage
+coverage/
+
+# Vite
+.vite/
+
+# Android / Expo
+.expo/
+.expo-shared/
+
+# IDE
+.vscode/
+.idea/
