@@ -3,8 +3,7 @@ const Department = require("../models/department.model");
 // Get All Departments
 const getDepartments = async (req, res) => {
   try {
-    const departments = await Department.getAll();
-
+    const departments = await Department.getAll(req.query.office_id);
     res.json({
       success: true,
       data: departments,

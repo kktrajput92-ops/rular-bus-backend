@@ -3,7 +3,7 @@ const Designation = require("../models/designation.model");
 // Get All Designations
 const getDesignations = async (req, res) => {
   try {
-    const designations = await Designation.getAll();
+    const designations = await Designation.getAll(req.query.department_id);
 
     res.json({
       success: true,
