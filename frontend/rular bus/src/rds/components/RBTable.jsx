@@ -33,7 +33,7 @@ export default function RBTable({ columns = [], data = [] }) {
                   whiteSpace: "nowrap",
                 }}
               >
-                {col.title}
+                {col.title || col.header}
               </th>
             ))}
           </tr>
