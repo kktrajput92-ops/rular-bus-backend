@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
 import { usePermission } from "../context/PermissionContext";
+import {
+  RBButton,
+  RBInput,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminUser() {
   const [users, setUsers] = useState([]);
 const [showForm, setShowForm] = useState(false);
@@ -118,6 +124,57 @@ const saveUser = async () => {
     alert(err.response?.data?.message || "Failed to save user");
   }
 };
+const columns = [
+  { key: "id", header: "ID" },
+  { key: "full_name", header: "Full Name" },
+  { key: "username", header: "Username" },
+  { key: "email", header: "Email" },
+  { key: "mobile", header: "Mobile" },
+  { key: "role_name", header: "Role" },
+  {
+    key: "status",
+    header: "Status",
+    render: (item) => (
+      <RBBadge
+        variant={
+          item.status === "ACTIVE"
+            ? "success"
+            : item.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {item.status}
+      </RBBadge>
+    ),
+  },
+  {
+    key: "actions",
+    header: "Actions",
+    render: (item) => (
+      <>
+        {hasPermission("user.update") && (
+          <RBButton
+            variant="secondary"
+            onClick={() => editUser(item)}
+            style={{ marginRight: 8 }}
+          >
+            Edit
+          </RBButton>
+        )}
+
+        {hasPermission("user.delete") && (
+          <RBButton
+            variant="danger"
+            onClick={() => deleteUser(item.id)}
+          >
+            Delete
+          </RBButton>
+        )}
+      </>
+    ),
+  },
+];
   return (
     <div style={{ padding: 30 }}>
       <h1>👤 User Management</h1>
@@ -130,19 +187,14 @@ const saveUser = async () => {
     margin: "20px 0",
   }}
 >
-  <input
-    type="text"
-    placeholder="🔍 Search user..."
-    style={{
-      width: "320px",
-      padding: "10px 14px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
+  <RBInput
+  placeholder="🔍 Search user..."
+/>
 
   {hasPermission("user.create") && (
-  <button
+  
+  <RBButton
+    variant="success"
     onClick={() => {
       setEditingId(null);
 
@@ -162,75 +214,18 @@ const saveUser = async () => {
 
       setShowForm(true);
     }}
-    style={{
-      background: "#198754",
-      color: "#fff",
-      border: "none",
-      padding: "10px 18px",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
   >
     ➕ Add User
-  </button>
+  </RBButton>
 )}
+
 </div>
 
-<table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Mobile</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
+<RBTable
+  columns={columns}
+  data={users}
+/>
 
-        <tbody>
-          {users.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.full_name}</td>
-              <td>{item.username}</td>
-              <td>{item.email}</td>
-              <td>{item.mobile}</td>
-              <td>{item.role_name}</td>
-              <td>{item.status}</td>
-         <td>
-  {hasPermission("user.update") && (
-  <button
-    onClick={() => editUser(item)}
-    style={{ marginRight: 8 }}
-  >
-    ✏️ Edit
-  </button>
-)}
-
-  {hasPermission("user.delete") && (
-  <button
-  onClick={() => deleteUser(item.id)}
->
-  🗑 Delete
-</button>
-)}
-</td>   
-         </tr>
-          ))}
-        </tbody>
-      </table>
 {showForm && (
   <div
     style={{
@@ -253,41 +248,36 @@ const saveUser = async () => {
     >
       <h2>{editingId ? "✏️ Edit User" : "➕ Add User"}</h2>
 
-      <input
-        placeholder="Full Name"
-        value={form.full_name}
-        onChange={(e) => setForm({ ...form, full_name: e.target.value })}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+     <RBInput
+  placeholder="Full Name"
+  value={form.full_name}
+  onChange={(e) => setForm({ ...form, full_name: e.target.value })}
+/>
 
-      <input
-        placeholder="Username"
-        value={form.username}
-        onChange={(e) => setForm({ ...form, username: e.target.value })}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+    <RBInput
+  placeholder="Username"
+  value={form.username}
+  onChange={(e) => setForm({ ...form, username: e.target.value })}
+/>
 
-      <input
-        placeholder="Email"
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+      <RBInput
+  placeholder="Email"
+  value={form.email}
+  onChange={(e) => setForm({ ...form, email: e.target.value })}
+/>
 
-      <input
-        placeholder="Mobile"
-        value={form.mobile}
-        onChange={(e) => setForm({ ...form, mobile: e.target.value })}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+     <RBInput
+  placeholder="Mobile"
+  value={form.mobile}
+  onChange={(e) => setForm({ ...form, mobile: e.target.value })}
+/>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+     <RBInput
+  type="password"
+  placeholder="Password"
+  value={form.password}
+  onChange={(e) => setForm({ ...form, password: e.target.value })}
+/>
 
       <select
         value={form.role_id}
@@ -310,13 +300,19 @@ const saveUser = async () => {
           marginTop: 20,
         }}
       >
-        <button onClick={() => setShowForm(false)}>
-          Cancel
-        </button>
+        <RBButton
+  variant="secondary"
+  onClick={() => setShowForm(false)}
+>
+  Cancel
+</RBButton>
 
-        <button onClick={saveUser}>
-          Save
-        </button>
+        <RBButton
+  variant="success"
+  onClick={saveUser}
+>
+  Save
+</RBButton>
       </div>
     </div>
   </div>
