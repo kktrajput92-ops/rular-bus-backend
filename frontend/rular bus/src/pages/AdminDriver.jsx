@@ -1,6 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBTable,
+} from "../rds/components";
 function AdminDriver() {
 
   const API = `${API_BASE}/drivers`;
@@ -155,6 +159,46 @@ function AdminDriver() {
 
   };
 
+const columns = [
+  {
+    key: "full_name",
+    title: "Name",
+  },
+  {
+    key: "phone",
+    title: "Phone",
+  },
+  {
+    key: "license_number",
+    title: "License",
+  },
+  {
+    key: "address",
+    title: "Address",
+  },
+  {
+    key: "actions",
+    title: "Action",
+    render: (driver) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editDriver(driver)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton
+          variant="danger"
+          onClick={() => deleteDriver(driver.id)}
+        >
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];
   return (
 
     <div
@@ -185,18 +229,10 @@ function AdminDriver() {
           <p style={{ color: "#666" }}>
             Rular Bus Admin ERP
           </p>
-          <input
-  type="text"
+          <RBInput
   placeholder="Search Driver..."
   value={search}
   onChange={(e) => setSearch(e.target.value)}
-  style={{
-    padding: "12px",
-    width: "300px",
-    border: "1px solid #ddd",
-    borderRadius: "8px",
-    outline: "none",
-  }}
 />
 
       </div>
@@ -220,82 +256,46 @@ function AdminDriver() {
           }}
         >
 
-          <input
-            name="full_name"
-            placeholder="Driver Name"
-            value={form.full_name}
-            onChange={handleChange}
-           style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}
-          />
+          <RBInput
+  name="driver_name"
+  placeholder="Driver Name"
+  value={form.driver_name}
+  onChange={handleChange}
+/>
 
-          <input
-            name="phone"
-            placeholder="Phone"
-            value={form.phone}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}  
-        />
+        <RBInput
+  name="phone"
+  placeholder="Phone"
+  value={form.phone}
+  onChange={handleChange}
+/>
 
-          <input
-            name="license_number"
-            placeholder="License Number"
-            value={form.license_number}
-            onChange={handleChange}
-  
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}        />
+       <RBInput
+  name="license_number"
+  placeholder="License Number"
+  value={form.license_number}
+  onChange={handleChange}
+/>
 
-          <input
-            name="address"
-            placeholder="Address"
-            value={form.address}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}  
-        />
+         <RBInput
+  name="address"
+  placeholder="Address"
+  value={form.address}
+  onChange={handleChange}
+/>
 
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-style={{
-  marginTop: "20px",
-  width: "100%",
-  padding: "14px",
-  background: "#0B3D91",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "16px",
-  fontWeight: "bold",
-  cursor: "pointer",
-}}  
-      >
-          {editingId ? "Update Driver" : "Add Driver"}
-        </button>
+        <RBButton
+  type="submit"
+  variant="primary"
+  disabled={loading}
+  style={{ width: "100%", marginTop: 20 }}
+>
+  {editingId ? "Update Driver" : "Add Driver"}
+</RBButton>
+
+          
 
       </form>
       <div
@@ -307,104 +307,25 @@ style={{
         }}
       >
 
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-
-          <thead
-            style={{
-              background: "#0B3D91",
-              color: "#fff",
-            }}
-          >
-            <tr>
-              <th style={{ padding: "14px" }}>ID</th>
-              <th>Name</th>
-              <th>Phone</th>
-              <th>License</th>
-              <th>Address</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            {filteredDrivers.length === 0 ? (
-
-              <tr>
-                <td
-                  colSpan="6"
-                  style={{
-                    textAlign: "center",
-                    padding: "25px",
-                  }}
-                >
-                  No Driver Found
-                </td>
-              </tr>
-
-            ) : (
-
-              filteredDrivers.map((driver) => (
-
-                <tr
-                  key={driver.id}
-                  style={{
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-
-                  <td style={{ padding: "14px" }}>{driver.id}</td>
-                  <td>{driver.full_name}</td>
-                  <td>{driver.phone}</td>
-                  <td>{driver.license_number}</td>
-                  <td>{driver.address}</td>
-
-                  <td>
-                    <button
-                      onClick={() => editDriver(driver)}
-                      style={{
-                        background: "#0B3D91",
-                        color: "#fff",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => deleteDriver(driver.id)}
-                      style={{
-                        background: "#D62828",
-                        color: "#fff",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Delete
-                    </button>
-
-                  </td>
-
-                </tr>
-
-              ))
-
-            )}
-
-          </tbody>
-
-        </table>
-
+        {filteredDrivers.length === 0 ? (
+  <div
+    style={{
+      padding: "25px",
+      textAlign: "center",
+      background: "#fff",
+      borderRadius: "10px",
+    }}
+  >
+    No Driver Found
+  </div>
+) : (
+  <RBTable
+    columns={columns}
+    data={filteredDrivers}
+  />
+)}
+         
+          
       </div>
 
     </div>
