@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminPermission() {
   const [permissions, setPermissions] = useState([]);
 const [showForm, setShowForm] = useState(false);
@@ -70,6 +75,48 @@ const savePermission = async () => {
     alert(err.response?.data?.message || "Failed to save permission");
   }
 };
+const columns = [
+  { key: "id", header: "ID" },
+  { key: "permission_code", header: "Permission Code" },
+  { key: "permission_name", header: "Permission Name" },
+  { key: "module_name", header: "Module" },
+  {
+    key: "status",
+    header: "Status",
+    render: (item) => (
+      <RBBadge
+        variant={
+          item.status === "ACTIVE"
+            ? "success"
+            : item.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {item.status}
+      </RBBadge>
+    ),
+  },
+  {
+    key: "actions",
+    header: "Actions",
+    render: (item) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editPermission(item)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton variant="danger">
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];
   return (
     <div style={{ padding: 30 }}>
       <h1>🔑 Permission Management</h1>
@@ -81,87 +128,32 @@ const savePermission = async () => {
     margin: "20px 0",
   }}
 >
-  <input
-    type="text"
-    placeholder="🔍 Search permission..."
-    style={{
-      width: "320px",
-      padding: "10px 14px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
+  <RBInput
+  placeholder="🔍 Search permission..."
+/>
 
-  <button
-    onClick={() => {
-      setEditingId(null);
+  <RBButton
+  variant="success"
+  onClick={() => {
+    setEditingId(null);
 
-      setForm({
-        permission_code: "",
-        permission_name: "",
-        module_name: "",
-        description: "",
-      });
+    setForm({
+      permission_code: "",
+      permission_name: "",
+      module_name: "",
+      description: "",
+    });
 
-      setShowForm(true);
-    }}
-    style={{
-      background: "#198754",
-      color: "#fff",
-      border: "none",
-      padding: "10px 18px",
-      borderRadius: "8px",
-      cursor: "pointer",
-      fontWeight: "bold",
-    }}
-  >
-    ➕ Add Permission
-  </button>
+    setShowForm(true);
+  }}
+>
+  ➕ Add Permission
+</RBButton>
 </div>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Permission Code</th>
-            <th>Permission Name</th>
-            <th>Module</th>
-            <th>Status</th>
-             <th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {permissions.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.permission_code}</td>
-              <td>{item.permission_name}</td>
-              <td>{item.module_name}</td>
-              <td>{item.status}</td>
-<td>
-  <button
-    onClick={() => editPermission(item)}
-    style={{ marginRight: 8 }}
-  >
-    ✏️ Edit
-  </button>
-
-  <button>
-    🗑 Delete
-  </button>
-</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+       <RBTable
+  columns={columns}
+  data={permissions}
+/>
 
 {showForm && (
   <div
@@ -187,32 +179,28 @@ const savePermission = async () => {
         {editingId ? "✏️ Edit Permission" : "➕ Add Permission"}
       </h2>
 
-      <input
-        placeholder="Permission Code"
-        value={form.permission_code}
-        onChange={(e) =>
-          setForm({ ...form, permission_code: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+      <RBInput
+  placeholder="Permission Code"
+  value={form.permission_code}
+  onChange={(e) =>
+    setForm({ ...form, permission_code: e.target.value })
+  }
+/>
 
-      <input
-        placeholder="Permission Name"
-        value={form.permission_name}
-        onChange={(e) =>
-          setForm({ ...form, permission_name: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
-
-      <input
-        placeholder="Module Name"
-        value={form.module_name}
-        onChange={(e) =>
-          setForm({ ...form, module_name: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginTop: 10 }}
-      />
+    <RBInput
+  placeholder="Permission Name"
+  value={form.permission_name}
+  onChange={(e) =>
+    setForm({ ...form, permission_name: e.target.value })
+  }
+/>
+      <RBInput
+  placeholder="Module Name"
+  value={form.module_name}
+  onChange={(e) =>
+    setForm({ ...form, module_name: e.target.value })
+  }
+/>
 
       <textarea
         placeholder="Description"
@@ -236,13 +224,19 @@ const savePermission = async () => {
           marginTop: 20,
         }}
       >
-        <button onClick={() => setShowForm(false)}>
-          Cancel
-        </button>
+       <RBButton
+  variant="secondary"
+  onClick={() => setShowForm(false)}
+>
+  Cancel
+</RBButton>
 
-        <button onClick={savePermission}>
-          Save
-        </button>
+<RBButton
+  variant="success"
+  onClick={savePermission}
+>
+  Save
+</RBButton>
       </div>
     </div>
   </div>

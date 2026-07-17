@@ -9,7 +9,8 @@ import {
 } from "../rds/components";
 export default function AdminStaff() {
   const [staff, setStaff] = useState([]);
-
+const [selectedStaff, setSelectedStaff] = useState(null);
+const [showView, setShowView] = useState(false);
   const [showForm, setShowForm] = useState(false);
 const [editingId, setEditingId] = useState(null);
 const [companies, setCompanies] = useState([]);
@@ -198,8 +199,24 @@ address: item.address || "",
 
   setShowForm(true);
 };
-  const saveStaff = async () => {
-    try {
+ 
+const viewStaff = async (row) => {
+  console.log("Clicked Row:", row);
+
+  try {
+    const { data } = await api.get(`/staff/${row.id}`);
+
+    console.log("API Response:", data);
+
+    setSelectedStaff(data.data);
+    setShowView(true);
+  } catch (err) {
+    console.log("View Error:", err);
+    alert(err.response?.data?.message || err.message);
+  }
+};
+const saveStaff = async () => { 
+   try {
       const payload = {
   company_id: Number(form.company_id),
   region_id: Number(form.region_id),
@@ -277,6 +294,15 @@ const columns = [
     title: "Actions",
     render: (row) => (
       <>
+<RBButton
+  variant="primary"
+  onClick={() => viewStaff(row)}
+  style={{ marginRight: 8 }}
+>
+  View
+</RBButton>
+  
+
         <RBButton
           variant="secondary"
           onClick={() => editStaff(row)}
@@ -348,6 +374,55 @@ const columns = [
   columns={columns}
   data={staff}
 />
+{showView && selectedStaff && (
+  <div
+    style={{
+      position: "fixed",
+      inset: 0,
+      background: "rgba(0,0,0,.45)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 9999,
+    }}
+  >
+    <div
+      style={{
+        width: "700px",
+        maxWidth: "95%",
+        background: "#fff",
+        borderRadius: 12,
+        padding: 24,
+      }}
+    >
+      <h2>👤 Staff Details</h2>
+
+      <p><b>Employee Code:</b> {selectedStaff.employee_code}</p>
+      <p><b>Name:</b> {selectedStaff.full_name}</p>
+      <p><b>Company:</b> {selectedStaff.company_name}</p>
+      <p><b>Region:</b> {selectedStaff.region_name}</p>
+      <p><b>Branch:</b> {selectedStaff.branch_name}</p>
+      <p><b>Office:</b> {selectedStaff.office_name}</p>
+      <p><b>Department:</b> {selectedStaff.department_name}</p>
+      <p><b>Designation:</b> {selectedStaff.designation_name}</p>
+      <p><b>Role:</b> {selectedStaff.role_name}</p>
+      <p><b>Mobile:</b> {selectedStaff.mobile}</p>
+      <p><b>Email:</b> {selectedStaff.email}</p>
+      <p><b>Address:</b> {selectedStaff.address}</p>
+      <p><b>Status:</b> {selectedStaff.status}</p>
+
+      <RBButton
+        variant="secondary"
+        onClick={() => {
+          setShowView(false);
+          setSelectedStaff(null);
+        }}
+      >
+        Close
+      </RBButton>
+    </div>
+  </div>
+)}
   {showForm && (
     <div
       style={{

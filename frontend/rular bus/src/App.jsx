@@ -115,7 +115,8 @@ function App() {
 />
       <Route path="/admin/buses" element={<AdminBus />} />
       <Route path="/admin/routes" element={<AdminRoute />} />
-      <Route path="/admin/schedules" element={<AdminSchedule />} />
+      
+<Route path="/admin/schedules" element={<AdminSchedule />} />
       <Route path="/admin/drivers" element={<AdminDriver />} />
       <Route path="/conductor-dashboard"element={<ConductorDashboard />}
 />    

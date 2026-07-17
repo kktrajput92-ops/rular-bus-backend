@@ -1,6 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+  RBCard,
+  RBBadge,
+  RBTable,
+} from "../rds/components";
 export default function AdminDepartment() {
   const [departments, setDepartments] = useState([]);
 const [showForm, setShowForm] = useState(false);
@@ -89,6 +95,50 @@ const saveDepartment = async () => {
     alert(err.response?.data?.message || "Failed to save department");
   }
 };
+const columns = [
+  { key: "id", title: "ID" },
+  { key: "department_code", title: "Department Code" },
+  { key: "department_name", title: "Department Name" },
+  {
+    key: "status",
+    title: "Status",
+    render: (item) => (
+      <RBBadge
+        variant={
+          item.status === "ACTIVE"
+            ? "success"
+            : item.status === "INACTIVE"
+            ? "warning"
+            : "danger"
+        }
+      >
+        {item.status}
+      </RBBadge>
+    ),
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: (item) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editDepartment(item)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton
+          variant="danger"
+          onClick={() => deleteDepartment(item.id)}
+        >
+          Delete
+        </RBButton>
+      </>
+    ),
+  },
+];
   return (
     <div style={{ padding: 30 }}>
       <h1>🏢 Department Management</h1>
@@ -100,16 +150,9 @@ const saveDepartment = async () => {
     margin: "20px 0",
   }}
 >
-  <input
-    type="text"
-    placeholder="🔍 Search department..."
-    style={{
-      width: "320px",
-      padding: "10px 14px",
-      borderRadius: "8px",
-      border: "1px solid #ccc",
-    }}
-  />
+ <RBInput
+  placeholder="🔍 Search department..."
+/>
 
   <button
     onClick={() => {
@@ -136,50 +179,10 @@ const saveDepartment = async () => {
     ➕ Add Department
   </button>
 </div>
-      <table
-        border="1"
-        cellPadding="10"
-        style={{
-          width: "100%",
-          borderCollapse: "collapse",
-          marginTop: 20,
-        }}
-      >
-        <thead>
-          <tr>
-            <th>ID</th>
-<th>Department Code</th>
-<th>Department Name</th>
-<th>Status</th>
-<th>Actions</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {departments.map((item) => (
-            <tr key={item.id}>
-              <td>{item.id}</td>
-              <td>{item.department_code}</td>
-              <td>{item.department_name}</td>
-              <td>{item.status}</td>
-<td>
-  <button
-    onClick={() => editDepartment(item)}
-    style={{ marginRight: 8 }}
-  >
-    ✏️ Edit
-  </button>
-
-  <button
-  onClick={() => deleteDepartment(item.id)}
->
-  🗑 Delete
-</button>
-</td>           
- </tr>
-          ))}
-        </tbody>
-      </table>
+     <RBTable
+  columns={columns}
+  data={departments}
+/>
 {showForm && (
   <div
     style={{
@@ -202,23 +205,21 @@ const saveDepartment = async () => {
     >
       <h2>{editingId ? "Edit Department" : "Add Department"}</h2>
 
-      <input
-        placeholder="Department Code"
-        value={form.department_code}
-        onChange={(e) =>
-          setForm({ ...form, department_code: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginBottom: 10 }}
-      />
+      <RBInput
+  placeholder="Department Code"
+  value={form.department_code}
+  onChange={(e) =>
+    setForm({ ...form, department_code: e.target.value })
+  }
+/>
 
-      <input
-        placeholder="Department Name"
-        value={form.department_name}
-        onChange={(e) =>
-          setForm({ ...form, department_name: e.target.value })
-        }
-        style={{ width: "100%", padding: 10, marginBottom: 10 }}
-      />
+      <RBInput
+  placeholder="Department Name"
+  value={form.department_name}
+  onChange={(e) =>
+    setForm({ ...form, department_name: e.target.value })
+  }
+/>
 
       <textarea
         placeholder="Description"
@@ -241,22 +242,20 @@ const saveDepartment = async () => {
           gap: 10,
         }}
       >
-        <button onClick={() => setShowForm(false)}>
-          Cancel
-        </button>
+        <RBButton
+  variant="secondary"
+  onClick={() => setShowForm(false)}
+>
+  Cancel
+</RBButton>
 
-        <button
-          onClick={saveDepartment}
-          style={{
-            background: "#198754",
-            color: "#fff",
-            border: "none",
-            padding: "10px 18px",
-            borderRadius: 8,
-          }}
-        >
-          Save
-        </button>
+        <RBButton
+  variant="success"
+  onClick={saveDepartment}
+>
+  Save
+</RBButton>
+       
       </div>
     </div>
   </div>
