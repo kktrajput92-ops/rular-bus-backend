@@ -191,19 +191,11 @@ function AdminBus() {
 
         </div>
 
-        <input
-          type="text"
-          placeholder="Search Bus..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          style={{
-            padding: "12px",
-            width: "300px",
-            border: "1px solid #ddd",
-            borderRadius: "8px",
-            outline: "none",
-          }}
-        />
+        <RBInput
+  placeholder="Search Bus..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+/>
 
       </div>
 
@@ -226,81 +218,45 @@ function AdminBus() {
           }}
         >
 
-          <input
-            name="bus_name"
-            placeholder="Bus Name"
-            value={form.bus_name}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}
-          />
+          <RBInput
+  name="bus_name"
+  placeholder="Bus Name"
+  value={form.bus_name}
+  onChange={handleChange}
+/>
 
-          <input
-            name="bus_number"
-            placeholder="Bus Number"
-            value={form.bus_number}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}  
-        />
+          <RBInput
+  name="bus_number"
+  placeholder="Bus Number"
+  value={form.bus_number}
+  onChange={handleChange}
+/>
 
-          <input
-            name="bus_type"
-            placeholder="Bus Type"
-            value={form.bus_type}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}
-          />
+         <RBInput
+  name="bus_type"
+  placeholder="Bus Type"
+  value={form.bus_type}
+  onChange={handleChange}
+/>
 
-          <input
-            type="number"
-            name="total_seats"
-            placeholder="Total Seats"
-            value={form.total_seats}
-            onChange={handleChange}
-style={{
-  width: "100%",
-  padding: "12px",
-  border: "1px solid #ddd",
-  borderRadius: "8px",
-  outline: "none",
-}}  
-        />
+          <RBInput
+  type="number"
+  name="total_seats"
+  placeholder="Total Seats"
+  value={form.total_seats}
+  onChange={handleChange}
+/>
 
         </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-style={{
-  marginTop: "20px",
-  width: "100%",
-  padding: "14px",
-  background: "#0B3D91",
-  color: "#fff",
-  border: "none",
-  borderRadius: "8px",
-  fontSize: "16px",
-  fontWeight: "bold",
-  cursor: "pointer",
-}}
-        >
+       <RBButton
+  type="submit"
+  variant="primary"
+  disabled={loading}
+  style={{ width: "100%", marginTop: 20 }}
+>
+  {editingId ? "Update Bus" : "Add Bus"}
+</RBButton>
           {editingId ? "Update Bus" : "Add Bus"}
         </button>
 
@@ -371,34 +327,20 @@ style={{
                   <td>{bus.total_seats}</td>
 
                   <td>
-                    <button
-                      onClick={() => editBus(bus)}
-                      style={{
-                        background: "#0B3D91",
-                        color: "#fff",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                        marginRight: "10px",
-                      }}
-                    >
-                      Edit
-                    </button>
+                   <RBButton
+  variant="secondary"
+  onClick={() => editBus(bus)}
+  style={{ marginRight: 10 }}
+>
+  Edit
+</RBButton>
 
-                    <button
-                      onClick={() => deleteBus(bus.id)}
-                      style={{
-                        background: "#D62828",
-                        color: "#fff",
-                        border: "none",
-                        padding: "8px 14px",
-                        borderRadius: "6px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Delete
-                    </button>
+                <RBButton
+  variant="danger"
+  onClick={() => deleteBus(bus.id)}
+>
+  Delete
+</RBButton>
 
                   </td>
 
