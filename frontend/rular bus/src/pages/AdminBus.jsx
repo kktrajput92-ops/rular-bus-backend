@@ -1,6 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { API_BASE } from "../api/api";
-
+import {
+  RBButton,
+  RBInput,
+} from "../rds/components";
 function AdminBus() {
 
   const API = `${API_BASE}/buses`;
@@ -257,10 +260,7 @@ function AdminBus() {
 >
   {editingId ? "Update Bus" : "Add Bus"}
 </RBButton>
-          {editingId ? "Update Bus" : "Add Bus"}
-        </button>
-
-      </form>
+           </form>
       <div
         style={{
           background: "#fff",
