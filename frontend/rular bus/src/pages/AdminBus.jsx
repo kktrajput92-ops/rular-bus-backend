@@ -3,6 +3,7 @@ import { API_BASE } from "../api/api";
 import {
   RBButton,
   RBInput,
+  RBTable,
 } from "../rds/components";
 function AdminBus() {
 
@@ -55,8 +56,8 @@ function AdminBus() {
 
     });
 
-  }, [buses, search]);
-
+  }, [buses, search]);  
+ 
   const handleChange = (e) => {
 
     setForm({
@@ -161,7 +162,50 @@ function AdminBus() {
 
   };
 
-  return (
+
+const columns = [
+  {
+    key: "bus_name",
+    title: "Bus Name",
+  },
+  {
+    key: "bus_number",
+    title: "Bus Number",
+  },
+  {
+    key: "bus_type",
+    title: "Bus Type",
+  },
+  {
+    key: "total_seats",
+    title: "Seats",
+  },
+  {
+    key: "actions",
+    title: "Actions",
+    render: (bus) => (
+      <>
+        <RBButton
+          variant="secondary"
+          onClick={() => editBus(bus)}
+          style={{ marginRight: 8 }}
+        >
+          Edit
+        </RBButton>
+
+        <RBButton
+          variant="danger"
+          onClick={() => deleteBus(bus.id)}
+        >
+          Delete
+        </RBButton>
+      </>
+    ),
+  },  
+];
+
+return (
+  
 
     <div
       style={{
@@ -270,90 +314,23 @@ function AdminBus() {
         }}
       >
 
-        <table
-          style={{
-            width: "100%",
-            borderCollapse: "collapse",
-          }}
-        >
-
-          <thead
-            style={{
-              background: "#0B3D91",
-              color: "#fff",
-            }}
-          >
-            <tr>
-              <th style={{ padding: "14px" }}>ID</th>
-              <th>Bus Name</th>
-              <th>Bus Number</th>
-              <th>Type</th>
-              <th>Total Seats</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-
-          <tbody>
-
-            {filteredBuses.length === 0 ? (
-
-              <tr>
-                <td
-                  colSpan="6"
-                  style={{
-                    textAlign: "center",
-                    padding: "25px",
-                  }}
-                >
-                  No Bus Found
-                </td>
-              </tr>
-
-            ) : (
-
-              filteredBuses.map((bus) => (
-
-                <tr
-                  key={bus.id}
-                  style={{
-                    borderBottom: "1px solid #eee",
-                  }}
-                >
-
-                  <td style={{ padding: "14px" }}>{bus.id}</td>
-                  <td>{bus.bus_name}</td>
-                  <td>{bus.bus_number}</td>
-                  <td>{bus.bus_type}</td>
-                  <td>{bus.total_seats}</td>
-
-                  <td>
-                   <RBButton
-  variant="secondary"
-  onClick={() => editBus(bus)}
-  style={{ marginRight: 10 }}
->
-  Edit
-</RBButton>
-
-                <RBButton
-  variant="danger"
-  onClick={() => deleteBus(bus.id)}
->
-  Delete
-</RBButton>
-
-                  </td>
-
-                </tr>
-
-              ))
-
-            )}
-
-          </tbody>
-
-        </table>
-
+      {filteredBuses.length === 0 ? (
+  <div
+    style={{
+      padding: "25px",
+      textAlign: "center",
+      background: "#fff",
+      borderRadius: "10px",
+    }}
+  >
+    No Bus Found
+  </div>
+) : (
+  <RBTable
+    columns={columns}
+    data={filteredBuses}
+  />
+)}
       </div>
 
     </div>
