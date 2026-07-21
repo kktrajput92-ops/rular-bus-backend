@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import api from "../api/api";
+import StaffIDCard from "../components/staff/StaffIDCard";
 import {
   RBButton,
   RBInput,
@@ -7,11 +8,21 @@ import {
   RBBadge,
   RBTable,
 } from "../rds/components";
+import { useReactToPrint } from "react-to-print";
+import html2canvas from "html2canvas";
+import jsPDF from "jspdf";
 export default function AdminStaff() {
   const [staff, setStaff] = useState([]);
+const [search, setSearch] = useState("");
+const [companyFilter, setCompanyFilter] = useState("");
+const [regionFilter, setRegionFilter] = useState("");
+const [branchFilter, setBranchFilter] = useState("");
+const [officeFilter, setOfficeFilter] = useState("");
+const [statusFilter, setStatusFilter] = useState("");
 const [selectedStaff, setSelectedStaff] = useState(null);
 const [showView, setShowView] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [photoFile, setPhotoFile] = useState(null);
 const [editingId, setEditingId] = useState(null);
 const [companies, setCompanies] = useState([]);
 const [regions, setRegions] = useState([]);
@@ -34,14 +45,18 @@ employee_code: "",
     email: "",
     gender: "Male",
     employment_type: "PERMANENT",
-    salary: "",
-    address: "",
+status: "ACTIVE",
+salary: "",
+address: "",
   });
 
-  useEffect(() => {
+ useEffect(() => {
   loadStaff();
   loadCompanies();
+  loadRegions(1);
+  loadBranches(1);
 }, []);
+
 useEffect(() => {
   if (showForm && form.company_id) {
     loadRegions(form.company_id);
@@ -83,6 +98,7 @@ useEffect(() => {
 const loadCompanies = async () => {
   try {
     const res = await api.get("/companies");
+
     setCompanies(res.data.data);
   } catch (err) {
     console.log(err);
@@ -193,6 +209,7 @@ mobile: item.mobile || "",
 email: item.email || "",
 gender: item.gender || "Male",
 employment_type: item.employment_type || "PERMANENT",
+status: item.status || "ACTIVE",
 salary: item.salary || "",
 address: item.address || "",
   });
@@ -215,9 +232,23 @@ const viewStaff = async (row) => {
     alert(err.response?.data?.message || err.message);
   }
 };
-const saveStaff = async () => { 
-   try {
-      const payload = {
+const deleteStaff = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this staff?")) {
+    return;
+  }
+
+  try {
+    await api.delete(`/staff/${id}`);
+    alert("Staff deleted successfully.");
+
+    loadStaff();
+  } catch (err) {
+    alert(err.response?.data?.message || err.message);
+  }
+};
+   const saveStaff = async () => {
+  try {
+    const payload = {
   company_id: Number(form.company_id),
   region_id: Number(form.region_id),
   branch_id: Number(form.branch_id),
@@ -232,16 +263,32 @@ const saveStaff = async () => {
   email: form.email,
 
   gender: form.gender,
-  joining_date: new Date().toISOString().slice(0, 10),
-  employment_type: form.employment_type,
-  salary: Number(form.salary || 0),
-  address: form.address,
+joining_date: new Date().toISOString().slice(0, 10),
+employment_type: form.employment_type,
+status: form.status,
+salary: Number(form.salary || 0),
+address: form.address,
 };
+
+let staffId;
 
 if (editingId) {
   await api.put(`/staff/${editingId}`, payload);
+  staffId = editingId;
 } else {
-  await api.post("/staff", payload);
+  const { data } = await api.post("/staff", payload);
+  staffId = data.data.id;
+}
+
+if (photoFile) {
+  const formData = new FormData();
+  formData.append("photo", photoFile);
+
+  await api.post(`/staff/${staffId}/photo`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 }
 
       alert(editingId ? "Staff Updated Successfully" : "Staff Added Successfully");
@@ -259,7 +306,98 @@ console.log("ERROR =", err);
 alert(JSON.stringify(err.response?.data || err.message));
     }
   };
+const printRef = useRef(null);
+const handlePrint = useReactToPrint({
+  contentRef: printRef,
+  documentTitle: "Staff ID Card",
+});
+
+const debugPrint = () => {
+  alert(printRef.current ? "REF OK" : "REF NULL");
+  if (printRef.current) {
+    handlePrint();
+  }
+};
+
+const generatePDF = async () => {
+  if (!printRef.current) return;
+
+  const canvas = await html2canvas(printRef.current, {
+    scale: 2,
+    useCORS: true,
+    backgroundColor: "#ffffff",
+  });
+
+  const imgData = canvas.toDataURL("image/png");
+
+  const pdf = new jsPDF({
+    orientation: "portrait",
+    unit: "px",
+    format: [canvas.width, canvas.height],
+  });
+
+  pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+  pdf.save("Staff_ID_Card.pdf");
+};
+
+const filteredStaff = staff.filter((item) => {
+  
+  const q = search.toLowerCase();
+
+ const matchesSearch =
+  item.employee_code?.toLowerCase().includes(q) ||
+  item.full_name?.toLowerCase().includes(q) ||
+  item.mobile?.toLowerCase().includes(q);
+
+const matchesCompany =
+  !companyFilter || String(item.company_id) === companyFilter;
+
+const matchesRegion =
+  !regionFilter || String(item.region_id) === regionFilter;
+
+const matchesBranch =
+  !branchFilter || String(item.branch_id) === branchFilter;
+
+const matchesOffice =
+  !officeFilter || String(item.office_id) === officeFilter;
+
+const matchesStatus =
+  !statusFilter || item.status === statusFilter;
+
+return (
+  matchesSearch &&
+  matchesCompany &&
+  matchesRegion &&
+  matchesBranch &&
+  matchesOffice &&
+  matchesStatus
+);
+});
 const columns = [
+{
+  key: "photo",
+  title: "Photo",
+  render: (row) => (
+    <img
+      src={
+        row.photo
+          ? `${import.meta.env.VITE_API_URL}${row.photo}`
+          : "https://via.placeholder.com/45?text=👤"
+      }
+      alt="Staff"
+      onError={(e) => {
+        e.target.src = "https://via.placeholder.com/45?text=👤";
+      }}
+      style={{
+        width: 45,
+        height: 45,
+        borderRadius: "50%",
+        objectFit: "cover",
+        border: "1px solid #ddd",
+      }}
+    />
+  ),
+},
   { key: "employee_code", title: "Employee Code" },
   { key: "full_name", title: "Name" },
   { key: "company_name", title: "Company" },
@@ -311,9 +449,12 @@ const columns = [
           Edit
         </RBButton>
 
-        <RBButton variant="danger">
-          Delete
-        </RBButton>
+        <RBButton
+  variant="danger"
+  onClick={() => deleteStaff(row.id)}
+>
+  Delete
+</RBButton>
       </>
     ),
   },
@@ -331,48 +472,189 @@ const columns = [
     }}
   >
     <input
-      type="text"
-      placeholder="🔍 Search staff..."
-      style={{
-        width: "320px",
-        padding: "10px 14px",
-        borderRadius: "8px",
-        border: "1px solid #ccc",
-      }}
-    />
+  type="text"
+  placeholder="🔍 Search staff..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  style={{
+    width: "320px",
+    padding: "10px 14px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+  }}
+/>
 
-    <button
-      onClick={() => {
-  setEditingId(null);
-  setForm({
-    employee_code: "",
-    full_name: "",
-    mobile: "",
-    email: "",
-    gender: "Male",
-    employment_type: "PERMANENT",
-    salary: "",
-    address: "",
-  });
-  setShowForm(true);
+   <select
+  value={companyFilter}
+  onChange={(e) => {
+  const companyId = e.target.value;
+
+  setCompanyFilter(companyId);
+  setRegionFilter("");
+  setBranchFilter("");
+
+  if (companyId) {
+    loadRegions(companyId);
+  } else {
+    setRegions([]);
+    setBranches([]);
+  }
 }}
-      style={{
-        background: "#198754",
-        color: "#fff",
-        border: "none",
-        padding: "10px 18px",
-        borderRadius: "8px",
-        cursor: "pointer",
-        fontWeight: "bold",
-      }}
-    >
-      ➕ Add Staff
-    </button>
+  style={{
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginLeft: "10px",
+  }}
+>
+  <option value="">All Companies</option>
+  {companies.map((c) => (
+    <option key={c.id} value={c.id}>
+     {c.company_name}
+    </option>
+  ))}
+</select>
+<select
+  value={regionFilter}
+  onChange={(e) => {
+  const regionId = e.target.value;
+
+  setRegionFilter(regionId);
+  setBranchFilter("");
+
+  if (regionId) {
+    loadBranches(regionId);
+  } else {
+    setBranches([]);
+  }
+}}
+  style={{
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginLeft: "10px",
+  }}
+>
+  <option value="">All Regions</option>
+  {regions.map((r) => (
+    <option key={r.id} value={r.id}>
+      {r.region_name}
+    </option>
+  ))}
+</select>
+<select
+  value={branchFilter}
+  onChange={(e) => {
+  const branchId = e.target.value;
+
+  setBranchFilter(branchId);
+  setOfficeFilter("");
+
+  if (branchId) {
+    loadOffices(branchId);
+  } else {
+    setOffices([]);
+  }
+}}
+  style={{
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginLeft: "10px",
+  }}
+>
+  <option value="">All Branches</option>
+  {branches.map((b) => (
+    <option key={b.id} value={b.id}>
+      {b.branch_name}
+    </option>
+  ))}
+</select>
+<select
+  value={officeFilter}
+  onChange={(e) => setOfficeFilter(e.target.value)}
+  style={{
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginLeft: "10px",
+  }}
+>
+  <option value="">All Offices</option>
+
+  {offices.map((o) => (
+    <option key={o.id} value={o.id}>
+      {o.office_name}
+    </option>
+  ))}
+</select>
+<select
+  value={statusFilter}
+  onChange={(e) => setStatusFilter(e.target.value)}
+  style={{
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginLeft: "10px",
+  }}
+>
+ <option value="">All Status</option>
+<option value="ACTIVE">Active</option>
+<option value="INACTIVE">Inactive</option>
+</select>
+<button
+  onClick={() => {
+    setEditingId(null);
+    setForm({
+      employee_code: "",
+      full_name: "",
+      mobile: "",
+      email: "",
+      gender: "Male",
+      employment_type: "PERMANENT",
+      salary: "",
+      address: "",
+    });
+    setShowForm(true);
+  }}
+  style={{
+    background: "#198754",
+    color: "#fff",
+    border: "none",
+    padding: "10px 18px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "bold",
+  }}
+>
+  ➕ Add Staff
+</button>
+<button
+  onClick={() => {
+    setSearch("");
+    setCompanyFilter("");
+    setRegionFilter("");
+    setBranchFilter("");
+    setStatusFilter("");
+  }}
+  style={{
+    background: "#6c757d",
+    color: "#fff",
+    border: "none",
+    padding: "10px 18px",
+    borderRadius: "8px",
+    cursor: "pointer",
+    fontWeight: "bold",
+    marginLeft: "10px",
+  }}
+>
+  🔄 Reset
+</button>
   </div>
 
   <RBTable
   columns={columns}
-  data={staff}
+  data={filteredStaff}
 />
 {showView && selectedStaff && (
   <div
@@ -395,33 +677,41 @@ const columns = [
         padding: 24,
       }}
     >
-      <h2>👤 Staff Details</h2>
+     <h2>👤 Staff Details</h2>
 
-      <p><b>Employee Code:</b> {selectedStaff.employee_code}</p>
-      <p><b>Name:</b> {selectedStaff.full_name}</p>
-      <p><b>Company:</b> {selectedStaff.company_name}</p>
-      <p><b>Region:</b> {selectedStaff.region_name}</p>
-      <p><b>Branch:</b> {selectedStaff.branch_name}</p>
-      <p><b>Office:</b> {selectedStaff.office_name}</p>
-      <p><b>Department:</b> {selectedStaff.department_name}</p>
-      <p><b>Designation:</b> {selectedStaff.designation_name}</p>
-      <p><b>Role:</b> {selectedStaff.role_name}</p>
-      <p><b>Mobile:</b> {selectedStaff.mobile}</p>
-      <p><b>Email:</b> {selectedStaff.email}</p>
-      <p><b>Address:</b> {selectedStaff.address}</p>
-      <p><b>Status:</b> {selectedStaff.status}</p>
-
-      <RBButton
-        variant="secondary"
-        onClick={() => {
-          setShowView(false);
-          setSelectedStaff(null);
-        }}
-      >
-        Close
-      </RBButton>
-    </div>
+<div
+  style={{
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: 20,
+  }}
+>
+  <div ref={printRef}>
+    <StaffIDCard staff={selectedStaff} />
   </div>
+
+  <div>
+    <RBButton
+    onClick={generatePDF}
+    >
+      🖨 Print ID Card
+    </RBButton>
+
+    <RBButton
+      variant="secondary"
+      onClick={() => {
+        setShowView(false);
+        setSelectedStaff(null);
+      }}
+    >
+      Close
+    </RBButton>
+  </div>
+</div>
+    
+  </div>
+</div>
 )}
   {showForm && (
     <div
@@ -676,7 +966,38 @@ loadRegions(companyId);
           }
           style={{ width: "100%", padding: 10, marginBottom: 10 }}
         />
+<select
+  value={form.status}
+  onChange={(e) =>
+    setForm({ ...form, status: e.target.value })
+  }
+  style={{
+    width: "100%",
+    padding: 10,
+    marginBottom: 10,
+  }}
+>
+  <option value="ACTIVE">Active</option>
+  <option value="INACTIVE">Inactive</option>
+  <option value="SUSPENDED">Suspended</option>
+</select>
+<div style={{ marginBottom: 10 }}>
+  <label style={{ display: "block", marginBottom: 6 }}>
+    Staff Photo
+  </label>
 
+  <input
+    type="file"
+    accept="image/*"
+    onChange={(e) => setPhotoFile(e.target.files?.[0] || null)}
+  />
+
+  {photoFile && (
+    <p style={{ marginTop: 5, color: "green" }}>
+      Selected: {photoFile.name}
+    </p>
+  )}
+</div>
         <div
           style={{
             display: "flex",
@@ -709,3 +1030,4 @@ loadRegions(companyId);
 </div>
   );
 }
+

@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { usePermission } from "../../context/PermissionContext";
+import { API_BASE } from "../../config";
 const menus = [
   { name: "Dashboard", icon: "🏠", path: "/admin" },
 
@@ -40,6 +42,11 @@ const menus = [
     path: "/admin/users",
     permission: "user.view",
   },
+{
+  name: "Company Profile",
+  icon: "🏢",
+  path: "/admin/company",
+},
 
   { name: "Routes", icon: "🛣️", path: "/admin/routes" },
 
@@ -62,6 +69,18 @@ const menus = [
 export default function AdminSidebar() {
   const location = useLocation();
 const { hasPermission } = usePermission();
+const [company, setCompany] = useState({});
+
+useEffect(() => {
+  fetch(`${API_BASE}/api/companies`)
+    .then((res) => res.json())
+    .then((json) => {
+      if (json.success && json.data.length > 0) {
+        setCompany(json.data[0]);
+      }
+    })
+    .catch(console.error);
+}, []);
   return (
     <div
       style={{
@@ -82,13 +101,17 @@ const { hasPermission } = usePermission();
         }}
       >
         <img
-          src="/logo.png"
-          alt="Rular Bus"
-          style={{
-            width: 75,
-            marginBottom: 10,
-          }}
-        />
+  src={
+  company.logo_url
+    ? `${API_BASE}${company.logo_url}`
+    : "/logo.png"
+}
+  alt={company.company_name || "Rular Bus"}
+  style={{
+    width: 75,
+    marginBottom: 10,
+  }}
+/>
 
         <h2
           style={{
@@ -96,7 +119,7 @@ const { hasPermission } = usePermission();
             color: "#fff",
           }}
         >
-          Rular Bus
+          {company.company_name || "Rular Bus"}
         </h2>
 
         <small
@@ -104,7 +127,7 @@ const { hasPermission } = usePermission();
             color: "#ddd",
           }}
         >
-          Enterprise ERP
+         {company.short_name || "Enterprise ERP"}
         </small>
       </div>
 

@@ -44,7 +44,7 @@ console.log("API Response:", res.data);
 console.log("API Response:", res.data);
 console.log("First Bus:", res.data.buses?.[0]);
       setBuses(res.data.buses || []);
-
+alert(JSON.stringify(res.data));
     } catch (err) {
 
       console.error(err);

@@ -12,11 +12,11 @@ function Seats() {
   const location = useLocation();
 
   const bus = location.state || {};
-
+console.log("BUS DATA:", bus);
   const [bookedSeats, setBookedSeats] = useState([]);
 
   const [selectedSeats, setSelectedSeats] = useState([]);
-
+const [layout, setLayout] = useState([]);
   const farePerSeat = 550;
 const loadSeats = async () => {
   if (!bus.schedule_id) return;
@@ -28,15 +28,27 @@ const loadSeats = async () => {
     console.error(err);
   }
 };
+
+const loadLayout = async () => {
+  if (!bus.bus_id) return;
+
+  try {
+    const res = await api.get(`/seat-layouts/${bus.bus_id}`);
+    setLayout(res.data.layout || []);
+  } catch (err) {
+    console.error(err);
+  }
+};
 useEffect(() => {
   loadSeats();
+  loadLayout();
 
   const interval = setInterval(() => {
     loadSeats();
   }, 5000);
 
   return () => clearInterval(interval);
-}, [bus.schedule_id]);
+}, [bus.schedule_id, bus.bus_id]);
 
   const toggleSeat = (seat) => {
 
@@ -187,6 +199,7 @@ useEffect(() => {
 <DriverCabin />
    
 <SeatRenderer
+  layout={layout}
   totalSeats={52}
   layoutType="sleeper"
   bookedSeats={bookedSeats}

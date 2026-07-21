@@ -15,11 +15,17 @@ function AdminBus() {
   const [search, setSearch] = useState("");
 
   const [form, setForm] = useState({
-    bus_name: "",
-    bus_number: "",
-    bus_type: "",
-    total_seats: "",
-  });
+  bus_name: "",
+  bus_number: "",
+  bus_type: "",
+  rto_approved_seats: "",
+  physical_seats: "",
+  registration_number: "",
+  operator_name: "",
+  bus_status: "Active",
+  is_ac: false,
+  is_sleeper: false,
+});
 
   const loadBuses = async () => {
 
@@ -60,10 +66,13 @@ function AdminBus() {
  
   const handleChange = (e) => {
 
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
+   setForm({
+  ...form,
+  [e.target.name]:
+    e.target.type === "checkbox"
+      ? e.target.checked
+      : e.target.value,
+});
 
   };
   const saveBus = async (e) => {
@@ -81,16 +90,17 @@ function AdminBus() {
       const method = editingId
         ? "PUT"
         : "POST";
-
+     console.log("FORM DATA:", form);
       const res = await fetch(url, {
         method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          ...form,
-          total_seats: Number(form.total_seats),
-        }),
+       body: JSON.stringify({
+  ...form,
+  rto_approved_seats: Number(form.rto_approved_seats || 0),
+  physical_seats: Number(form.physical_seats || 0),
+}),
       });
 
       const data = await res.json();
@@ -102,11 +112,17 @@ function AdminBus() {
         setEditingId(null);
 
         setForm({
-          bus_name: "",
-          bus_number: "",
-          bus_type: "",
-          total_seats: "",
-        });
+  bus_name: "",
+  bus_number: "",
+  bus_type: "",
+  rto_approved_seats: "",
+physical_seats: "",
+  registration_number: "",
+  operator_name: "",
+  bus_status: "Active",
+  is_ac: false,
+  is_sleeper: false,
+});
 
         loadBuses();
 
@@ -127,11 +143,17 @@ function AdminBus() {
     setEditingId(bus.id);
 
     setForm({
-      bus_name: bus.bus_name,
-      bus_number: bus.bus_number,
-      bus_type: bus.bus_type,
-      total_seats: bus.total_seats,
-    });
+  bus_name: bus.bus_name,
+  bus_number: bus.bus_number,
+  bus_type: bus.bus_type,
+  rto_approved_seats: bus.rto_approved_seats || "",
+physical_seats: bus.physical_seats || "",
+registration_number: bus.registration_number || "",
+  operator_name: bus.operator_name,
+  bus_status: bus.bus_status,
+  is_ac: bus.is_ac,
+  is_sleeper: bus.is_sleeper,
+});
 
   };
 
@@ -180,6 +202,26 @@ const columns = [
     key: "total_seats",
     title: "Seats",
   },
+{
+  key: "rto_approved_seats",
+  title: "RTO Approved",
+},
+{
+  key: "physical_seats",
+  title: "Physical Seats",
+},
+{
+  key: "registration_number",
+  title: "Registration No",
+},
+{
+  key: "operator_name",
+  title: "Operator",
+},
+{
+  key: "bus_status",
+  title: "Status",
+},
   {
     key: "actions",
     title: "Actions",
@@ -199,6 +241,14 @@ const columns = [
         >
           Delete
         </RBButton>
+<RBButton
+  variant="primary"
+  onClick={() => window.location.href = `/admin/seat-layout/${bus.id}`}
+  style={{ marginLeft: 8 }}
+>
+  Design Layout
+</RBButton>
+
       </>
     ),
   },  
@@ -279,18 +329,61 @@ return (
   onChange={handleChange}
 />
 
-         <RBInput
+        <select
   name="bus_type"
-  placeholder="Bus Type"
   value={form.bus_type}
+  onChange={handleChange}
+  style={{
+    width: "100%",
+    padding: "10px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+  }}
+>
+  <option value="">Select Bus Type</option>
+  <option value="Seater">Seater</option>
+  <option value="Sleeper">Sleeper</option>
+  <option value="Semi Sleeper">Semi Sleeper</option>
+</select>
+
+
+
+<RBInput
+  type="number"
+  name="rto_approved_seats"
+  placeholder="RTO Approved Seats"
+  value={form.rto_approved_seats}
   onChange={handleChange}
 />
 
-          <RBInput
+<RBInput
   type="number"
-  name="total_seats"
-  placeholder="Total Seats"
-  value={form.total_seats}
+  name="physical_seats"
+  placeholder="Physical Seats"
+  value={form.physical_seats}
+  onChange={handleChange}
+/>
+
+         
+
+<RBInput
+  name="registration_number"
+  placeholder="Registration Number"
+  value={form.registration_number}
+  onChange={handleChange}
+/>
+
+<RBInput
+  name="operator_name"
+  placeholder="Operator Name"
+  value={form.operator_name}
+  onChange={handleChange}
+/>
+
+<RBInput
+  name="bus_status"
+  placeholder="Bus Status (Active/Inactive)"
+  value={form.bus_status}
   onChange={handleChange}
 />
 

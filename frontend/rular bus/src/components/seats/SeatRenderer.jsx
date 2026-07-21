@@ -2,17 +2,39 @@ import { generateLayout } from "../../layout-engine/generateLayout";
 import SeatButton from "./SeatButton";
 import Bed from "./Bed";
 export default function SeatRenderer({
+  layout,
   totalSeats,
   layoutType,
   bookedSeats,
   selectedSeats,
   onSeatClick,
 }) {
-  const rows = generateLayout({
-  totalSeats,
-  layoutType,
-});
+  const rows =
+  layout && layout.length
+    ? (() => {
+        const grid = [];
 
+        layout.forEach((item) => {
+          if (!grid[item.row_no]) {
+            grid[item.row_no] = [];
+          }
+
+          grid[item.row_no][item.col_no] = {
+            id: item.seat_no,
+            label: item.seat_no,
+            type: item.seat_type,
+          };
+        });
+
+        return grid.map((row) =>
+          row ? row.map((cell) => cell || null) : []
+        );
+      })()
+    : generateLayout({
+        totalSeats,
+        layoutType,
+      });
+console.log("SeatRenderer rows:", rows);
   return (
     <div
       style={{
@@ -42,7 +64,21 @@ export default function SeatRenderer({
                 />
               );
             }
-
+if (
+  seat.type === "DOOR" ||
+  seat.type === "AISLE" ||
+  seat.type === "DRIVER"
+) {
+  return (
+    <div
+      key={seat.id}
+      style={{
+        width: 64,
+        height: 64,
+      }}
+    />
+  );
+}
             return ( 
 
  seat.type?.includes("lower") || seat.type?.includes("upper") ? (

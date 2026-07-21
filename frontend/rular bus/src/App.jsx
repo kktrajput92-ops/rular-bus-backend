@@ -22,9 +22,11 @@ import AdminRole from "./pages/AdminRole";
 import AdminRolePermission from "./pages/AdminRolePermission";
 import AdminPermission from "./pages/AdminPermission";
 import AdminUser from "./pages/AdminUser";
+import AdminCompany from "./pages/AdminCompany";
 import PermissionRoute from "./components/auth/PermissionRoute";
 import Unauthorized from "./pages/Unauthorized";
 import IconLab from "./pages/IconLab";
+import SeatLayout from "./pages/SeatLayout";
 function App() {
     return (
   <BrowserRouter>
@@ -113,7 +115,20 @@ function App() {
     </ProtectedRoute>
   }
 />
+<Route
+  path="/admin/company"
+  element={
+    <ProtectedRoute>
+      <AdminCompany />
+    </ProtectedRoute>
+  }
+/>
+
       <Route path="/admin/buses" element={<AdminBus />} />
+<Route
+  path="/admin/seat-layout/:busId"
+  element={<SeatLayout />}
+/>
       <Route path="/admin/routes" element={<AdminRoute />} />
       
 <Route path="/admin/schedules" element={<AdminSchedule />} />

@@ -1,6 +1,7 @@
 import axios from "axios";
 
-export const API_BASE = "http://127.0.0.1:5001/api";
+export const API_BASE =
+  import.meta.env.VITE_API_URL + "/api";
 
 const api = axios.create({
   baseURL: API_BASE,

@@ -187,7 +187,7 @@ if (!uploadRes.ok) {
         <div
   style={{
     display: "grid",
-    gridTemplateColumns: "2fr 1fr",
+    gridTemplateColumns: "minmax(0,2fr) minmax(360px,1fr)",
     gap: 20,
     alignItems: "start",
   }}
@@ -554,12 +554,70 @@ if (!uploadRes.ok) {
     💾 Save Company Profile
   </button>
 </div>
+</div>
+  
+
+<div
+  style={{
+  background: "#fff",
+  padding: 20,
+  borderRadius: 12,
+  boxShadow: "0 2px 8px rgba(0,0,0,.1)",
+  minHeight: 500,
+  position: "sticky",
+  top: 20,
+  alignSelf: "start",
+}}
+  >
+    <h2 style={{ color: "#0B3D91", marginTop: 0 }}>
+      Live Preview
+    </h2>
+
+   <div style={{ textAlign: "center" }}>
+  <img
+    src={
+      company.logo
+        ? URL.createObjectURL(company.logo)
+        : company.logo_url
+        ? `${API_BASE}${company.logo_url}`
+        : "/logo.png"
+    }
+    alt="Logo"
+    style={{
+      width: 100,
+      height: 100,
+      objectFit: "contain",
+      marginBottom: 15,
+    }}
+  />
+
+  <h2 style={{ margin: 0, color: "#0B3D91" }}>
+    {company.company_name || "Company Name"}
+  </h2>
+
+  <p>{company.short_name || "Short Name"}</p>
+
+  <hr />
+
+  <p><b>GST:</b> {company.gst_number || "-"}</p>
+  <p><b>Phone:</b> {company.phone || "-"}</p>
+  <p><b>Email:</b> {company.email || "-"}</p>
+  <p><b>Website:</b> {company.website || "-"}</p>
+
+  <p style={{ marginTop: 20 }}>
+    {company.address}<br />
+    {company.city} {company.pincode}<br />
+    {company.state}, {company.country}
+  </p>
+</div>
+  </div> 
+
             </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    
   );
 }
           
