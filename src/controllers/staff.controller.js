@@ -99,10 +99,58 @@ const updateStaff = async (req, res) => {
     });
   }
 };
+// Upload Staff Photo
+const uploadStaffPhoto = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Photo is required",
+      });
+    }
+
+    const photo = "/uploads/staff/" + req.file.filename;
+
+    const staff = await Staff.updatePhoto(
+  req.params.id,
+  photo
+);
+
+    res.json({
+      success: true,
+      message: "Staff photo uploaded successfully",
+      data: staff,
+    });
+
+    } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
+const deleteStaff = async (req, res) => {
+  try {
+    await Staff.delete(req.params.id);
+
+    res.json({
+      success: true,
+      message: "Staff deleted successfully",
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+
 module.exports = {
   getStaff,
   getStaffById,
   createStaff,
   updateStaff,
+  deleteStaff,
+  uploadStaffPhoto,
 };
-

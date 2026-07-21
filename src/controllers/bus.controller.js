@@ -9,25 +9,54 @@ const addBus = async (req, res) => {
   try {
 
     const {
-      bus_name,
-      bus_number,
-      bus_type,
-      total_seats,
-    } = req.body;
+  bus_name,
+  bus_number,
+  bus_type,
+  
+rto_approved_seats,
+physical_seats,
+  registration_number,
+  operator_name,
+  bus_status,
+is_ac,
+is_sleeper,
+} = req.body;
+console.log("Create Bus req.body =", req.body);
+const total_seats = Number(physical_seats);   
 
-    if (
-      !bus_name ||
-      !bus_number ||
-      !bus_type ||
-      !total_seats
-    ) {
+ if (
+  !bus_name ||
+  !bus_number ||
+  !bus_type ||
+  
+  !registration_number ||
+  !operator_name ||
+  !bus_status
+) {
 
       return res.status(400).json({
         success: false,
         message: "All fields are required",
       });
 
-    }
+   }
+if (
+  Number(rto_approved_seats) < 0 ||
+  Number(physical_seats) < 0
+) {
+  return res.status(400).json({
+    success: false,
+    message: "Seats cannot be negative",
+  });
+}
+
+if (Number(physical_seats) < Number(rto_approved_seats)) {
+  return res.status(400).json({
+    success: false,
+    message: "Physical seats cannot be less than RTO approved seats",
+  });
+}
+
 
     const check = await pool.query(
       "SELECT id FROM buses WHERE bus_number=$1",
@@ -45,28 +74,50 @@ const addBus = async (req, res) => {
 
     const result = await pool.query(
       `
-      INSERT INTO buses
-      (
-        bus_name,
-        bus_number,
-        bus_type,
-        total_seats
-      )
-      VALUES
-      (
-        $1,
-        $2,
-        $3,
-        $4
-      )
-      RETURNING *
-      `,
-      [
-        bus_name,
-        bus_number,
-        bus_type,
-        total_seats,
-      ]
+     INSERT INTO buses
+(
+  bus_name,
+  bus_number,
+  total_seats,
+  bus_type,
+  rto_approved_seats,
+  physical_seats,
+  registration_number,
+  operator_name,
+  bus_status,
+  is_ac,
+  is_sleeper
+)
+VALUES
+(
+  $1,
+  $2,
+  $3,
+  $4,
+  $5,
+  $6,
+  $7,
+  $8,
+  $9,
+  $10,
+  $11
+)
+RETURNING *
+`,
+
+  [
+  bus_name,
+  bus_number,
+  total_seats,
+  bus_type,
+rto_approved_seats,
+physical_seats,
+  registration_number,
+  operator_name,
+  bus_status,
+is_ac,
+is_sleeper,
+],
     );
 
     return res.json({
@@ -171,12 +222,35 @@ const updateBus = async (req, res) => {
 
     const { id } = req.params;
 
-    const {
-      bus_name,
-      bus_number,
-      bus_type,
-      total_seats,
-    } = req.body;
+   const {
+  bus_name,
+  bus_number,
+  bus_type,
+rto_approved_seats,
+physical_seats,
+  registration_number,
+  operator_name,
+  bus_status,
+is_ac,
+is_sleeper,
+} = req.body;
+const total_seats = Number(physical_seats);
+if (
+  Number(rto_approved_seats) < 0 ||
+  Number(physical_seats) < 0
+) {
+  return res.status(400).json({
+    success: false,
+    message: "Seats cannot be negative",
+  });
+}
+
+if (Number(physical_seats) < Number(rto_approved_seats)) {
+  return res.status(400).json({
+    success: false,
+    message: "Physical seats cannot be less than RTO approved seats",
+  });
+}
     // Duplicate bus number check (ignore current bus)
     const check = await pool.query(
       `
@@ -199,24 +273,38 @@ const updateBus = async (req, res) => {
 
     const result = await pool.query(
 
-      `
+            `
       UPDATE buses
-      SET
-        bus_name = $1,
-        bus_number = $2,
-        bus_type = $3,
-        total_seats = $4
-      WHERE id = $5
-      RETURNING *
+SET
+  bus_name = $1,
+  bus_number = $2,
+  bus_type = $3,
+  total_seats = $4,
+  rto_approved_seats = $5,
+physical_seats = $6,
+  registration_number = $7,
+  operator_name = $8,
+  bus_status = $9,
+  is_ac = $10,
+  is_sleeper = $11
+WHERE id = $12
+RETURNING *
       `,
 
-      [
-        bus_name,
-        bus_number,
-        bus_type,
-        total_seats,
-        id,
-      ]
+    [
+  bus_name,
+  bus_number,
+  bus_type,
+  total_seats,
+  rto_approved_seats,
+physical_seats,
+  registration_number,
+  operator_name,
+  bus_status,
+  is_ac,
+  is_sleeper,
+  id,
+]
 
     );
 

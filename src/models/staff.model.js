@@ -15,8 +15,14 @@ const offset = (page - 1) * limit;
 let query = `
 SELECT
   s.*,
-  c.company_name,
-  rg.region_name,
+c.company_name,
+c.short_name,
+c.logo_url,
+c.primary_color,
+c.secondary_color,
+c.signature_url,
+c.qr_base_url,
+rg.region_name,
   b.branch_name,
   o.office_name,
   d.department_name,
@@ -62,14 +68,40 @@ const result = await pool.query(query, values);
 return result.rows;
   },
 
-  async getById(id) {
-    const result = await pool.query(
-      "SELECT * FROM staff WHERE id = $1",
-      [id]
-    );
+async getById(id) {
+  const result = await pool.query(
+    `
+    SELECT
+     s.*,
+c.company_name,
+c.short_name,
+c.logo_url,
+c.primary_color,
+c.secondary_color,
+c.signature_url,
+c.qr_base_url,
+rg.region_name,
+      b.branch_name,
+      o.office_name,
+      d.department_name,
+      dg.designation_name,
+      r.role_name
+    FROM staff s
+    LEFT JOIN companies c ON s.company_id = c.id
+    LEFT JOIN regions rg ON s.region_id = rg.id
+    LEFT JOIN branches b ON s.branch_id = b.id
+    LEFT JOIN offices o ON s.office_id = o.id
+    LEFT JOIN departments d ON s.department_id = d.id
+    LEFT JOIN designations dg ON s.designation_id = dg.id
+    LEFT JOIN roles r ON s.role_id = r.id
+    WHERE s.id = $1
+    `,
+    [id]
+  );
 
-    return result.rows[0];
-  },
+  return result.rows[0];
+},
+ 
 
   async create(data) {
 
@@ -156,35 +188,70 @@ return result.rows;
 async update(id, data) {
 
   const {
-    full_name,
-    mobile,
-    email,
-    address
-  } = data;
+  full_name,
+  mobile,
+  email,
+  address,
+  status
+} = data;
+
+  const result = await pool.query(
+    `
+    UPDATE staff
+SET
+  full_name = $1,
+  mobile = $2,
+  email = $3,
+  address = $4,
+  status = $5,
+  updated_at = CURRENT_TIMESTAMP
+WHERE id = $6
+RETURNING *
+    `,
+    [
+  full_name,
+  mobile,
+  email,
+  address,
+  status,
+  id
+]
+  );
+
+ return result.rows[0];
+},
+
+async updatePhoto(id, photo) {
 
   const result = await pool.query(
     `
     UPDATE staff
     SET
-      full_name = $1,
-      mobile = $2,
-      email = $3,
-      address = $4,
+      photo = $1,
       updated_at = CURRENT_TIMESTAMP
-    WHERE id = $5
+    WHERE id = $2
     RETURNING *
     `,
     [
-      full_name,
-      mobile,
-      email,
-      address,
+      photo,
       id
     ]
   );
 
   return result.rows[0];
-}
+},
+async delete(id) {
+  await pool.query(
+    `
+    DELETE FROM staff
+    WHERE id = $1
+    `,
+    [id]
+  );
+
+  return true;
+},
+
 };
 
 module.exports = Staff;

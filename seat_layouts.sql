@@ -1,0 +1,24 @@
+CREATE TABLE seat_layouts (
+    id SERIAL PRIMARY KEY,
+
+    bus_id INTEGER NOT NULL REFERENCES buses(id) ON DELETE CASCADE,
+
+    seat_no VARCHAR(20) NOT NULL,
+    seat_type VARCHAR(20) NOT NULL DEFAULT 'SEATER',
+
+    deck VARCHAR(20) NOT NULL DEFAULT 'LOWER',
+
+    row_no INTEGER NOT NULL,
+    col_no INTEGER NOT NULL,
+
+    is_driver BOOLEAN DEFAULT FALSE,
+    is_door BOOLEAN DEFAULT FALSE,
+    is_aisle BOOLEAN DEFAULT FALSE,
+
+    is_extra BOOLEAN DEFAULT FALSE,
+
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    UNIQUE(bus_id, seat_no)
+);

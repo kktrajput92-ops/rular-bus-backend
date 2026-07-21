@@ -6,10 +6,13 @@ const {
   getStaffById,
   createStaff,
   updateStaff,
+  deleteStaff,
+  uploadStaffPhoto,
 } = require("../controllers/staff.controller");
 
 const auth = require("../middleware/auth.middleware");
 const authorize = require("../middleware/role.middleware");
+const upload = require("../middleware/uploadStaffPhoto");
 /**
  * @swagger
  * /api/staff:
@@ -56,9 +59,17 @@ const authorize = require("../middleware/role.middleware");
  *         description: Staff created successfully
  */
 router.get("/", auth, authorize("staff.view"), getStaff);
-router.get("/:id", auth, authorize("staff.view"), getStaffById);
+router.get("/:id", auth, authorize("staff.view"), getStaffById)
 router.post("/", auth, authorize("staff.create"), createStaff);
 router.put("/:id", auth, authorize("staff.update"), updateStaff);
+router.delete("/:id", auth, authorize("staff.delete"), deleteStaff);
+router.post(
+  "/:id/photo",
+  auth,
+  authorize("staff.update"),
+  upload.single("photo"),
+  uploadStaffPhoto
+);
 
 module.exports = router;
 
