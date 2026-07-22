@@ -1,0 +1,167 @@
+// Add Booking
+const addBooking = async (req, res) => {
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    const { schedule_id, passengers } = req.body;
+
+    if (
+      !schedule_id ||
+      !Array.isArray(passengers) ||
+      passengers.length === 0
+    ) {
+      await client.query("ROLLBACK");
+
+      return res.status(400).json({
+        success: false,
+        message: "schedule_id and passengers are required",
+      });
+    }
+
+    const schedule = await client.query(
+      `
+      SELECT buses.total_seats
+      FROM schedules
+      JOIN buses
+        ON schedules.bus_id = buses.id
+      WHERE schedules.id = $1
+      `,
+      [schedule_id]
+    );
+
+    if (schedule.rows.length === 0) {
+      await client.query("ROLLBACK");
+
+      return res.status(404).json({
+        success: false,
+        message: "Schedule not found",
+      });
+    }
+
+    const totalSeats = schedule.rows[0].total_seats;
+
+    const bookedSeats = [];
+
+    for (const item of passengers) {
+      const { passenger_id, seat_number } = item;
+      const passenger = await client.query(
+        "SELECT id FROM passengers WHERE id = $1",
+        [passenger_id]
+      );
+
+      if (passenger.rows.length === 0) {
+        throw new Error(`Passenger ${passenger_id} not found`);
+      }
+
+      if (
+        seat_number < 1 ||
+        seat_number > totalSeats
+      ) {
+        throw new Error(
+          `Seat ${seat_number} is invalid`
+        );
+      }
+
+      const seatCheck = await client.query(
+        `
+        SELECT id
+        FROM bookings
+        WHERE schedule_id = $1
+          AND seat_number = $2
+          AND booking_status = 'confirmed'
+        `,
+        [schedule_id, seat_number]
+      );
+
+      if (seatCheck.rows.length > 0) {
+        throw new Error(
+          `Seat ${seat_number} already booked`
+        );
+      }
+
+      const bookingResult = await client.query(
+        `
+        INSERT INTO bookings
+        (passenger_id, schedule_id, seat_number)
+        VALUES ($1, $2, $3)
+        RETURNING id
+        `,
+        [
+          passenger_id,
+          schedule_id,
+          seat_number,
+        ]
+      );
+
+      bookedSeats.push({
+        booking_id: bookingResult.rows[0].id,
+        passenger_id,
+        seat_number,
+      });
+    }
+    const ticketNumber =
+      "RB" +
+      Date.now().toString().slice(-8) +
+      Math.floor(Math.random() * 1000);
+
+    const qrCode = ticketNumber;
+
+    for (const item of bookedSeats) {
+      await client.query(
+        `
+        INSERT INTO tickets
+        (booking_id, ticket_number, qr_code)
+        VALUES ($1, $2, $3)
+        `,
+        [
+          item.booking_id,
+          ticketNumber,
+          qrCode,
+        ]
+      );
+
+      await client.query(
+        `
+        INSERT INTO booking_passengers
+        (booking_id, passenger_id)
+        VALUES ($1, $2)
+        `,
+        [
+          item.booking_id,
+          item.passenger_id,
+        ]
+      );
+    }
+
+    await client.query("COMMIT");
+
+    return res.json({
+      success: true,
+      message: "Booking created successfully",
+      booking: {
+        booking_ids: bookedSeats.map(
+          (b) => b.booking_id
+        ),
+        ticket_number: ticketNumber,
+        qr_code: qrCode,
+        seats: bookedSeats.map(
+          (b) => b.seat_number
+        ),
+      },
+    });
+  } catch (err) {
+    await client.query("ROLLBACK");
+
+    console.error(err);
+
+    return res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  } finally {
+    client.release();
+  }
+};
+
