@@ -14,28 +14,53 @@ export default function SeatButton({
     <button
       onClick={() => !isBooked && onSeatClick(seat.id)}
       style={{
-        width: isSleeper ? 96 : 64,
-        height: isSleeper ? 54 : 64,
-        border: "2px solid rgba(255,255,255,.25)",
-        borderRadius: isSleeper ? 12 : 18,
-        background: isBooked
-          ? "#dc3545"
-          : isSelected
-          ? "#0d6efd"
-          : "#22c55e",
-        color: "#fff",
-        fontWeight: "bold",
-        fontSize: isSleeper ? "14px" : "16px",
-        cursor: isBooked ? "not-allowed" : "pointer",
-        boxShadow: isSelected
-          ? "0 0 18px rgba(13,110,253,.55)"
-          : "0 10px 22px rgba(0,0,0,.18)",
-        transition: "all .25s ease",
-        transform: isSelected ? "scale(1.06)" : "scale(1)",
+  width: isSleeper ? 98 : 62,
+  height: isSleeper ? 56 : 62,
+  border: isSelected
+    ? "2px solid #2563eb"
+    : "1px solid #dbeafe",
+  borderRadius: isSleeper ? 14 : 16,
+  background: isBooked
+    ? "linear-gradient(135deg,#ef4444,#b91c1c)"
+    : isSelected
+    ? "linear-gradient(135deg,#2563eb,#1d4ed8)"
+    : "linear-gradient(135deg,#22c55e,#16a34a)",
+  color: "#fff",
+  fontWeight: 700,
+  fontSize: isSleeper ? 14 : 15,
+  cursor: isBooked ? "not-allowed" : "pointer",
+  boxShadow: isBooked
+    ? "0 8px 18px rgba(239,68,68,.35)"
+    : isSelected
+    ? "0 0 22px rgba(37,99,235,.45)"
+    : "0 10px 20px rgba(34,197,94,.28)",
+  transition: "all .25s ease",
+  transform: isSelected ? "scale(1.08)" : "scale(1)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  position: "relative",
+}}
+    >
+      <>
+  {isBooked && (
+    <span
+      style={{
+        position: "absolute",
+        top: 3,
+        right: 5,
+        fontSize: 11,
       }}
     >
-      {isSleeper ? "🛏️ " : ""}
-      {seat.label}
+      🔒
+    </span>
+  )}
+
+  <span>
+    {isSleeper ? "🛏 " : ""}
+    {seat.label}
+  </span>
+</>
     </button>
   );
 }

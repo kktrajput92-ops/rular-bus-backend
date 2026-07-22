@@ -77,7 +77,7 @@ const bookingRes = await api.get(`/bookings/${booking.id}`);
 
           state: {
 
-           booking: bookingRes.data[0],
+           booking: bookingRes.data.booking,
 
             payment: res.data.payment,
 

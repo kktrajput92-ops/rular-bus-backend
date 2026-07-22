@@ -12,12 +12,12 @@ function Seats() {
   const location = useLocation();
 
   const bus = location.state || {};
-console.log("BUS DATA:", bus);
+
   const [bookedSeats, setBookedSeats] = useState([]);
 
   const [selectedSeats, setSelectedSeats] = useState([]);
 const [layout, setLayout] = useState([]);
-  const farePerSeat = 550;
+  const farePerSeat = Number(bus.fare || bus.price || 550);
 const loadSeats = async () => {
   if (!bus.schedule_id) return;
 
@@ -34,7 +34,9 @@ const loadLayout = async () => {
 
   try {
     const res = await api.get(`/seat-layouts/${bus.bus_id}`);
-    setLayout(res.data.layout || []);
+console.log("BUS ID =", bus.bus_id);
+console.log("LAYOUT =", res.data.layout);  
+  setLayout(res.data.layout || []);
   } catch (err) {
     console.error(err);
   }
@@ -132,34 +134,39 @@ useEffect(() => {
       }}
     >
 
-      <h2
-        style={{
-          textAlign: "center",
-        }}
-      >
-        🚌 Select Your Seats
-      </h2>
+     <div
+  style={{
+    background: "linear-gradient(135deg,#0f172a,#1e3a8a)",
+    color: "#fff",
+    borderRadius: 18,
+    padding: 20,
+    marginBottom: 20,
+    boxShadow: "0 10px 25px rgba(0,0,0,.18)",
+  }}
+>
+  <h2 style={{ margin: 0, fontSize: 24 }}>
+    🚌 {bus.bus_name || "Rular Bus"}
+  </h2>
 
-      <div
-        style={{
-          background: "#f8f9fa",
-          padding: 15,
-          borderRadius: 10,
-          marginBottom: 20,
-        }}
-      >
+  <p style={{ marginTop: 8, opacity: .9 }}>
+    {bus.source} ➜ {bus.destination}
+  </p>
 
-        <h3>
-          {bus.bus_name}
-        </h3>
-
-        <p>
-
-          {bus.source} ➜ {bus.destination}
-
-        </p>
-
-      </div>
+  <div
+    style={{
+      display: "flex",
+      justifyContent: "space-between",
+      flexWrap: "wrap",
+      marginTop: 18,
+      gap: 10,
+    }}
+  >
+    <div>📅 {bus.journey_date || "-"}</div>
+    <div>🕒 {bus.departure_time || "-"}</div>
+    <div>💰 ₹{farePerSeat}</div>
+  </div>
+</div>
+      
 
       <div
         style={{

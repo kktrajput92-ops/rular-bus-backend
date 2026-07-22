@@ -6,6 +6,9 @@ import {
   RBInput,
   RBCard,
 } from "../rds/components";
+import Toolbox from "../components/seatDesigner/Toolbox";
+import BusCanvas from "../components/seatDesigner/BusCanvas";
+import SeatGrid from "../components/seatDesigner/SeatGrid";
 
 export default function SeatLayout() {
   const { busId } = useParams();
@@ -16,7 +19,7 @@ export default function SeatLayout() {
   const [rows, setRows] = useState(10);
   const [cols, setCols] = useState(4);
   const [grid, setGrid] = useState([]);
-
+const [selectedTool, setSelectedTool] = useState("SEAT");
   useEffect(() => {
     loadLayout();
   }, [busId]);
@@ -58,24 +61,15 @@ const generateGrid = () => {
 
 const toggleCell = (rowIndex, colIndex) => {
   setGrid((oldGrid) =>
-    oldGrid.map((row, r) =>
-      row.map((cell, c) => {
-        if (r !== rowIndex || c !== colIndex) return cell;
-
-        const order = [
-          "EMPTY",
-          "SEAT",
-          "DOOR",
-          "DRIVER",
-          "AISLE",
-          "EXTRA",
-        ];
-
-        const next = order[(order.indexOf(cell.type) + 1) % order.length];
+    oldGrid.map((row) =>
+      row.map((cell) => {
+        if (cell.row !== rowIndex || cell.col !== colIndex) {
+          return cell;
+        }
 
         return {
           ...cell,
-          type: next,
+          type: selectedTool,
         };
       })
     )
@@ -86,7 +80,11 @@ const getSeatLabel = (row, col) => {
 
   for (let r = 0; r < grid.length; r++) {
     for (let c = 0; c < grid[r].length; c++) {
-      if (grid[r][c].type === "SEAT") {
+      if (
+  grid[r][c].type === "SEAT" ||
+  grid[r][c].type === "LOWER_BERTH" ||
+  grid[r][c].type === "UPPER_BERTH"
+) {
         count++;
 
         if (r === row && c === col) {
@@ -112,7 +110,7 @@ const getSeatLabel = (row, col) => {
     ? getSeatLabel(cell.row, cell.col)
     : `${cell.type}_${cell.row}_${cell.col}`,
             seat_type: cell.type,
-            deck: 1,
+deck: cell.type === "UPPER_BERTH" ? 2 : 1,
             row_no: cell.row,
             col_no: cell.col,
             is_driver: cell.type === "DRIVER",
@@ -145,111 +143,101 @@ const getSeatLabel = (row, col) => {
   }
 };
   
-  return (
-    <div style={{ padding: 20 }}>
+return (
+  <div style={{ padding: 20 }}>
+    <RBCard style={{ padding: 20 }}>
+      <h2>Seat Layout Designer</h2>
 
-      <RBCard style={{ padding: 20 }}>
+      <p>
+        <strong>Bus ID:</strong> {busId}
+      </p>
 
-        <h2>Seat Layout Designer</h2>
+      <p>
+        <strong>Saved Seats:</strong> {layout.length}
+      </p>
 
-        <p><strong>Bus ID:</strong> {busId}</p>
+      <div
+        style={{
+          display: "flex",
+          gap: 10,
+          marginBottom: 20,
+          flexWrap: "wrap",
+        }}
+      >
+        <RBInput
+          type="number"
+          value={rows}
+          onChange={(e) => setRows(Number(e.target.value))}
+          placeholder="Rows"
+        />
 
-        <p><strong>Saved Seats:</strong> {layout.length}</p>
+        <RBInput
+          type="number"
+          value={cols}
+          onChange={(e) => setCols(Number(e.target.value))}
+          placeholder="Columns"
+        />
 
+        <RBButton onClick={generateGrid}>
+          Generate Grid
+        </RBButton>
+
+        <RBButton onClick={saveLayout}>
+          Save Layout
+        </RBButton>
+      </div>
+
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
         <div
           style={{
             display: "flex",
-            gap: 10,
-            marginBottom: 20,
+            gap: 24,
+            alignItems: "flex-start",
             flexWrap: "wrap",
           }}
         >
-          <RBInput
-            type="number"
-            value={rows}
-            onChange={(e) => setRows(Number(e.target.value))}
-            placeholder="Rows"
-          />
+       <Toolbox
+  selectedTool={selectedTool}
+  onSelect={setSelectedTool}
+/>
 
-          <RBInput
-            type="number"
-            value={cols}
-            onChange={(e) => setCols(Number(e.target.value))}
-            placeholder="Columns"
-          />
-
-          <RBButton onClick={generateGrid}>
-            Generate Grid
-          </RBButton>
-        </div>
-<RBButton onClick={saveLayout}>
-  Save Layout
-</RBButton>
-
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div>
-
-            {grid.map((row, r) => (
-
-              <div
-                key={r}
-                style={{
-                  display: "flex",
-                  gap: 8,
-                  marginBottom: 8,
-                }}
-              >
-
-                {row.map((cell) => (
-
-                  <div
-                    key={`${cell.row}-${cell.col}`}
-onClick={() => toggleCell(cell.row, cell.col)}
-                    style={{
-                      width: 50,
-                      height: 50,
-                      border: "1px solid #999",
-                      borderRadius: 6,
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      background:
-  cell.type === "SEAT"
-    ? "#4f8ef7"
-    : cell.type === "DOOR"
-    ? "#22c55e"
-    : cell.type === "DRIVER"
-    ? "#f97316"
-    : cell.type === "AISLE"
-    ? "#9ca3af"
-    : cell.type === "EXTRA"
-    ? "#a855f7"
-    : "#fafafa",
-cursor: "pointer",
-color: cell.type === "EMPTY" ? "#000" : "#fff",
-fontWeight: "bold",
-                    }}
-                  >
-                   {cell.type === "EMPTY"
-  ? `${cell.row + 1}-${cell.col + 1}`
-  : cell.type === "SEAT"
-  ? getSeatLabel(cell.row, cell.col)
-  : cell.type}
-                  </div>
-
-                ))}
-
-              </div>
-
-            ))}
-
-          </div>
-        )}
-
-      </RBCard>
-
+       <div>
+  <div
+    style={{
+      background: "#fff",
+      border: "3px solid #1f2937",
+      borderRadius: 28,
+      padding: 20,
+      width: "fit-content",
+      boxShadow: "0 10px 25px rgba(0,0,0,.15)",
+    }}
+  >
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        marginBottom: 16,
+        fontWeight: "bold",
+      }}
+    >
+      <span>👨 DRIVER</span>
+      <span>🚪 DOOR</span>
     </div>
-  );
+
+    <SeatGrid
+  grid={grid}
+  getSeatLabel={getSeatLabel}
+  toggleCell={toggleCell}
+/>
+            </div>
+          </div>
+        </div>
+      )}
+
+    </RBCard>
+  </div>
+); 
+
 }

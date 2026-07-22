@@ -9,32 +9,27 @@ export default function SeatRenderer({
   selectedSeats,
   onSeatClick,
 }) {
-  const rows =
-  layout && layout.length
-    ? (() => {
-        const grid = [];
+  const rows = (() => {
+  const grid = [];
 
-        layout.forEach((item) => {
-          if (!grid[item.row_no]) {
-            grid[item.row_no] = [];
-          }
+  layout.forEach((item) => {
+    if (!grid[item.row_no]) {
+      grid[item.row_no] = [];
+    }
 
-          grid[item.row_no][item.col_no] = {
-            id: item.seat_no,
-            label: item.seat_no,
-            type: item.seat_type,
-          };
-        });
+    grid[item.row_no][item.col_no] = {
+      id: item.seat_no,
+      label: item.seat_no,
+      type: item.seat_type,
+    };
+  });
 
-        return grid.map((row) =>
-          row ? row.map((cell) => cell || null) : []
-        );
-      })()
-    : generateLayout({
-        totalSeats,
-        layoutType,
-      });
-console.log("SeatRenderer rows:", rows);
+  return grid.map((row) =>
+    row ? row.map((cell) => cell || null) : []
+  );
+})();
+      
+
   return (
     <div
       style={{
@@ -45,25 +40,28 @@ console.log("SeatRenderer rows:", rows);
         <div
           key={rowIndex}
           style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "28px",
-            marginBottom: "20px",
+            display: "grid",
+gridTemplateColumns: "repeat(5, max-content)",
+justifyContent: "center",
+alignItems: "center",
+columnGap: "16px",
+rowGap: "18px",
+marginBottom: "18px",
           }}
         >
           {row.map((seat, index) => {
 
             if (seat === null) {
-              return (
-                <div
-                  key={index}
-                  style={{
-                   width: 110,
-                  }}
-                />
-              );
-            }
+  return (
+    <div
+      key={index}
+      style={{
+        width: 40,
+        height: 64,
+      }}
+    />
+  );
+}
 if (
   seat.type === "DOOR" ||
   seat.type === "AISLE" ||
@@ -82,6 +80,7 @@ if (
             return ( 
 
  seat.type?.includes("lower") || seat.type?.includes("upper") ? (
+
   <Bed
     key={seat.id}
     label={seat.label}

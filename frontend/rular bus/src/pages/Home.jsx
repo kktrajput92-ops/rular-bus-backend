@@ -29,33 +29,20 @@ function Home() {
 
     setLoading(true);
 
-    try {
+   
+const url = `/search?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&journey_date=${journeyDate}`;
+try {
+  const res = await api.get(url);
+  setBuses(res.data.buses || []);
 
-      const res = await api.get(
-        `/search?source=${encodeURIComponent(source)}&destination=${encodeURIComponent(destination)}&journey_date=${journeyDate}`
-      );
-console.log("Search Params:", {
-  source,
-  destination,
-  journeyDate,
-});
-
-console.log("API Response:", res.data);
-console.log("API Response:", res.data);
-console.log("First Bus:", res.data.buses?.[0]);
-      setBuses(res.data.buses || []);
-alert(JSON.stringify(res.data));
-    } catch (err) {
+} catch (err) {
 
       console.error(err);
+alert("Unable to search buses");
+     } finally {
+  setLoading(false);
 
-      alert("Unable to search buses");
-
-    } finally {
-
-      setLoading(false);
-
-    }
+}
 
   };
 
@@ -102,7 +89,7 @@ alert(JSON.stringify(res.data));
 
           buses.map((bus) => (
   <BusCard
-    key={bus.id}
+    key={bus.schedule_id}
     bus={bus}
     onSelect={() =>
       navigate("/seats", {
