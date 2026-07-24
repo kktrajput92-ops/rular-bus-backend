@@ -19,6 +19,10 @@ const searchRoutes = require("./routes/search.routes");
 const seatLayoutRoutes = require("./routes/seatLayout.routes");
 const stopRoutes = require("./routes/stop.routes");
 const journeyRoutes = require("./routes/journey.routes");
+const fareCategoryRoutes = require("./routes/fareCategory.routes");
+const pricingRuleRoutes = require("./routes/pricingRule.routes");
+const pricingEngineRoutes = require("./routes/pricingEngine.routes");
+const couponCodeRoutes = require("./routes/couponCode.routes");
 const dashboardRoutes = require("./routes/dashboard.routes");
 const conductorRoutes = require("./routes/conductor.routes");
 const seatLockRoutes = require("./routes/seat_lock.routes");
@@ -44,7 +48,6 @@ const rolePermissionRoutes = require("./routes/rolePermission.routes");
 const path = require("path");
 const app = express();
 
-app.use(cors());
 app.use(express.json());
 
 // Request Logger
@@ -68,6 +71,10 @@ app.use("/api/seats", seatRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/stops", stopRoutes);
 app.use("/api/journeys", journeyRoutes);
+app.use("/api/fare-categories", fareCategoryRoutes);
+app.use("/api/pricing-rules", pricingRuleRoutes);
+app.use("/api/pricing-engine", pricingEngineRoutes);
+app.use("/api/coupon-codes", couponCodeRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/conductor", conductorRoutes);
 app.use("/api/seat-locks", seatLockRoutes);

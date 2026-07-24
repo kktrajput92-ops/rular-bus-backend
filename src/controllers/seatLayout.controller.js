@@ -13,7 +13,7 @@ const getLayout = async (req, res) => {
        ORDER BY row_no, col_no`,
       [busId]
     );
-
+console.log("SEAT LAYOUT =", JSON.stringify(result.rows, null, 2));
     return res.json({
       success: true,
       layout: result.rows,

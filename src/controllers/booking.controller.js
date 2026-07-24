@@ -2,7 +2,10 @@ const pool = require("../config/db");
 
 // Add Booking
 const addBooking = async (req, res) => {
+  const client = await pool.connect();
+
   try {
+    await client.query("BEGIN");
 
     const {
   passenger_id,
@@ -10,7 +13,7 @@ const addBooking = async (req, res) => {
   journey_id,
   seat_number
 } = req.body;
-    const passenger = await pool.query(
+    const passenger = await client.query(
       "SELECT id FROM passengers WHERE id=$1",
       [passenger_id]
     );
@@ -23,7 +26,7 @@ const addBooking = async (req, res) => {
     }
 
     // Schedule + Total Seats
-    const schedule = await pool.query(`
+    const schedule = await client.query(`
       SELECT buses.total_seats
       FROM schedules
       JOIN buses
@@ -48,7 +51,7 @@ const addBooking = async (req, res) => {
     }
 
     // Duplicate Seat
-    const seatCheck = await pool.query(
+    const seatCheck = await client.query(
       `SELECT id
        FROM bookings
        WHERE schedule_id=$1
@@ -64,7 +67,7 @@ const addBooking = async (req, res) => {
       });
     }
 
-    const result = await pool.query(
+    const result = await client.query(
   `INSERT INTO bookings
   (passenger_id,schedule_id,seat_number)
   VALUES($1,$2,$3)
@@ -80,13 +83,13 @@ const ticketNumber =
 
 const qrCode = ticketNumber;
 
-await pool.query(
+await client.query(
   `INSERT INTO tickets
   (booking_id, ticket_number, qr_code)
   VALUES ($1,$2,$3)`,
   [bookingId, ticketNumber, qrCode]
 );
-const booking = await pool.query(
+const booking = await client.query(
   `
   SELECT
     b.id,
@@ -129,21 +132,22 @@ WHERE b.id = $1
   [result.rows[0].id]
 );
 console.log("BOOKING =", booking.rows[0]);
+await client.query("COMMIT");
 res.json({
   success: true,
   message: "Booking Created Successfully",
   booking: booking.rows[0],
 });
-
   } catch(err){
-
+await client.query("ROLLBACK");
     console.error(err);
 
     res.status(500).json({
       success:false,
       message:err.message,
     });
-
+} finally {
+  client.release();
   }
 };
 
