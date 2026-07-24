@@ -7,6 +7,12 @@ const menus = [
 
   { name: "Buses", icon: "🚌", path: "/admin/buses" },
 
+{
+  name: "Seat Management",
+  icon: "🪑",
+  path: "/admin/seat-layout/4",
+},
+
   { name: "Drivers", icon: "👨‍✈️", path: "/admin/drivers" },
 
   { name: "Staff", icon: "👥", path: "/admin/staff" },
@@ -53,6 +59,13 @@ const menus = [
   
   { name: "Schedules", icon: "⏰", path: "/admin/schedules" },
 
+  { name: "Fare Categories", icon: "🏷️", path: "/admin/fare-categories" },
+
+  { name: "Pricing Rules", icon: "💰", path: "/admin/pricing-rules" },
+
+  { name: "Offers", icon: "🎁", path: "/admin/offers" },
+
+  { name: "Coupons", icon: "🎟️", path: "/admin/coupons" },
   { name: "Passengers", icon: "👥", path: "/admin/passengers" },
 
   { name: "Bookings", icon: "📚", path: "/bookings" },

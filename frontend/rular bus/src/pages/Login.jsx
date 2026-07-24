@@ -14,12 +14,12 @@ const login=async()=>{
 
 try{
 
-const res=await api.post("/auth/login",{
-
-email,
-password
-
+const res = await api.post("/auth/login", {
+  email,
+  password,
 });
+
+
 
 localStorage.setItem("token",res.data.token);
 localStorage.setItem("user", JSON.stringify(res.data.user));
@@ -33,10 +33,14 @@ if (res.data.permissions) {
 }
 navigate("/admin");
 
-}catch(err){
+} catch (err) {
+  console.error("Login error:", err);
 
-alert(err.response?.data?.message || "Login Failed");
-
+  alert(
+    err.response?.data?.message ||
+    err.message ||
+    "Login Failed"
+  );
 }
 
 };

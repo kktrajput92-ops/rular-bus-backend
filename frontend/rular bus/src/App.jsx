@@ -27,6 +27,10 @@ import PermissionRoute from "./components/auth/PermissionRoute";
 import Unauthorized from "./pages/Unauthorized";
 import IconLab from "./pages/IconLab";
 import SeatLayout from "./pages/SeatLayout";
+import AdminFareCategories from "./pages/AdminFareCategories";
+import AdminPricingRules from "./pages/AdminPricingRules";
+import AdminOffers from "./pages/AdminOffers";
+import AdminCoupons from "./pages/AdminCoupons";
 function App() {
     return (
   <BrowserRouter>
@@ -135,6 +139,41 @@ function App() {
       <Route path="/admin/drivers" element={<AdminDriver />} />
       <Route path="/conductor-dashboard"element={<ConductorDashboard />}
 />    
+<Route
+  path="/admin/fare-categories"
+  element={
+    <ProtectedRoute>
+      <AdminFareCategories />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/pricing-rules"
+  element={
+    <ProtectedRoute>
+      <AdminPricingRules />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/offers"
+  element={
+    <ProtectedRoute>
+      <AdminOffers />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/admin/coupons"
+  element={
+    <ProtectedRoute>
+      <AdminCoupons />
+    </ProtectedRoute>
+  }
+/>
 <Route path="/icon-lab" element={<IconLab />} />
 </Routes>
   </BrowserRouter>

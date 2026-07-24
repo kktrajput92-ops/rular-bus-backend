@@ -3,6 +3,7 @@ export default function SeatGrid({
   grid,
   getSeatLabel,
   toggleCell,
+  selectedSeat,
 }) {
   return (
     <>
@@ -21,6 +22,10 @@ export default function SeatGrid({
   cell={cell}
   getSeatLabel={getSeatLabel}
   onClick={() => toggleCell(cell.row, cell.col)}
+  isSelected={
+    selectedSeat?.row === cell.row &&
+    selectedSeat?.col === cell.col
+  }
 />
           ))}
         </div>

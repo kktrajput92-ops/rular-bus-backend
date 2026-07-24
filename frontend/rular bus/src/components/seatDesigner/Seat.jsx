@@ -13,6 +13,7 @@ export default function Seat({
   cell,
   getSeatLabel,
   onClick,
+  isSelected,
 }) {
   return (
     <div
@@ -20,7 +21,7 @@ export default function Seat({
       style={{
         width: 50,
         height: 50,
-        border: "1px solid #999",
+        border: isSelected ? "3px solid #111827" : "1px solid #999",
         borderRadius: 6,
         display: "flex",
         justifyContent: "center",
@@ -30,7 +31,7 @@ export default function Seat({
         userSelect: "none",
         color: cell.type === "EMPTY" ? "#000" : "#fff",
         background: COLORS[cell.type] || "#fafafa",
-        transition: "0.15s ease",
+        transform: isSelected ? "scale(1.08)" : "scale(1)",
       }}
     >
       {cell.type === "EMPTY"
@@ -38,7 +39,7 @@ export default function Seat({
         : cell.type === "SEAT" ||
           cell.type === "LOWER_BERTH" ||
           cell.type === "UPPER_BERTH"
-        ? getSeatLabel(cell.row, cell.col)
+        ? cell.seat_number || getSeatLabel(cell.row, cell.col)
         : cell.type}
     </div>
   );

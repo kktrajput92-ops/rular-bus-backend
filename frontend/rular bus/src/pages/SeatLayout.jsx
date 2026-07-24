@@ -20,10 +20,36 @@ export default function SeatLayout() {
   const [cols, setCols] = useState(4);
   const [grid, setGrid] = useState([]);
 const [selectedTool, setSelectedTool] = useState("SEAT");
+const [selectedSeat, setSelectedSeat] = useState(null);
+const [seatNumber, setSeatNumber] = useState("");
+const [seatFare, setSeatFare] = useState("");
   useEffect(() => {
     loadLayout();
   }, [busId]);
+useEffect(() => {
+  if (!selectedSeat) {
+    setSeatNumber("");
+    setSeatFare("");
+    return;
+  }
 
+  const selectedCell =
+    grid[selectedSeat.row]?.[selectedSeat.col];
+
+  if (!selectedCell) {
+    setSeatNumber("");
+    setSeatFare("");
+    return;
+  }
+
+  setSeatNumber(
+  selectedCell.type === "SEAT"
+    ? (selectedCell.seat_number || getSeatLabel(selectedCell.row, selectedCell.col))
+    : selectedCell.type
+);
+
+  setSeatFare(selectedCell.fare || "");
+}, [selectedSeat]);
   const loadLayout = async () => {
     try {
       const res = await fetch(`${API_BASE}/seat-layouts/${busId}`);
@@ -31,6 +57,42 @@ const [selectedTool, setSelectedTool] = useState("SEAT");
 
       if (data.success) {
         setLayout(data.layout || []);
+const saved = data.layout || [];
+
+setLayout(saved);
+
+if (saved.length > 0) {
+  const maxRow = Math.max(...saved.map((s) => s.row_no));
+  const maxCol = Math.max(...saved.map((s) => s.col_no));
+
+  setRows(maxRow + 1);
+  setCols(maxCol + 1);
+
+  const temp = Array.from(
+    { length: maxRow + 1 },
+    (_, r) =>
+      Array.from(
+        { length: maxCol + 1 },
+        (_, c) => ({
+          row: r,
+          col: c,
+          type: "EMPTY",
+        })
+      )
+  );
+
+  saved.forEach((seat) => {
+    temp[seat.row_no][seat.col_no] = {
+  row: seat.row_no,
+  col: seat.col_no,
+  type: seat.seat_type,
+  seat_number: seat.seat_no,
+  fare: seat.fare,
+};
+  });
+
+  setGrid(temp);
+}
       }
     } catch (err) {
       console.error(err);
@@ -74,6 +136,12 @@ const toggleCell = (rowIndex, colIndex) => {
       })
     )
   );
+ 
+
+  setSelectedSeat({
+    row: rowIndex,
+    col: colIndex,
+  });
 };
 const getSeatLabel = (row, col) => {
   let count = 0;
@@ -107,10 +175,11 @@ const getSeatLabel = (row, col) => {
           seats.push({
             seat_no:
   cell.type === "SEAT"
-    ? getSeatLabel(cell.row, cell.col)
+    ? (cell.seat_number || getSeatLabel(cell.row, cell.col))
     : `${cell.type}_${cell.row}_${cell.col}`,
             seat_type: cell.type,
 deck: cell.type === "UPPER_BERTH" ? 2 : 1,
+fare: Number(cell.fare) || 0,
             row_no: cell.row,
             col_no: cell.col,
             is_driver: cell.type === "DRIVER",
@@ -142,7 +211,33 @@ deck: cell.type === "UPPER_BERTH" ? 2 : 1,
     alert("Error saving layout.");
   }
 };
-  
+const updateSeat = () => {
+  if (!selectedSeat) {
+    alert("Please select a seat.");
+    return;
+  }
+
+  setGrid((oldGrid) =>
+    oldGrid.map((row) =>
+      row.map((cell) => {
+        if (
+          cell.row !== selectedSeat.row ||
+          cell.col !== selectedSeat.col
+        ) {
+          return cell;
+        }
+
+        return {
+          ...cell,
+          seat_number: seatNumber,
+          fare: Number(seatFare) || 0,
+        };
+      })
+    )
+  );
+
+  alert("Seat updated. Click Save Layout to save changes.");
+};  
 return (
   <div style={{ padding: 20 }}>
     <RBCard style={{ padding: 20 }}>
@@ -230,9 +325,66 @@ return (
   grid={grid}
   getSeatLabel={getSeatLabel}
   toggleCell={toggleCell}
+  selectedSeat={selectedSeat}
 />
-            </div>
-          </div>
+</div>           
+ </div>
+          <div
+  style={{
+    background: "#ffffff",
+    border: "1px solid #d1d5db",
+    borderRadius: 12,
+    padding: 18,
+    minWidth: 220,
+    boxShadow: "0 6px 18px rgba(0,0,0,.08)",
+  }}
+>
+  <h3 style={{ marginTop: 0 }}>Seat Properties</h3>
+
+  {selectedSeat ? (
+    <>
+      <p><strong>Row:</strong> {selectedSeat.row + 1}</p>
+      <p><strong>Column:</strong> {selectedSeat.col + 1}</p>
+      <p>
+        <strong>Type:</strong>{" "}
+        {grid[selectedSeat.row]?.[selectedSeat.col]?.type}
+      </p>
+        <div style={{ marginTop: 14 }}>
+          <label style={{ display: "block", marginBottom: 6 }}>
+            Seat Number
+          </label>
+
+          <RBInput
+            value={seatNumber}
+            onChange={(e) => setSeatNumber(e.target.value)}
+            placeholder="Seat Number"
+          />
+        </div>
+
+        <div style={{ marginTop: 14 }}>
+          <label style={{ display: "block", marginBottom: 6 }}>
+            Fare
+          </label>
+
+          <RBInput
+            type="number"
+            value={seatFare}
+            onChange={(e) => setSeatFare(e.target.value)}
+            placeholder="Fare"
+          />
+        </div>
+<RBButton
+  variant="primary"
+  onClick={updateSeat}
+  style={{ marginTop: 16, width: "100%" }}
+>
+  Update Seat
+</RBButton>
+    </>
+  ) : (
+    <p>Select a seat to view properties.</p>
+  )}
+</div>
         </div>
       )}
 
