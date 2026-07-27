@@ -1,0 +1,532 @@
+.payment-processing-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: start center;
+  padding: 54px 16px 90px;
+  color: #10284c;
+  background:
+    radial-gradient(
+      circle at 50% 0%,
+      rgba(93, 175, 255, 0.2),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #edf5ff 0%,
+      #f8fbff 100%
+    );
+  font-family: Arial, sans-serif;
+}
+
+.payment-processing-page * {
+  box-sizing: border-box;
+}
+
+.payment-processing-card {
+  width: 100%;
+  max-width: 660px;
+  overflow: hidden;
+  border: 1px solid #d6e5f6;
+  border-radius: 26px;
+  background:
+    rgba(255, 255, 255, 0.97);
+  box-shadow:
+    0 24px 60px
+    rgba(5, 53, 119, 0.15);
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.payment-processing-card.is-complete {
+  border-color: #86efac;
+  box-shadow:
+    0 24px 60px
+    rgba(22, 163, 74, 0.16);
+}
+
+.processing-brand {
+  position: relative;
+  overflow: hidden;
+  padding: 30px 28px 27px;
+  color: #ffffff;
+  text-align: center;
+  background:
+    radial-gradient(
+      circle at 88% 15%,
+      rgba(59, 190, 255, 0.36),
+      transparent 34%
+    ),
+    linear-gradient(
+      125deg,
+      #052f71 0%,
+      #0755b5 58%,
+      #008bd8 100%
+    );
+}
+
+.processing-brand::after {
+  content: "🚌";
+  position: absolute;
+  right: 28px;
+  bottom: -8px;
+  font-size: 70px;
+  opacity: 0.09;
+}
+
+.processing-premium-label {
+  display: inline-flex;
+  padding: 6px 11px;
+  border-radius: 999px;
+  color: #543600;
+  background:
+    linear-gradient(
+      90deg,
+      #fbbf24,
+      #fde68a
+    );
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.65px;
+}
+
+.processing-brand h1 {
+  margin: 13px 0 7px;
+  font-size: 25px;
+  line-height: 1.2;
+}
+
+.processing-brand p {
+  margin: 0;
+  color:
+    rgba(255, 255, 255, 0.84);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.processing-road-scene {
+  position: relative;
+  min-height: 145px;
+  margin: 24px 26px 6px;
+  padding-top: 58px;
+}
+
+.processing-sky-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background:
+    radial-gradient(
+      circle at 50% 40%,
+      rgba(72, 157, 255, 0.12),
+      transparent 55%
+    );
+}
+
+.processing-bus {
+  position: absolute;
+  z-index: 4;
+  top: 17px;
+  font-size: 52px;
+  filter:
+    drop-shadow(
+      0 10px 8px
+      rgba(0, 56, 133, 0.2)
+    );
+  transition:
+    left 0.28s linear;
+  animation:
+    processing-bus-bounce
+    0.8s ease-in-out infinite;
+}
+
+.processing-road {
+  position: relative;
+  z-index: 2;
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #dce6f1;
+}
+
+.processing-road::after {
+  content: "";
+  position: absolute;
+  inset: 4px 0 auto;
+  height: 2px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #ffffff 0 18px,
+      transparent 18px 34px
+    );
+}
+
+.processing-road-complete {
+  height: 100%;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      90deg,
+      #0a8f46,
+      #22c55e
+    );
+  transition:
+    width 0.28s linear;
+}
+
+.processing-road-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 11px;
+  color: #718096;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.processing-percentage-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  align-items: center;
+  padding: 0 28px;
+}
+
+.processing-percentage-row > div {
+  display: flex;
+  gap: 9px;
+  align-items: baseline;
+}
+
+.processing-percentage-row strong {
+  color: #0758bd;
+  font-size: 27px;
+}
+
+.processing-percentage-row span {
+  color: #718096;
+  font-size: 11px;
+}
+
+.processing-secure-chip {
+  padding: 7px 10px;
+  border: 1px solid #bbf7d0;
+  border-radius: 999px;
+  color: #166534 !important;
+  background: #ecfdf5;
+  font-weight: 900;
+}
+
+.processing-progress-track {
+  position: relative;
+  height: 10px;
+  overflow: hidden;
+  margin: 12px 28px 22px;
+  border-radius: 999px;
+  background: #e5edf6;
+}
+
+.processing-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  background:
+    linear-gradient(
+      90deg,
+      #0758bd,
+      #0aa34f
+    );
+  transition:
+    width 0.25s linear;
+}
+
+.processing-progress-shine {
+  position: absolute;
+  top: -3px;
+  width: 44px;
+  height: 16px;
+  opacity: 0.8;
+  transform: skewX(-24deg);
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.9),
+      transparent
+    );
+  transition:
+    left 0.25s linear;
+}
+
+.processing-active-message {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin: 0 28px 20px;
+  padding: 17px;
+  border: 1px solid #d6e6f8;
+  border-radius: 17px;
+  background:
+    linear-gradient(
+      135deg,
+      #f4f9ff,
+      #ffffff
+    );
+}
+
+.payment-processing-card.is-complete
+.processing-active-message {
+  border-color: #86efac;
+  background:
+    linear-gradient(
+      135deg,
+      #ecfdf5,
+      #ffffff
+    );
+}
+
+.processing-active-icon {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  flex: 0 0 48px;
+  place-items: center;
+  border-radius: 15px;
+  color: #ffffff;
+  background:
+    linear-gradient(
+      135deg,
+      #0758bd,
+      #1591e1
+    );
+  box-shadow:
+    0 9px 20px
+    rgba(7, 88, 189, 0.18);
+  font-size: 23px;
+}
+
+.is-complete
+.processing-active-icon {
+  background:
+    linear-gradient(
+      135deg,
+      #078b43,
+      #22c55e
+    );
+}
+
+.processing-active-message h2 {
+  margin: 0;
+  color: #123d77;
+  font-size: 18px;
+}
+
+.processing-active-message p {
+  margin: 5px 0 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.processing-step-list {
+  display: grid;
+  gap: 9px;
+  margin: 0 28px 20px;
+}
+
+.processing-step {
+  display: flex;
+  gap: 11px;
+  align-items: center;
+  min-height: 41px;
+  padding: 8px 11px;
+  border: 1px solid #edf2f7;
+  border-radius: 11px;
+  color: #8290a3;
+  background: #fbfdff;
+  font-size: 12px;
+  font-weight: 800;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.processing-step.active {
+  border-color: #9dc8f5;
+  color: #0758bd;
+  background: #eef6ff;
+}
+
+.processing-step.completed {
+  border-color: #bbf7d0;
+  color: #166534;
+  background: #f0fdf4;
+}
+
+.processing-step-status {
+  width: 25px;
+  height: 25px;
+  display: grid;
+  flex: 0 0 25px;
+  place-items: center;
+  border-radius: 50%;
+  color: #718096;
+  background: #e8eef5;
+  font-size: 11px;
+}
+
+.processing-step.active
+.processing-step-status {
+  color: #ffffff;
+  background: #1675d1;
+  animation:
+    processing-pulse
+    1s ease-in-out infinite;
+}
+
+.processing-step.completed
+.processing-step-status {
+  color: #ffffff;
+  background: #16a34a;
+}
+
+.processing-emotional-note {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+  margin: 0 28px 20px;
+  padding: 15px;
+  border: 1px solid #ffd4df;
+  border-radius: 15px;
+  background:
+    linear-gradient(
+      135deg,
+      #fff5f8,
+      #ffffff
+    );
+}
+
+.processing-emotional-note > span {
+  color: #ef476f;
+  font-size: 33px;
+}
+
+.processing-emotional-note strong {
+  color: #a42850;
+  font-size: 13px;
+}
+
+.processing-emotional-note p {
+  margin: 5px 0 0;
+  color: #765762;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.processing-footer {
+  display: grid;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  padding: 15px 20px;
+  border-top: 1px solid #e7eef6;
+  background: #f8fbff;
+}
+
+.processing-footer span {
+  color: #47617e;
+  font-size: 10px;
+  font-weight: 800;
+  text-align: center;
+}
+
+@keyframes processing-bus-bounce {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(-1deg);
+  }
+
+  50% {
+    transform:
+      translateY(-5px)
+      rotate(1deg);
+  }
+}
+
+@keyframes processing-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0
+      rgba(22, 117, 209, 0.2);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 6px
+      rgba(22, 117, 209, 0);
+  }
+}
+
+@media (max-width: 600px) {
+  .payment-processing-page {
+    padding:
+      20px 10px 75px;
+  }
+
+  .payment-processing-card {
+    border-radius: 20px;
+  }
+
+  .processing-brand {
+    padding:
+      24px 17px 22px;
+  }
+
+  .processing-brand h1 {
+    font-size: 21px;
+  }
+
+  .processing-road-scene {
+    margin:
+      18px 17px 4px;
+  }
+
+  .processing-bus {
+    font-size: 44px;
+  }
+
+  .processing-percentage-row,
+  .processing-active-message,
+  .processing-step-list,
+  .processing-emotional-note {
+    margin-left: 17px;
+    margin-right: 17px;
+  }
+
+  .processing-progress-track {
+    margin-left: 17px;
+    margin-right: 17px;
+  }
+
+  .processing-active-message {
+    align-items: flex-start;
+    padding: 14px;
+  }
+
+  .processing-active-icon {
+    width: 42px;
+    height: 42px;
+    flex-basis: 42px;
+  }
+
+  .processing-active-message h2 {
+    font-size: 16px;
+  }
+
+  .processing-footer {
+    grid-template-columns: 1fr;
+  }
+}

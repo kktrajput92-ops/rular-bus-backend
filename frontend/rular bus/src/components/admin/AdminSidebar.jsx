@@ -1,192 +1,447 @@
-import { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { usePermission } from "../../context/PermissionContext";
-import { API_BASE } from "../../config";
-const menus = [
-  { name: "Dashboard", icon: "🏠", path: "/admin" },
+import { API_BASE } from "../../api/api";
+import "./AdminSidebar.css";
 
-  { name: "Buses", icon: "🚌", path: "/admin/buses" },
-
+const MENU_SECTIONS = [
+  {
+    title: "Dashboard",
+    items: [
+      {
+        name: "Dashboard",
+        icon: "🏠",
+        path: "/admin",
+      },
+    ],
+  },
+  {
+    title: "Fleet Management",
+    items: [
+      {
+        name: "Buses",
+        icon: "🚌",
+        path: "/admin/buses",
+      },
+      {
+        name: "Seat Management",
+        icon: "🪑",
+        path: "/admin/seat-layout/4",
+        activePrefixes: ["/admin/seat-layout"],
+      },
+      {
+        name: "Drivers",
+        icon: "👨‍✈️",
+        path: "/admin/drivers",
+      },
+      {
+        name: "Routes",
+        icon: "🛣️",
+        path: "/admin/routes",
+      },
+                      {
+          name: "Location Types",
+          icon: "🏷️",
+          path: "/admin/location-types",
+        },
+        {
+          name: "Search Locations",
+          icon: "📌",
+          path: "/admin/passenger-locations",
+        },
 {
-  name: "Seat Management",
-  icon: "🪑",
-  path: "/admin/seat-layout/4",
-},
-
-  { name: "Drivers", icon: "👨‍✈️", path: "/admin/drivers" },
-
-  { name: "Staff", icon: "👥", path: "/admin/staff" },
-
-  { name: "Departments", icon: "🏢", path: "/admin/departments" },
-
-  { name: "Designations", icon: "🏷️", path: "/admin/designations" },
-
-  {
-    name: "Roles",
-    icon: "🔐",
-    path: "/admin/roles",
-    permission: "role.view",
-  },
-
-  {
-    name: "Role Permissions",
-    icon: "🔑",
-    path: "/admin/role-permissions",
-    permission: "role.view",
-  },
-
-  {
-    name: "Permissions",
-    icon: "🛡️",
-    path: "/admin/permissions",
-    permission: "permission.view",
-  },
-
-  {
-    name: "Users",
-    icon: "👤",
-    path: "/admin/users",
-    permission: "user.view",
-  },
+          name: "Route Stops",
+          icon: "📍",
+          path: "/admin/route-stops",
+        },
 {
-  name: "Company Profile",
-  icon: "🏢",
-  path: "/admin/company",
-},
+        name: "Homepage Routes",
+        icon: "🧭",
+        path: "/admin/homepage-routes",
+      },
+      {
+        name: "Schedules",
+        icon: "⏰",
+        path: "/admin/schedules",
+      },
+      {
+        name: "Live Tracking",
+        icon: "📍",
+        path: "/admin/tracking",
+      },
+    ],
+  },
+  {
+    title: "People & Access",
+    items: [
+      {
+        name: "Staff",
+        icon: "👥",
+        path: "/admin/staff",
+      },
+      {
+        name: "Departments",
+        icon: "🏢",
+        path: "/admin/departments",
+      },
+      {
+        name: "Designations",
+        icon: "🏷️",
+        path: "/admin/designations",
+      },
+      {
+        name: "Users",
+        icon: "👤",
+        path: "/admin/users",
+        permission: "user.view",
+      },
+      {
+        name: "Roles",
+        icon: "🔐",
+        path: "/admin/roles",
+        permission: "role.view",
+      },
+      {
+        name: "Role Permissions",
+        icon: "🔑",
+        path: "/admin/role-permissions",
+        permission: "role.view",
+      },
+      {
+        name: "Permissions",
+        icon: "🛡️",
+        path: "/admin/permissions",
+        permission: "permission.view",
+      },
+    ],
+  },
+  {
+    title: "Revenue Management",
+    items: [
+      {
+        name: "Fare Categories",
+        icon: "🏷️",
+        path: "/admin/fare-categories",
+      },
+      {
+        name: "Pricing Rules",
+        icon: "💰",
+        path: "/admin/pricing-rules",
+      },
+      {
+        name: "Offers",
+        icon: "🎁",
+        path: "/admin/offers",
+      },
+      {
+        name: "Coupons",
+        icon: "🎟️",
+        path: "/admin/coupons",
+      },
+    ],
+  },
+  {
+    title: "Operations",
+    items: [
+      {
+        name: "Passengers",
+        icon: "👥",
+        path: "/admin/passengers",
+      },
+      {
+        name: "Bookings",
+        icon: "📚",
+        path: "/bookings",
+      },
+      {
+        name: "Tickets",
+        icon: "🎫",
+        path: "/admin/tickets",
+      },
+      {
+        name: "Payments",
+        icon: "💳",
+        path: "/admin/payments",
+      },
 
-  { name: "Routes", icon: "🛣️", path: "/admin/routes" },
-
-  
-  { name: "Schedules", icon: "⏰", path: "/admin/schedules" },
-
-  { name: "Fare Categories", icon: "🏷️", path: "/admin/fare-categories" },
-
-  { name: "Pricing Rules", icon: "💰", path: "/admin/pricing-rules" },
-
-  { name: "Offers", icon: "🎁", path: "/admin/offers" },
-
-  { name: "Coupons", icon: "🎟️", path: "/admin/coupons" },
-  { name: "Passengers", icon: "👥", path: "/admin/passengers" },
-
-  { name: "Bookings", icon: "📚", path: "/bookings" },
-
-  { name: "Tickets", icon: "🎫", path: "/admin/tickets" },
-
-  { name: "Payments", icon: "💳", path: "/admin/payments" },
-
-  { name: "Reports", icon: "📊", path: "/admin/reports" },
-
-  { name: "Live Tracking", icon: "📍", path: "/admin/tracking" },
+      {
+        name: "Refund Management",
+        icon: "↩️",
+        path: "/admin/refunds",
+        activePrefixes: ["/admin/refunds"],
+        permission: "refund.view",
+      },
+      {
+        name: "Customer Intelligence",
+        icon: "🧠",
+        path: "/admin/customer-intelligence",
+      },
+      {
+        name: "Reports",
+        icon: "📊",
+        path: "/admin/reports",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [
+      {
+        name: "Company Profile",
+        icon: "🏢",
+        path: "/admin/company",
+      },
+    ],
+  },
 ];
-
-export default function AdminSidebar() {
+const AdminSidebar = () => {
   const location = useLocation();
-const { hasPermission } = usePermission();
-const [company, setCompany] = useState({});
+  const { hasPermission } = usePermission();
 
-useEffect(() => {
-  fetch(`${API_BASE}/api/companies`)
-    .then((res) => res.json())
-    .then((json) => {
-      if (json.success && json.data.length > 0) {
-        setCompany(json.data[0]);
+  const [company, setCompany] = useState({});
+  const [logoLoaded, setLogoLoaded] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const API_ORIGIN = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
+const logoUrl = company?.logo_url
+  ? company.logo_url.startsWith("http")
+    ? company.logo_url
+    : `${API_ORIGIN}${company.logo_url}`
+  : "";
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadCompany() {
+      try {
+      const res = await fetch(`${API_BASE}/companies`);
+
+if (!res.ok) {
+  throw new Error(`Company API failed: ${res.status}`);
+}
+
+const result = await res.json();
+
+if (!mounted) return;
+
+const companyData = Array.isArray(result?.data)
+  ? result.data[0]
+  : result?.data || result?.company || result;
+
+setCompany(companyData || {});
+      } catch (err) {
+        console.error("Company load failed:", err);
       }
-    })
-    .catch(console.error);
-}, []);
+    }
+
+    loadCompany();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const sections = useMemo(() => {
+    return MENU_SECTIONS.map((section) => ({
+      ...section,
+      items: section.items.filter(
+        (item) =>
+          !item.permission || hasPermission(item.permission)
+      ),
+    })).filter((section) => section.items.length);
+  }, [hasPermission]);
+
+  const isActive = (item) => {
+    if (location.pathname === item.path) return true;
+
+    if (item.activePrefixes) {
+      return item.activePrefixes.some((prefix) =>
+        location.pathname.startsWith(prefix)
+      );
+    }
+
+    return false;
+  };
+
   return (
-    <div
-      style={{
-        width: 270,
-        minHeight: "100vh",
-        background: "#0B3D91",
-        color: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        boxShadow: "5px 0 15px rgba(0,0,0,.15)",
-      }}
-    >
-      <div
-        style={{
-          padding: 25,
-          textAlign: "center",
-          borderBottom: "1px solid rgba(255,255,255,.15)",
-        }}
+
+
+    <>
+
+
+      <button
+
+
+        type="button"
+
+
+        className="admin-sidebar-toggle"
+
+
+        aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+
+
+        aria-expanded={isOpen}
+
+
+        onClick={() => setIsOpen((current) => !current)}
+
+
       >
-        <img
-  src={
-  company.logo_url
-    ? `${API_BASE}${company.logo_url}`
-    : "/logo.png"
-}
-  alt={company.company_name || "Rular Bus"}
-  style={{
-    width: 75,
-    marginBottom: 10,
-  }}
-/>
 
-        <h2
-          style={{
-            margin: 0,
-            color: "#fff",
-          }}
-        >
-          {company.company_name || "Rular Bus"}
-        </h2>
 
-        <small
-          style={{
-            color: "#ddd",
-          }}
-        >
-         {company.short_name || "Enterprise ERP"}
-        </small>
+        <span />
+
+
+        <span />
+
+
+        <span />
+
+
+      </button>
+
+
+
+      {isOpen && (
+
+
+        <button
+
+
+          type="button"
+
+
+          className="admin-sidebar-backdrop"
+
+
+          aria-label="Close navigation menu"
+
+
+          onClick={() => setIsOpen(false)}
+
+
+        />
+
+
+      )}
+
+
+
+      <aside
+
+
+        className={`admin-sidebar ${
+
+
+          isOpen ? "admin-sidebar--open" : ""
+
+
+        }`}
+
+
+      >
+      <div className="admin-sidebar__brand">
+
+        <div className="admin-sidebar__logo-shell">
+
+        {logoUrl ? (
+  <img
+    key={logoUrl}
+    src={logoUrl}
+    alt="Company Logo"
+    className="admin-sidebar__logo"
+    onLoad={() => setLogoLoaded(true)}
+    onError={(e) => {
+      console.error("Sidebar logo failed:", logoUrl);
+      e.currentTarget.style.display = "none";
+      setLogoLoaded(false);
+    }}
+  />
+) : (
+  <span style={{ fontSize: "34px" }}>🚌</span>
+)}
+
+        </div>
+
+        <div className="admin-sidebar__brand-copy">
+          <h2>
+            {company.company_name || "Rular Bus ERP"}
+          </h2>
+
+          <p>
+            {company.short_name || "Enterprise Edition"}
+          </p>
+
+          <div className="admin-sidebar__status">
+            <span className="admin-sidebar__status-dot"></span>
+            <span>System Online</span>
+          </div>
+
+        </div>
+
       </div>
 
-      <div style={{ padding: 12, flex: 1 }}>
-        {menus
-  .filter(
-    (item) =>
-      !item.permission || hasPermission(item.permission)
-  )
-  .map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            style={{
-              display: "block",
-              textDecoration: "none",
-              color: "#fff",
-              padding: "14px 18px",
-              marginBottom: 8,
-              borderRadius: 12,
-              background:
-                location.pathname === item.path
-                  ? "#D62828"
-                  : "transparent",
-              transition: ".25s",
-            }}
+      <nav className="admin-sidebar__navigation">
+        {sections.map((section) => (
+          <div
+            key={section.title}
+            className="admin-sidebar__section"
           >
-            <span style={{ marginRight: 12 }}>{item.icon}</span>
+            <div className="admin-sidebar__section-title">
+              {section.title}
+            </div>
 
-            {item.name}
-          </Link>
+            <div className="admin-sidebar__menu">
+              {section.items.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={
+                    isActive(item)
+                      ? "admin-sidebar__link admin-sidebar__link--active"
+                      : "admin-sidebar__link"
+                  }
+                >
+                  <span className="admin-sidebar__link-icon">
+                    {item.icon}
+                  </span>
+
+                  <span className="admin-sidebar__link-label">
+                    {item.name}
+                  </span>
+
+                  <span className="admin-sidebar__link-arrow">
+                    ›
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </div>
         ))}
-      </div>
+      </nav>
 
-      <div
-        style={{
-          padding: 18,
-          borderTop: "1px solid rgba(255,255,255,.15)",
-          textAlign: "center",
-          fontSize: 13,
-          color: "#ddd",
-        }}
-      >
-        Rular Bus ERP v1.0
+      <div className="admin-sidebar__footer">
+        <div className="admin-sidebar__footer-icon">
+          ERP
+        </div>
+
+        <div className="admin-sidebar__footer-copy">
+          <strong>
+            Enterprise Edition
+          </strong>
+
+          <small>
+            Secure Admin Panel
+          </small>
+        </div>
+
+        <div className="admin-sidebar__footer-shield">
+          🛡️
+        </div>
       </div>
-    </div>
+    </aside>
+    </>
   );
-}
+};
 
+export default AdminSidebar;

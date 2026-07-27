@@ -1,92 +1,121 @@
 export default function Bed({
-  label,
-  type,
-  booked = false,
+  seat,
   selected = false,
   onClick,
 }) {
-  const background = booked
-    ? "#dc3545"
+  const disabled =
+    seat.booked ||
+    seat.locked ||
+    !seat.private_available;
+
+  const type = String(
+    seat.seat_type || ""
+  ).toUpperCase();
+
+  const isUpper =
+    type.includes("UPPER");
+
+  const isDouble =
+    type.includes("DOUBLE") ||
+    Number(
+      seat.sharing_capacity || 1
+    ) > 1;
+
+  const fare = Number(
+    seat.private_fare ??
+      seat.fare ??
+      0
+  );
+
+  const background = seat.booked
+    ? "#dc2626"
+    : seat.locked
+    ? "#d97706"
     : selected
     ? "#2563eb"
-    : "rgba(31,41,55,.75)";
+    : "#16a34a";
 
   return (
-    <div
-      onClick={!booked ? onClick : undefined}
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={() => {
+        if (!disabled) {
+          onClick();
+        }
+      }}
       style={{
-        width:
-  type === "double-lower" || type === "double-upper"
-    ? 220
-    : 140,
-        height: 74,
-        borderRadius: 18,
+        width: isDouble ? 150 : 108,
+        height: 64,
+        borderRadius: 16,
         background,
         border: selected
-          ? "2px solid #60a5fa"
-          : "1px solid rgba(255,255,255,.12)",
+          ? "3px solid #93c5fd"
+          : "1px solid rgba(255,255,255,.3)",
         boxShadow: selected
-          ? "0 0 24px rgba(59,130,246,.65)"
-          : "0 12px 28px rgba(0,0,0,.28)",
-        cursor: booked ? "not-allowed" : "pointer",
+          ? "0 0 24px rgba(59,130,246,.55)"
+          : "0 10px 24px rgba(0,0,0,.22)",
+        cursor: disabled
+          ? "not-allowed"
+          : "pointer",
+        color: "#fff",
         position: "relative",
-        transition: ".25s ease",
         overflow: "hidden",
+        opacity:
+          disabled &&
+          !seat.booked &&
+          !seat.locked
+            ? 0.55
+            : 1,
       }}
     >
-      {/* Window Strip */}
       <div
         style={{
           position: "absolute",
-          left: 0,
-          top: 0,
-          width: 8,
-          height: "100%",
-          background: "rgba(255,255,255,.18)",
-        }}
-      />
-
-      {/* Pillow */}
-      <div
-        style={{
-          position: "absolute",
-          left: 16,
-          top: 10,
-          width: 36,
-          height: 12,
+          left: 8,
+          top: 8,
+          width: 30,
+          height: 11,
           borderRadius: 8,
           background: "#f8fafc",
         }}
       />
-      {/* Seat Label */}
+
+      {(seat.booked ||
+        seat.locked) && (
+        <span
+          style={{
+            position: "absolute",
+            right: 8,
+            top: 6,
+          }}
+        >
+          🔒
+        </span>
+      )}
+
       <div
         style={{
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "#fff",
-          fontWeight: 700,
-          fontSize: 15,
+          fontWeight: 800,
+          fontSize: 14,
         }}
       >
-        {label}
+        🛏 {seat.seat_no}
       </div>
 
-      {/* Upper / Lower Badge */}
       <div
         style={{
-          position: "absolute",
-          right: 10,
-          bottom: 8,
-          fontSize: 10,
-          fontWeight: 700,
-          color: "#fff",
-          opacity: 0.85,
+          fontSize: 9,
+          marginTop: 5,
         }}
       >
-        {type === "upper" ? "UPPER" : "LOWER"}
+        {isUpper
+          ? "UPPER"
+          : "LOWER"}
+        {fare > 0
+          ? ` • ₹${fare}`
+          : ""}
       </div>
-    </div>
+    </button>
   );
 }

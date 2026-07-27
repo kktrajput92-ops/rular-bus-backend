@@ -58,7 +58,7 @@ return(
 <div
 style={{
 display:"flex",
-background:"#F5F7FA",
+background:"var(--erp-bg)",
 minHeight:"100vh"
 }}
 >
@@ -199,17 +199,17 @@ marginTop:30
 <div
 style={{
 marginTop:30,
-background:"#fff",
+background:"var(--erp-surface)",
 borderRadius:20,
 padding:25,
-boxShadow:"0 10px 25px rgba(0,0,0,.08)"
+boxShadow:"var(--erp-shadow-md)"
 }}
 >
 
 <h2
   style={{
     marginBottom: 25,
-    color: "#0B3D91",
+    color: "var(--erp-heading)",
     fontSize: "30px",
     fontWeight: "700",
     borderBottom: "3px solid #0B3D91",
@@ -227,16 +227,16 @@ gap:20
 >
 <div
   style={{
-    background:"#F8FAFC",
+    background:"var(--erp-surface-muted)",
     borderRadius:"16px",
     padding:"20px",
-    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+    boxShadow:"var(--erp-shadow-sm)"
   }}
 >
 
 <h3
   style={{
-    color:"#0B3D91",
+    color:"var(--erp-heading)",
     fontSize:"22px",
     marginBottom:"15px"
   }}
@@ -254,10 +254,10 @@ gap:20
 
 <div
   style={{
-    background:"#F8FAFC",
+    background:"var(--erp-surface-muted)",
     borderRadius:"16px",
     padding:"20px",
-    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+    boxShadow:"var(--erp-shadow-sm)"
   }}
 >
 
@@ -281,10 +281,10 @@ gap:20
 
 <div
   style={{
-    background:"#F8FAFC",
+    background:"var(--erp-surface-muted)",
     borderRadius:"16px",
     padding:"20px",
-    boxShadow:"0 6px 16px rgba(0,0,0,.08)"
+    boxShadow:"var(--erp-shadow-sm)"
   }}
 >
 

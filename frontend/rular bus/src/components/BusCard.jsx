@@ -11,7 +11,7 @@ const minutes = Math.floor(
   return (
     <div
       style={{
-        background: "#fff",
+        background: "var(--erp-surface)",
         borderRadius: "16px",
         padding: "20px",
         marginBottom: "20px",
@@ -141,7 +141,7 @@ const minutes = Math.floor(
 </p>
       <p
   style={{
-    color: "#666",
+    color: "var(--erp-text-muted)",
     fontWeight: "600",
     margin: "8px 0",
   }}
@@ -156,7 +156,7 @@ const minutes = Math.floor(
           padding: "14px",
           marginTop: "15px",
          background: "linear-gradient(90deg,#0B3D91,#1565C0)",
-          color: "#fff",
+          color: "var(--erp-surface)",
           border: "none",
           borderRadius: "10px",
           fontWeight: "bold",

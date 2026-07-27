@@ -2,76 +2,53 @@ export default function WhyChooseUs() {
   const features = [
     {
       icon: "🛡️",
-      title: "Safe Journey",
-      desc: "Verified buses and trusted operators.",
+      title: "सुरक्षित यात्रा",
+      text: "भरोसेमंद बस और सत्यापित ऑपरेटर।",
     },
     {
-      icon: "⚡",
-      title: "Fast Booking",
-      desc: "Book your ticket in just a few clicks.",
+      icon: "💺",
+      title: "आरामदायक सीट",
+      text: "लंबे सफर में भी आराम का ध्यान।",
+    },
+    {
+      icon: "💰",
+      title: "साफ और सही किराया",
+      text: "बुकिंग से पहले पूरा किराया देखें।",
+    },
+    {
+      icon: "🎫",
+      title: "फोन में टिकट",
+      text: "टिकट सीधे आपके मोबाइल में मिलेगा।",
     },
     {
       icon: "📍",
-      title: "Live Tracking",
-      desc: "Track your bus in real time.",
+      title: "सफर की जानकारी",
+      text: "बस और यात्रा की जरूरी जानकारी साफ मिलेगी।",
     },
     {
-      icon: "🎧",
-      title: "24×7 Support",
-      desc: "We're here whenever you need help.",
+      icon: "☎️",
+      title: "मदद हमेशा साथ",
+      text: "बुकिंग में परेशानी हो तो सहायता लें।",
     },
   ];
 
   return (
-    <div
-      style={{
-        maxWidth: "900px",
-        margin: "40px auto",
-      }}
-    >
-      <h2
-        style={{
-          textAlign: "center",
-          color: "#0B3D91",
-          marginBottom: "20px",
-        }}
-      >
-        🛡️ Why Choose Rular Bus?
-      </h2>
+    <section className="worker-section">
+      <div className="worker-section-heading">
+        <span>हर यात्री का भरोसा</span>
+        <h2>Rular Bus क्यों चुनें?</h2>
+        <p>आसान बुकिंग, सही जानकारी और सुरक्षित सफर।</p>
+      </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))",
-          gap: "20px",
-        }}
-      >
-        {features.map((item) => (
-          <div
-            key={item.title}
-            style={{
-              background: "#fff",
-              padding: "20px",
-              borderRadius: "14px",
-              textAlign: "center",
-              boxShadow: "0 4px 12px rgba(0,0,0,.08)",
-            }}
-          >
-            <div style={{ fontSize: "34px" }}>{item.icon}</div>
-
-            <h3>{item.title}</h3>
-
-            <p
-              style={{
-                color: "#666",
-                fontSize: "14px",
-              }}
-            >
-              {item.desc}
-            </p>
-          </div>
+      <div className="worker-benefit-grid">
+        {features.map((feature) => (
+          <article className="worker-benefit-card" key={feature.title}>
+            <div className="worker-benefit-icon">{feature.icon}</div>
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+          </article>
         ))}
       </div>
-    </div>
+    </section>
   );
 }

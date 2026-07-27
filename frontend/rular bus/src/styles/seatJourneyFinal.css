@@ -1,0 +1,796 @@
+/* ==========================================
+   RULAR BUS — FINAL JOURNEY INFORMATION
+   Seat dimensions/layout untouched
+   ========================================== */
+
+.journey-meta-grid-final {
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(128px, 1fr)
+    ) !important;
+}
+
+.journey-meta-grid-final > div {
+  min-height: 82px;
+}
+
+.journey-meta-grid-final strong {
+  line-height: 1.25;
+}
+
+.arrival-meta-item {
+  position: relative;
+}
+
+.next-day-badge {
+  display: inline-flex !important;
+  width: fit-content;
+  margin-top: 5px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  color: #9a3412 !important;
+  background: #ffedd5;
+  border: 1px solid #fdba74;
+  font-size: 9px !important;
+  font-weight: 900;
+}
+
+.boarding-dropping-strip {
+  display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    44px
+    minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-top: 14px;
+  padding: 14px;
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      #f8fbff,
+      #eef5ff
+    );
+  border: 1px solid #d9e7fb;
+}
+
+.journey-point {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+}
+
+.dropping-point {
+  justify-content: flex-end;
+  text-align: right;
+}
+
+.journey-point-icon {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  color: #ffffff;
+  background: #1565d8;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow:
+    0 5px 12px
+    rgba(21, 101, 216, 0.2);
+}
+
+.dropping-point
+.journey-point-icon {
+  background: #f97316;
+}
+
+.journey-point div {
+  display: grid;
+  min-width: 0;
+}
+
+.journey-point small {
+  color: #7b8ca5;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+}
+
+.journey-point strong {
+  overflow: hidden;
+  color: #102a56;
+  font-size: 13px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.journey-point div > span {
+  margin-top: 2px;
+  color: #567093;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.journey-point-line {
+  display: flex;
+  align-items: center;
+}
+
+.journey-point-line span {
+  width: 100%;
+  border-top:
+    2px dashed
+    #a8bad3;
+}
+
+.selected-seat-strip-final {
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.selected-seat-strip-final > div {
+  display: grid;
+  gap: 2px;
+}
+
+.selected-journey-context {
+  text-align: right;
+}
+
+.selected-journey-context span {
+  color: #13345f;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.selected-journey-context small {
+  color: #71839d;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.seat-empty-state {
+  display: grid;
+  justify-items: center;
+  width: min(100%, 440px);
+  margin: 18px auto;
+  padding: 32px 20px;
+  text-align: center;
+  border-radius: 22px;
+  border: 1px dashed #b9cae1;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #f5f9ff
+    );
+}
+
+.seat-empty-state-icon {
+  font-size: 38px;
+}
+
+.seat-empty-state h3 {
+  margin:
+    12px 0 6px;
+  color: #17345f;
+  font-size: 17px;
+}
+
+.seat-empty-state p {
+  margin: 0;
+  color: #70819a;
+  font-size: 12px;
+}
+
+.seat-empty-state button {
+  margin-top: 16px;
+  padding: 10px 16px;
+  border: 0;
+  border-radius: 11px;
+  color: #ffffff;
+  background: #1565d8;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.premium-booking-summary-final {
+  grid-template-columns:
+    minmax(120px, 1fr)
+    minmax(210px, 1.4fr)
+    auto
+    minmax(150px, auto) !important;
+}
+
+.summary-journey-information {
+  display: grid;
+  gap: 4px;
+  padding:
+    0 14px;
+  border-right:
+    1px solid
+    rgba(148, 163, 184, 0.3);
+  border-left:
+    1px solid
+    rgba(148, 163, 184, 0.3);
+}
+
+.summary-journey-information
+> div:first-child {
+  display: grid;
+  gap: 1px;
+}
+
+.summary-journey-information span {
+  color: #153863;
+  font-size: 11px;
+  font-weight: 900;
+}
+
+.summary-journey-information small {
+  color: #71839b;
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.summary-time-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.summary-time-row strong {
+  color: #132f56;
+  font-size: 12px;
+}
+
+.summary-time-row i {
+  color: #8091a7;
+  font-style: normal;
+}
+
+.summary-time-row em {
+  padding: 2px 5px;
+  border-radius: 999px;
+  color: #9a3412;
+  background: #ffedd5;
+  font-size: 7px;
+  font-style: normal;
+  font-weight: 900;
+}
+
+.summary-duration {
+  color: #446488 !important;
+}
+
+@media (max-width: 820px) {
+  .premium-booking-summary-final {
+    grid-template-columns:
+      minmax(0, 1fr)
+      auto !important;
+  }
+
+  .summary-journey-information {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .journey-meta-grid-final {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr))
+      !important;
+  }
+
+  .journey-meta-grid-final > div {
+    min-height: 74px;
+  }
+
+  .boarding-dropping-strip {
+    grid-template-columns:
+      minmax(0, 1fr)
+      24px
+      minmax(0, 1fr);
+    padding: 11px;
+  }
+
+  .journey-point {
+    gap: 6px;
+  }
+
+  .journey-point-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 11px;
+  }
+
+  .journey-point strong {
+    font-size: 11px;
+  }
+
+  .journey-point div > span {
+    font-size: 8px;
+  }
+
+  .selected-seat-strip-final {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .selected-journey-context {
+    text-align: left;
+  }
+}
+
+/* ==========================================
+   LOCKED FINAL POLISH
+   Seat layout and dimensions untouched
+   ========================================== */
+
+/* Balanced journey information: 3 × 2 */
+.journey-meta-grid-final {
+  display: grid !important;
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr))
+    !important;
+  gap: 10px !important;
+}
+
+/* Labels more readable */
+.journey-meta-grid-final
+> div
+> span {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.15px;
+}
+
+.journey-meta-grid-final
+> div
+> strong {
+  margin-top: 4px !important;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+  font-weight: 900 !important;
+}
+
+.journey-meta-grid-final
+> div
+> small {
+  font-size: 9px !important;
+  line-height: 1.2 !important;
+}
+
+/* Next-day badge */
+.next-day-badge {
+  padding: 4px 8px !important;
+  font-size: 9px !important;
+}
+
+/* Boarding and dropping readability */
+.boarding-dropping-strip {
+  gap: 12px !important;
+}
+
+.journey-point small {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+}
+
+.journey-point strong {
+  margin-top: 2px;
+  font-size: 13px !important;
+  line-height: 1.25 !important;
+}
+
+.journey-point div > span {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.journey-point-line span {
+  border-top-width: 2px !important;
+  border-top-color:
+    #8fa8c8 !important;
+}
+
+/* Live section labels */
+.seat-section-header
+.section-kicker {
+  font-size: 9px !important;
+}
+
+.seat-section-header h2 {
+  line-height: 1.25 !important;
+}
+
+.seat-section-header p {
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+}
+
+/* Legend clearer */
+.premium-seat-legend {
+  gap: 14px !important;
+}
+
+.premium-seat-legend > div {
+  gap: 5px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.legend-shape {
+  flex: 0 0 auto;
+}
+
+/* Live badge */
+.live-availability {
+  font-size: 9px !important;
+  font-weight: 900 !important;
+}
+
+/* Selected journey context */
+.selected-journey-context span {
+  font-size: 12px !important;
+}
+
+.selected-journey-context small {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+/* Mobile: exact 2 × 3 structure */
+@media (max-width: 760px) {
+  .journey-meta-grid-final {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr))
+      !important;
+  }
+
+  .journey-meta-grid-final
+  > div {
+    min-height: 76px !important;
+  }
+
+  .journey-meta-grid-final
+  > div
+  > span {
+    font-size: 9.5px !important;
+  }
+
+  .journey-meta-grid-final
+  > div
+  > strong {
+    font-size: 12px !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .boarding-dropping-strip {
+    grid-template-columns:
+      minmax(0, 1fr)
+      22px
+      minmax(0, 1fr)
+      !important;
+    gap: 6px !important;
+  }
+
+  .journey-point {
+    gap: 6px !important;
+  }
+
+  .journey-point-icon {
+    width: 26px !important;
+    height: 26px !important;
+  }
+
+  .journey-point strong {
+    font-size: 11px !important;
+  }
+
+  .journey-point div > span {
+    font-size: 9px !important;
+  }
+
+  .premium-seat-legend {
+    column-gap: 11px !important;
+    row-gap: 8px !important;
+  }
+
+  .premium-seat-legend > div {
+    font-size: 9px !important;
+  }
+}
+
+/* ==================================================
+   RULAR BUS — FINAL MOBILE FONT READABILITY
+   Seat dimensions and coach layout remain untouched
+   ================================================== */
+
+/* Hero journey information */
+.journey-meta-grid-final > div > span {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+}
+
+.journey-meta-grid-final > div > strong {
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.journey-meta-grid-final > div > small {
+  font-size: 10px !important;
+  line-height: 1.3 !important;
+}
+
+/* Boarding / dropping */
+.journey-point small {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+}
+
+.journey-point strong {
+  font-size: 13px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.journey-point div > span {
+  font-size: 10.5px !important;
+  line-height: 1.3 !important;
+  font-weight: 800 !important;
+}
+
+/* Live selection header */
+.seat-section-header .section-kicker {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+}
+
+.seat-section-header h2 {
+  font-size: 20px !important;
+  line-height: 1.25 !important;
+}
+
+.seat-section-header p {
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+/* Live badge */
+.live-availability {
+  font-size: 10px !important;
+}
+
+/* Seat legend */
+.premium-seat-legend > div {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.legend-shape {
+  width: 18px !important;
+  min-width: 18px !important;
+  height: 13px !important;
+}
+
+/* Deck switcher */
+.premium-deck-switcher button span {
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+}
+
+.premium-deck-switcher button small {
+  margin-top: 3px !important;
+  font-size: 9.5px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+}
+
+/* Selected-seat emotional message */
+.seat-emotion-message {
+  padding: 15px 16px !important;
+}
+
+.seat-emotion-message .emotion-icon {
+  font-size: 28px !important;
+}
+
+.seat-emotion-message strong {
+  font-size: 15px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.seat-emotion-message p {
+  margin-top: 4px !important;
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  font-weight: 600 !important;
+}
+
+/* Selected-seat strip */
+.selected-seat-strip-final {
+  padding: 13px 15px !important;
+}
+
+.selected-seat-strip-final > div:first-child > span {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.selected-seat-strip-final > div:first-child > strong {
+  margin-top: 3px !important;
+  font-size: 14px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.selected-journey-context span {
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  font-weight: 900 !important;
+}
+
+.selected-journey-context small {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.4 !important;
+  font-weight: 700 !important;
+}
+
+/* Bottom sticky booking summary */
+.premium-booking-summary-final {
+  min-height: 86px !important;
+}
+
+.summary-seat-information > span,
+.summary-price > span {
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+.summary-seat-information > strong {
+  margin-top: 3px !important;
+  font-size: 14px !important;
+  line-height: 1.25 !important;
+  font-weight: 900 !important;
+}
+
+.summary-seat-information > small {
+  margin-top: 3px !important;
+  font-size: 10px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+}
+
+.summary-price > strong {
+  margin-top: 3px !important;
+  font-size: 19px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+}
+
+.summary-journey-information span {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+
+.summary-journey-information small {
+  font-size: 9.5px !important;
+  line-height: 1.3 !important;
+}
+
+.summary-time-row strong {
+  font-size: 12px !important;
+  line-height: 1.2 !important;
+}
+
+.summary-duration {
+  font-size: 9.5px !important;
+}
+
+/* Continue button */
+.premium-booking-summary-final button {
+  min-height: 50px !important;
+  padding: 11px 16px !important;
+}
+
+.premium-booking-summary-final button span {
+  font-size: 12px !important;
+  line-height: 1.25 !important;
+  font-weight: 900 !important;
+}
+
+.premium-booking-summary-final button i {
+  font-size: 16px !important;
+}
+
+/* Coach micro labels */
+.rbs-side-headings {
+  font-size: 6.5px !important;
+  line-height: 1.2 !important;
+  font-weight: 900 !important;
+}
+
+.rbs-aisle span {
+  font-size: 5.5px !important;
+  font-weight: 900 !important;
+}
+
+/* Mobile-specific readability */
+@media (max-width: 560px) {
+  .journey-meta-grid-final > div > span {
+    font-size: 10px !important;
+  }
+
+  .journey-meta-grid-final > div > strong {
+    font-size: 13px !important;
+  }
+
+  .journey-meta-grid-final > div > small {
+    font-size: 9.5px !important;
+  }
+
+  .premium-seat-legend {
+    column-gap: 13px !important;
+    row-gap: 9px !important;
+  }
+
+  .premium-seat-legend > div {
+    font-size: 10px !important;
+  }
+
+  .selected-seat-strip-final {
+    gap: 8px !important;
+  }
+
+  .seat-emotion-message strong {
+    font-size: 14px !important;
+  }
+
+  .seat-emotion-message p {
+    font-size: 10.5px !important;
+  }
+
+  .premium-booking-summary-final {
+    padding: 11px 12px !important;
+  }
+
+  .summary-seat-information > strong {
+    font-size: 13px !important;
+  }
+
+  .summary-price > strong {
+    font-size: 18px !important;
+  }
+
+  .premium-booking-summary-final button {
+    min-width: 142px !important;
+  }
+
+  .premium-booking-summary-final button span {
+    font-size: 11px !important;
+  }
+}

@@ -1,45 +1,81 @@
-export default function DriverCabin() {
- return (
-  <div
-    style={{
-      background: "linear-gradient(135deg,#0f172a,#1e40af)",
-      borderRadius: "18px",
-      padding: "16px 18px",
-      marginBottom: "24px",
-      boxShadow: "0 12px 30px rgba(0,0,0,.18)",
-      color: "#fff",
-    }}
-  >
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-      }}
-    >
-      <span style={{ fontSize: 24 }}>🛞</span>
-
-      <div
-        style={{
-          fontWeight: 700,
-          fontSize: 18,
-          letterSpacing: ".5px",
-        }}
-      >
-        🚌 DRIVER CABIN
+export default function DriverCabin({
+  showDoor = true,
+  deck = "LOWER",
+}) {
+  return (
+    <>
+      <div className="coach-front-label">
+        FRONT
       </div>
 
-      <span style={{ fontSize: 24 }}>🛞</span>
-    </div>
+      <div className="driver-cabin">
+        <div className="conductor-zone">
+          {showDoor ? (
+            <>
+              <span className="cabin-main-icon">
+                🚪
+              </span>
 
-    <div
-      style={{
-        marginTop: 10,
-        height: 4,
-        background: "rgba(255,255,255,.25)",
-        borderRadius: 10,
-      }}
-    />
-  </div>
-);
+              <div>
+                <strong>
+                  CONDUCTOR
+                </strong>
+
+                <small>
+                  Door
+                </small>
+              </div>
+            </>
+          ) : (
+            <>
+              <span className="cabin-main-icon">
+                🪟
+              </span>
+
+              <div>
+                <strong>
+                  FRONT WINDOW
+                </strong>
+
+                <small>
+                  Upper Deck
+                </small>
+              </div>
+            </>
+          )}
+        </div>
+
+        <div className="cabin-center">
+          <span>
+            {deck === "UPPER"
+              ? "PANORAMIC VIEW"
+              : "ENTRY AREA"}
+          </span>
+        </div>
+
+        <div className="driver-zone">
+          <div>
+            <strong>
+              DRIVER
+            </strong>
+
+            <small>
+              Cabin
+            </small>
+          </div>
+
+          <span className="steering-wheel">
+            <i />
+          </span>
+        </div>
+      </div>
+
+      <div className="coach-window-strip">
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+    </>
+  );
 }

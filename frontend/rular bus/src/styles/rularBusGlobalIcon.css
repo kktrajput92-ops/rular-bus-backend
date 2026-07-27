@@ -1,0 +1,89 @@
+.rular-global-bus-icon {
+  display: inline-block;
+  width: 2.15em;
+  min-width: 2.15em;
+  height: 1.05em;
+  margin:
+    0 0.18em;
+  object-fit: contain;
+  object-position: center;
+  vertical-align: -0.2em;
+  user-select: none;
+  pointer-events: none;
+  filter:
+    drop-shadow(
+      0 0.13em 0.18em
+      rgba(3, 34, 82, 0.2)
+    );
+}
+
+/* Route animation में छोटा और साफ icon */
+
+.moving-route-bus
+.rular-global-bus-icon {
+  width: 38px;
+  min-width: 38px;
+  height: auto;
+  margin: 0;
+  vertical-align: middle;
+}
+
+/* Hero areas */
+
+.hero-bus-symbol
+.rular-global-bus-icon,
+.worker-bus
+.rular-global-bus-icon {
+  width: 76px;
+  min-width: 76px;
+  height: auto;
+  margin: 0;
+}
+
+/* Loading animation */
+
+.loading-bus
+.rular-global-bus-icon {
+  width: 94px;
+  min-width: 94px;
+  height: auto;
+  margin: 0;
+}
+
+/* Footer और headings */
+
+.worker-footer-icon
+.rular-global-bus-icon,
+.worker-route-icon
+.rular-global-bus-icon {
+  width: 46px;
+  min-width: 46px;
+  height: auto;
+  margin: 0;
+}
+
+/* Buttons */
+
+button
+.rular-global-bus-icon {
+  width: 2.5em;
+  min-width: 2.5em;
+  height: 1.2em;
+}
+
+/* Admin sidebar */
+
+aside
+.rular-global-bus-icon,
+nav
+.rular-global-bus-icon {
+  width: 2em;
+  min-width: 2em;
+  height: 1em;
+}
+
+/* Direction हमेशा left-to-right */
+
+.rular-global-bus-icon {
+  transform: none !important;
+}

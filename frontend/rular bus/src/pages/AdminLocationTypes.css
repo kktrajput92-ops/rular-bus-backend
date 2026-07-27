@@ -1,0 +1,29 @@
+.admin-location-types-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: var(--erp-bg);
+  color: var(--erp-text);
+}
+
+.admin-location-types-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 430px) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .admin-location-types-page {
+    padding: 16px;
+  }
+
+  .admin-location-types-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .admin-location-types-page {
+    padding: 12px;
+  }
+}

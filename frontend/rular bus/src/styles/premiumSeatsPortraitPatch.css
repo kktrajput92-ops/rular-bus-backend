@@ -1,0 +1,221 @@
+/* =============================================
+   FINAL PORTRAIT BERTH PROPORTION FIX
+   Single + driver-side beds vertical
+   ============================================= */
+
+.sleeper-layout-labels,
+.sleeper-layout-row {
+  grid-template-columns:
+    78px
+    46px
+    minmax(158px, 1fr);
+}
+
+.sleeper-layout-row {
+  min-height: 132px;
+}
+
+/* Conductor side: one narrow vertical bed */
+
+.conductor-berth-column {
+  justify-content: center;
+}
+
+.conductor-berth-column
+.sleeper-layout-berth {
+  width: 72px;
+  height: 124px;
+}
+
+/* Driver side: exactly two narrow vertical beds */
+
+.driver-double-column {
+  display: grid;
+  grid-template-columns:
+    repeat(2, 72px);
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.driver-double-column
+.sleeper-layout-berth {
+  width: 72px;
+  height: 124px;
+}
+
+/* Empty position must preserve portrait spacing */
+
+.sleeper-empty-slot {
+  width: 72px;
+  min-height: 124px;
+}
+
+/* Vertical bed visual */
+
+.sleeper-layout-berth {
+  border-radius: 14px;
+}
+
+.sleeper-window-strip {
+  top: 7px;
+  right: 7px;
+  bottom: auto;
+  left: 7px;
+  width: auto;
+  height: 4px;
+}
+
+.sleeper-pillow {
+  top: 17px;
+  left: 50%;
+  width: 37px;
+  height: 15px;
+  transform: translateX(-50%);
+}
+
+.sleeper-bed-sheet {
+  top: 40px;
+  right: 8px;
+  bottom: 9px;
+  left: 8px;
+}
+
+.sleeper-curtain {
+  top: 16px;
+  right: 5px;
+}
+
+.sleeper-curtain i {
+  width: 16px;
+  height: 2px;
+}
+
+.sleeper-seat-content strong {
+  margin-top: 10px;
+  font-size: 11px;
+}
+
+.sleeper-seat-content small {
+  margin-top: 4px;
+  font-size: 5px;
+}
+
+.sleeper-available {
+  top: 15px;
+  left: 4px;
+  right: auto;
+  font-size: 4px;
+}
+
+.sleeper-selected-check,
+.sleeper-lock {
+  top: 15px;
+  left: 4px;
+  right: auto;
+}
+
+.sleeper-fare {
+  right: 4px;
+  bottom: 4px;
+  font-size: 6px;
+}
+
+/* Aisle remains empty and continuous */
+
+.sleeper-main-aisle {
+  min-height: 124px;
+}
+
+.sleeper-main-aisle::before {
+  left: 10px;
+}
+
+.sleeper-main-aisle::after {
+  right: 10px;
+}
+
+/* Mobile exact fitting */
+
+@media (max-width: 700px) {
+  .sleeper-layout-labels,
+  .sleeper-layout-row {
+    grid-template-columns:
+      67px
+      38px
+      minmax(138px, 1fr);
+  }
+
+  .sleeper-layout-row {
+    min-height: 116px;
+  }
+
+  .conductor-berth-column
+  .sleeper-layout-berth {
+    width: 62px;
+    height: 110px;
+  }
+
+  .driver-double-column {
+    grid-template-columns:
+      repeat(2, 62px);
+    justify-content: space-between;
+    gap: 5px;
+  }
+
+  .driver-double-column
+  .sleeper-layout-berth {
+    width: 62px;
+    height: 110px;
+  }
+
+  .sleeper-empty-slot {
+    width: 62px;
+    min-height: 110px;
+  }
+
+  .sleeper-main-aisle {
+    min-height: 110px;
+  }
+
+  .sleeper-layout-rows {
+    gap: 9px;
+  }
+}
+
+@media (max-width: 390px) {
+  .sleeper-layout-labels,
+  .sleeper-layout-row {
+    grid-template-columns:
+      60px
+      32px
+      minmax(126px, 1fr);
+  }
+
+  .conductor-berth-column
+  .sleeper-layout-berth {
+    width: 56px;
+    height: 106px;
+  }
+
+  .driver-double-column {
+    grid-template-columns:
+      repeat(2, 56px);
+    gap: 4px;
+  }
+
+  .driver-double-column
+  .sleeper-layout-berth {
+    width: 56px;
+    height: 106px;
+  }
+
+  .sleeper-empty-slot {
+    width: 56px;
+    min-height: 106px;
+  }
+
+  .sleeper-seat-content small {
+    display: none;
+  }
+}

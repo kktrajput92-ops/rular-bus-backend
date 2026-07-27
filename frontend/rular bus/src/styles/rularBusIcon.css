@@ -1,0 +1,63 @@
+.rular-bus-brand-icon {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+  object-position: center;
+  vertical-align: middle;
+  user-select: none;
+  pointer-events: none;
+  transform: none;
+  image-rendering: auto;
+  filter:
+    drop-shadow(
+      0 5px 7px
+      rgba(3, 33, 82, 0.24)
+    );
+}
+
+.rular-route-bus-icon {
+  width: 36px !important;
+  min-width: 36px;
+  transform: none !important;
+}
+
+.rular-hero-bus-icon {
+  width: 74px !important;
+  filter:
+    drop-shadow(
+      0 12px 15px
+      rgba(0, 22, 65, 0.33)
+    );
+}
+
+.rular-loading-bus-icon {
+  width: 92px !important;
+  animation:
+    rularLoadingBusMove
+    2.2s ease-in-out infinite;
+}
+
+.rular-empty-bus-icon {
+  width: 100px !important;
+  margin-inline: auto;
+  opacity: 0.88;
+}
+
+.rular-inline-bus-icon {
+  width: 24px !important;
+  margin-right: 7px;
+}
+
+@keyframes rularLoadingBusMove {
+  0%,
+  100% {
+    transform:
+      translateX(-16px);
+  }
+
+  50% {
+    transform:
+      translateX(16px);
+  }
+}

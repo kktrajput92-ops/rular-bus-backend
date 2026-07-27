@@ -1,0 +1,744 @@
+/* =============================================
+   RULAR BUS SLEEPER COACH LAYOUT
+
+   CONDUCTOR SIDE | AISLE | DRIVER SIDE
+   Vertical portrait sleeper berths
+   ============================================= */
+
+.seat-selection-card {
+  overflow: hidden;
+}
+
+.deck-animation-shell {
+  width: 100%;
+}
+
+.premium-bus-shell {
+  width: min(100%, 600px);
+  max-width: 600px;
+  margin-top: 28px;
+}
+
+.premium-bus-body {
+  padding-inline: 13px;
+}
+
+.seat-layout-area,
+.realistic-seat-grid,
+.fixed-seat-layout {
+  display: none !important;
+}
+
+/* =============================================
+   Main sleeper coach
+   ============================================= */
+
+.sleeper-layout {
+  width: 100%;
+  padding: 8px 3px 18px;
+}
+
+.sleeper-layout-labels {
+  display: grid;
+  grid-template-columns:
+    minmax(88px, 0.78fr)
+    60px
+    minmax(190px, 1.5fr);
+  align-items: center;
+  margin: 1px 0 8px;
+  color: #95a1b3;
+  font-size: 6px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+.sleeper-layout-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sleeper-layout-row {
+  display: grid;
+  grid-template-columns:
+    minmax(88px, 0.78fr)
+    60px
+    minmax(190px, 1.5fr);
+  align-items: center;
+  min-height: 132px;
+}
+
+/* =============================================
+   Conductor side:
+   one vertical single berth
+   ============================================= */
+
+.conductor-berth-column {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.conductor-berth-column
+.sleeper-layout-berth {
+  width: min(100%, 92px);
+  height: 128px;
+}
+
+/* =============================================
+   Center aisle
+   ============================================= */
+
+.sleeper-main-aisle {
+  position: relative;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  min-height: 128px;
+}
+
+.sleeper-main-aisle::before,
+.sleeper-main-aisle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px dashed #ccd5e1;
+}
+
+.sleeper-main-aisle::before {
+  left: 15px;
+}
+
+.sleeper-main-aisle::after {
+  right: 15px;
+}
+
+.sleeper-main-aisle span {
+  position: relative;
+  z-index: 2;
+  padding: 5px 3px;
+  color: #9da8b8;
+  font-size: 6px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: #ffffff;
+  writing-mode: vertical-rl;
+}
+
+/* =============================================
+   Driver side:
+   two vertical beds per row
+   ============================================= */
+
+.driver-double-column {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.driver-double-column
+.sleeper-layout-berth {
+  width: 100%;
+  height: 128px;
+}
+
+/* =============================================
+   Vertical berth cards
+   ============================================= */
+
+.sleeper-layout-berth {
+  position: relative;
+  display: block;
+  min-width: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1.5px solid #aabdd2;
+  border-radius: 16px;
+  color: #203149;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #edf3f9
+    );
+  box-shadow:
+    0 8px 18px
+    rgba(45, 67, 97, 0.14);
+  cursor: pointer;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sleeper-layout-berth::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border:
+    1px solid
+    rgba(125, 149, 179, 0.19);
+  border-radius: 11px;
+  pointer-events: none;
+}
+
+.sleeper-layout-berth:hover:not(:disabled) {
+  z-index: 5;
+  border-color: #6399e8;
+  box-shadow:
+    0 13px 27px
+    rgba(41, 91, 164, 0.21);
+  transform: translateY(-2px);
+}
+
+.sleeper-layout-berth:active:not(:disabled) {
+  animation:
+    sleeperTapBounce
+    300ms ease;
+}
+
+/* =============================================
+   Empty slots
+   ============================================= */
+
+.sleeper-empty-slot {
+  min-height: 128px;
+}
+
+.driver-double-column
+.sleeper-empty-slot {
+  width: 100%;
+}
+
+/* =============================================
+   Vertical pillow, sheet, curtain and window
+   ============================================= */
+
+.sleeper-window-strip {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  left: 8px;
+  height: 5px;
+  border-radius: 99px;
+  background:
+    linear-gradient(
+      90deg,
+      #56a8f6,
+      #c9e8ff
+    );
+  box-shadow:
+    0 1px 5px
+    rgba(52, 131, 211, 0.18);
+}
+
+.sleeper-pillow {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  width: 42px;
+  height: 18px;
+  border:
+    1px solid #d3dce7;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow:
+    0 3px 7px
+    rgba(55, 76, 105, 0.1);
+  transform: translateX(-50%);
+}
+
+.sleeper-bed-sheet {
+  position: absolute;
+  top: 43px;
+  right: 11px;
+  bottom: 12px;
+  left: 11px;
+  border:
+    1px solid
+    rgba(116, 139, 169, 0.15);
+  border-radius: 11px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(245, 249, 253, 0.78),
+      rgba(211, 224, 239, 0.86)
+    );
+}
+
+.sleeper-curtain {
+  position: absolute;
+  top: 17px;
+  right: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sleeper-curtain i {
+  width: 21px;
+  height: 3px;
+  border-radius: 4px;
+  background:
+    rgba(82, 112, 157, 0.25);
+}
+
+/* =============================================
+   Berth labels
+   ============================================= */
+
+.sleeper-seat-content {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.sleeper-seat-content strong {
+  display: block;
+  max-width:
+    calc(100% - 18px);
+  overflow: hidden;
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sleeper-seat-content small {
+  display: block;
+  max-width:
+    calc(100% - 14px);
+  overflow: hidden;
+  margin-top: 5px;
+  color: #758299;
+  font-size: 7px;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =============================================
+   Fare and availability badges
+   ============================================= */
+
+.sleeper-fare {
+  position: absolute;
+  right: 7px;
+  bottom: 7px;
+  z-index: 6;
+  padding: 4px 6px;
+  border-radius: 999px;
+  color: #205fb7;
+  font-size: 8px;
+  font-weight: 900;
+  line-height: 1;
+  background: #e4efff;
+}
+
+.sleeper-available {
+  position: absolute;
+  top: 17px;
+  left: 7px;
+  z-index: 6;
+  padding: 3px 5px;
+  border-radius: 999px;
+  color: #10734d;
+  font-size: 5px;
+  font-weight: 900;
+  line-height: 1;
+  background: #dcf7eb;
+}
+
+.sleeper-selected-check {
+  position: absolute;
+  top: 17px;
+  left: 7px;
+  z-index: 7;
+  display: grid;
+  width: 21px;
+  height: 21px;
+  place-items: center;
+  border-radius: 50%;
+  color: #1757ae;
+  font-size: 12px;
+  font-weight: 900;
+  background: #ffffff;
+}
+
+.sleeper-lock {
+  position: absolute;
+  top: 17px;
+  left: 7px;
+  z-index: 7;
+  font-size: 14px;
+}
+
+.sleeper-lock.booked {
+  animation:
+    sleeperLockMove
+    1.6s ease-in-out
+    infinite;
+}
+
+/* =============================================
+   Seat states
+   ============================================= */
+
+.sleeper-layout-berth.selected {
+  border-color: #3479e4;
+  color: #ffffff;
+  background:
+    linear-gradient(
+      180deg,
+      #1453b6,
+      #3b84ed
+    );
+  box-shadow:
+    0 0 0 3px
+    rgba(67, 132, 235, 0.14),
+    0 0 24px
+    rgba(42, 112, 228, 0.52);
+  animation:
+    sleeperSelectedGlow
+    1.8s ease-in-out
+    infinite;
+}
+
+.sleeper-layout-berth.selected
+.sleeper-seat-content small {
+  color:
+    rgba(255, 255, 255, 0.77);
+}
+
+.sleeper-layout-berth.selected
+.sleeper-pillow {
+  border-color:
+    rgba(255, 255, 255, 0.5);
+  background:
+    rgba(255, 255, 255, 0.92);
+}
+
+.sleeper-layout-berth.selected
+.sleeper-bed-sheet {
+  border-color:
+    rgba(255, 255, 255, 0.16);
+  background:
+    rgba(255, 255, 255, 0.16);
+}
+
+.sleeper-layout-berth.selected
+.sleeper-curtain i {
+  background:
+    rgba(255, 255, 255, 0.33);
+}
+
+.sleeper-layout-berth.selected
+.sleeper-fare {
+  color: #174a8c;
+  background:
+    rgba(255, 255, 255, 0.92);
+}
+
+.sleeper-layout-berth.booked {
+  border-color: #d2d9e3;
+  color: #8993a2;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #e7eaef,
+      #e7eaef 8px,
+      #dfe3e9 8px,
+      #dfe3e9 16px
+    );
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+.sleeper-layout-berth.locked {
+  border-color: #edb66a;
+  color: #915817;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #fff6e8,
+      #fff6e8 8px,
+      #ffecd0 8px,
+      #ffecd0 16px
+    );
+  cursor: not-allowed;
+}
+
+.sleeper-layout-berth.blocked {
+  border-color: #d5dae2;
+  color: #8993a2;
+  background: #e8ebef;
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+/* =============================================
+   Empty deck
+   ============================================= */
+
+.sleeper-empty-layout {
+  display: grid;
+  min-height: 190px;
+  place-items: center;
+  align-content: center;
+  padding: 25px;
+  color: #6d7a8e;
+  text-align: center;
+}
+
+.sleeper-empty-layout > span {
+  font-size: 36px;
+}
+
+.sleeper-empty-layout strong {
+  margin-top: 8px;
+  color: #34445c;
+  font-size: 13px;
+}
+
+.sleeper-empty-layout p {
+  margin: 5px 0 0;
+  font-size: 10px;
+}
+
+/* =============================================
+   Mobile fitting
+   ============================================= */
+
+@media (max-width: 700px) {
+  .premium-bus-shell {
+    width: 100%;
+    margin-top: 25px;
+    padding: 6px;
+    border-radius:
+      34px 34px 24px 24px;
+  }
+
+  .premium-bus-body {
+    padding:
+      14px 7px 10px;
+    border-radius:
+      29px 29px 20px 20px;
+  }
+
+  .sleeper-layout {
+    padding:
+      7px 0 13px;
+  }
+
+  .sleeper-layout-labels,
+  .sleeper-layout-row {
+    grid-template-columns:
+      minmax(62px, 0.72fr)
+      40px
+      minmax(132px, 1.58fr);
+  }
+
+  .sleeper-layout-row {
+    min-height: 112px;
+  }
+
+  .sleeper-layout-rows {
+    gap: 9px;
+  }
+
+  .sleeper-main-aisle {
+    min-height: 108px;
+  }
+
+  .sleeper-main-aisle::before {
+    left: 9px;
+  }
+
+  .sleeper-main-aisle::after {
+    right: 9px;
+  }
+
+  .driver-double-column {
+    gap: 5px;
+  }
+
+  .sleeper-layout-berth {
+    height: 108px;
+    border-radius: 13px;
+  }
+
+  .conductor-berth-column
+  .sleeper-layout-berth {
+    width: min(
+      100%,
+      74px
+    );
+    height: 108px;
+  }
+
+  .driver-double-column
+  .sleeper-layout-berth {
+    height: 108px;
+  }
+
+  .sleeper-empty-slot {
+    min-height: 108px;
+  }
+
+  .sleeper-seat-content strong {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+
+  .sleeper-seat-content small {
+    font-size: 5px;
+  }
+
+  .sleeper-fare {
+    right: 4px;
+    bottom: 4px;
+    padding: 3px 4px;
+    font-size: 6px;
+  }
+
+  .sleeper-available {
+    top: 14px;
+    left: 4px;
+    font-size: 4px;
+  }
+
+  .sleeper-pillow {
+    top: 16px;
+    width: 34px;
+    height: 14px;
+  }
+
+  .sleeper-bed-sheet {
+    top: 36px;
+    right: 8px;
+    bottom: 8px;
+    left: 8px;
+  }
+
+  .sleeper-curtain {
+    top: 15px;
+    right: 4px;
+  }
+
+  .sleeper-curtain i {
+    width: 17px;
+    height: 2px;
+  }
+
+  .seat-selection-card {
+    padding:
+      17px 8px 18px;
+  }
+}
+
+@media (max-width: 390px) {
+  .sleeper-layout-labels,
+  .sleeper-layout-row {
+    grid-template-columns:
+      minmax(56px, 0.7fr)
+      34px
+      minmax(118px, 1.6fr);
+  }
+
+  .driver-double-column {
+    gap: 4px;
+  }
+
+  .conductor-berth-column
+  .sleeper-layout-berth {
+    width: 66px;
+  }
+
+  .sleeper-main-aisle::before {
+    left: 7px;
+  }
+
+  .sleeper-main-aisle::after {
+    right: 7px;
+  }
+
+  .sleeper-main-aisle span {
+    font-size: 5px;
+  }
+
+  .sleeper-seat-content small {
+    display: none;
+  }
+}
+
+/* =============================================
+   Animations
+   ============================================= */
+
+@keyframes sleeperTapBounce {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(0.92);
+  }
+
+  75% {
+    transform: scale(1.06);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sleeperSelectedGlow {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px
+      rgba(67, 132, 235, 0.12),
+      0 0 17px
+      rgba(42, 112, 228, 0.37);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 5px
+      rgba(67, 132, 235, 0.17),
+      0 0 26px
+      rgba(42, 112, 228, 0.65);
+  }
+}
+
+@keyframes sleeperLockMove {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(0);
+  }
+
+  50% {
+    transform:
+      translateY(-2px)
+      rotate(-6deg);
+  }
+}

@@ -1,0 +1,786 @@
+/* ============================================
+   FINAL RULAR BUS SLEEPER LAYOUT
+
+   Conductor: one vertical single berth
+   Center: empty aisle
+   Driver: one vertical double berth
+   ============================================ */
+
+.rbs-sleeper-layout {
+  width: 100%;
+  padding:
+    8px 2px 18px;
+}
+
+.rbs-side-headings {
+  display: grid;
+  grid-template-columns:
+    76px
+    42px
+    minmax(132px, 1fr);
+  align-items: center;
+  margin-bottom: 8px;
+  color: #8e9caf;
+  font-size: 5.5px;
+  font-weight: 900;
+  letter-spacing: 0.85px;
+  text-align: center;
+}
+
+.rbs-coach-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.rbs-coach-row {
+  display: grid;
+  grid-template-columns:
+    76px
+    42px
+    minmax(132px, 1fr);
+  align-items: center;
+  min-height: 128px;
+}
+
+.rbs-conductor-column,
+.rbs-driver-column {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Empty center aisle ---------- */
+
+.rbs-aisle {
+  position: relative;
+  display: flex;
+  align-self: stretch;
+  align-items: center;
+  justify-content: center;
+  min-height: 124px;
+}
+
+.rbs-aisle::before,
+.rbs-aisle::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left:
+    1px dashed #cbd6e3;
+}
+
+.rbs-aisle::before {
+  left: 8px;
+}
+
+.rbs-aisle::after {
+  right: 8px;
+}
+
+.rbs-aisle span {
+  position: relative;
+  z-index: 2;
+  padding: 4px 2px;
+  color: #9da9ba;
+  font-size: 5px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  background: #ffffff;
+  writing-mode: vertical-rl;
+}
+
+/* ---------- Single vertical berth ---------- */
+
+.rbs-single-berth {
+  position: relative;
+  display: block;
+  width: 62px;
+  min-width: 62px;
+  max-width: 62px;
+  height: 120px;
+  min-height: 120px;
+  max-height: 120px;
+  padding: 0;
+  overflow: hidden;
+  border:
+    1.5px solid #a9bdd4;
+  border-radius: 15px;
+  color: #1f304a;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #edf3f9
+    );
+  box-shadow:
+    0 7px 17px
+    rgba(46, 69, 101, 0.14);
+  cursor: pointer;
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+/* ---------- Proper vertical double berth ---------- */
+
+.rbs-double-berth {
+  position: relative;
+  width: min(100%, 132px);
+  min-width: 120px;
+  height: 120px;
+  overflow: hidden;
+  border:
+    1.5px solid #a9bdd4;
+  border-radius: 15px;
+  color: #1f304a;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #edf3f9
+    );
+  box-shadow:
+    0 7px 17px
+    rgba(46, 69, 101, 0.14);
+}
+
+/*
+ * Double berth एक wide bed है,
+ * दो अलग-अलग दूर रखे cards नहीं।
+ */
+
+.rbs-double-seat-area {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: grid;
+  grid-template-columns:
+    repeat(2, 1fr);
+}
+
+.rbs-double-half {
+  position: relative;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  background: transparent;
+  cursor: pointer;
+  -webkit-tap-highlight-color:
+    transparent;
+}
+
+.rbs-double-half.left {
+  border-right:
+    1px solid
+    rgba(120, 145, 177, 0.3);
+}
+
+.rbs-double-half:disabled {
+  cursor: not-allowed;
+}
+
+.rbs-double-divider {
+  position: absolute;
+  top: 41px;
+  bottom: 9px;
+  left: 50%;
+  z-index: 3;
+  border-left:
+    1px dashed
+    rgba(104, 132, 167, 0.34);
+}
+
+/* ---------- Bed visuals ---------- */
+
+.rbs-window-line {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  left: 7px;
+  z-index: 2;
+  height: 4px;
+  border-radius: 999px;
+  background:
+    linear-gradient(
+      90deg,
+      #51a8f7,
+      #cceaff
+    );
+}
+
+.rbs-pillow {
+  position: absolute;
+  top: 17px;
+  left: 50%;
+  z-index: 2;
+  width: 35px;
+  height: 14px;
+  border:
+    1px solid #d1dbe7;
+  border-radius: 8px;
+  background: #ffffff;
+  transform:
+    translateX(-50%);
+}
+
+.rbs-mattress {
+  position: absolute;
+  top: 39px;
+  right: 8px;
+  bottom: 9px;
+  left: 8px;
+  border:
+    1px solid
+    rgba(115, 140, 172, 0.16);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(247, 250, 253, 0.78),
+      rgba(210, 225, 241, 0.88)
+    );
+}
+
+.rbs-double-pillow {
+  position: absolute;
+  top: 17px;
+  right: 12px;
+  left: 12px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns:
+    repeat(2, 1fr);
+  gap: 10px;
+}
+
+.rbs-double-pillow i {
+  height: 14px;
+  border:
+    1px solid #d1dbe7;
+  border-radius: 8px;
+  background: #ffffff;
+}
+
+.rbs-double-mattress {
+  position: absolute;
+  top: 39px;
+  right: 8px;
+  bottom: 9px;
+  left: 8px;
+  border:
+    1px solid
+    rgba(115, 140, 172, 0.16);
+  border-radius: 10px;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(247, 250, 253, 0.78),
+      rgba(210, 225, 241, 0.88)
+    );
+}
+
+.rbs-curtain {
+  position: absolute;
+  top: 16px;
+  right: 5px;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.rbs-curtain i {
+  width: 15px;
+  height: 2px;
+  border-radius: 4px;
+  background:
+    rgba(81, 112, 158, 0.27);
+}
+
+/* ---------- Labels ---------- */
+
+.rbs-seat-copy,
+.rbs-half-copy {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.rbs-seat-copy strong,
+.rbs-half-copy strong {
+  margin-top: 11px;
+  font-size: 10px;
+}
+
+.rbs-seat-copy small,
+.rbs-half-copy small {
+  margin-top: 4px;
+  color: #748298;
+  font-size: 5px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* ---------- Fare ---------- */
+
+.rbs-fare,
+.rbs-half-fare {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  z-index: 7;
+  padding: 3px 4px;
+  border-radius: 999px;
+  color: #205eb6;
+  font-size: 6px;
+  font-weight: 900;
+  line-height: 1;
+  background: #e4efff;
+}
+
+.rbs-half-fare {
+  right: 3px;
+  padding:
+    3px 3px;
+  font-size: 5px;
+}
+
+/* ---------- Status ---------- */
+
+.rbs-available-badge {
+  position: absolute;
+  top: 15px;
+  left: 4px;
+  z-index: 8;
+  padding: 3px 4px;
+  border-radius: 999px;
+  color: #10734d;
+  font-size: 4px;
+  font-weight: 900;
+  line-height: 1;
+  background: #dcf7eb;
+}
+
+.rbs-seat-check {
+  position: absolute;
+  top: 15px;
+  left: 4px;
+  z-index: 8;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border-radius: 50%;
+  color: #1757ae;
+  font-size: 10px;
+  font-weight: 900;
+  background: #ffffff;
+}
+
+.rbs-seat-lock {
+  position: absolute;
+  top: 15px;
+  left: 4px;
+  z-index: 8;
+  font-size: 12px;
+}
+
+/* ---------- Selected ---------- */
+
+.rbs-single-berth.selected,
+.rbs-double-half.selected {
+  color: #ffffff;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(20, 83, 182, 0.96),
+      rgba(59, 132, 237, 0.96)
+    );
+}
+
+.rbs-single-berth.selected {
+  border-color: #3479e4;
+  box-shadow:
+    0 0 0 3px
+    rgba(67, 132, 235, 0.14),
+    0 0 24px
+    rgba(42, 112, 228, 0.52);
+  animation:
+    rbsSelectedPulse
+    1.8s ease-in-out infinite;
+}
+
+.rbs-double-half.selected
+.rbs-half-copy small,
+.rbs-single-berth.selected
+.rbs-seat-copy small {
+  color:
+    rgba(255, 255, 255, 0.78);
+}
+
+/* ---------- Booked / locked ---------- */
+
+.rbs-single-berth.booked,
+.rbs-double-half.booked {
+  color: #8993a2;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #e7eaef,
+      #e7eaef 8px,
+      #dfe3e9 8px,
+      #dfe3e9 16px
+    );
+  cursor: not-allowed;
+}
+
+.rbs-single-berth.locked,
+.rbs-double-half.locked {
+  color: #915817;
+  background:
+    repeating-linear-gradient(
+      135deg,
+      #fff6e8,
+      #fff6e8 8px,
+      #ffecd0 8px,
+      #ffecd0 16px
+    );
+  cursor: not-allowed;
+}
+
+.rbs-single-berth.blocked,
+.rbs-double-half.blocked {
+  color: #8993a2;
+  background: #e8ebef;
+  cursor: not-allowed;
+  opacity: 0.72;
+}
+
+.rbs-booked-lock {
+  animation:
+    rbsLockMove
+    1.6s ease-in-out infinite;
+}
+
+.rbs-empty-single-slot {
+  width: 62px;
+  height: 120px;
+}
+
+.rbs-empty-layout {
+  padding: 40px 20px;
+  color: #6c798e;
+  text-align: center;
+}
+
+.rbs-empty-layout strong {
+  display: block;
+  color: #33445d;
+  font-size: 13px;
+}
+
+.rbs-empty-layout p {
+  margin: 6px 0 0;
+  font-size: 10px;
+}
+
+/* ============================================
+   RULAR BUS icon direction and size
+   ============================================ */
+
+/* Route bus: larger, moving towards Kannauj */
+
+.moving-route-bus {
+  display: flex !important;
+  width: 62px !important;
+  height: 36px !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.moving-route-bus
+.rular-route-bus-icon,
+.rular-route-bus-icon {
+  width: 62px !important;
+  min-width: 62px !important;
+  height: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+  filter:
+    drop-shadow(
+      0 5px 7px
+      rgba(1, 24, 66, 0.3)
+    );
+}
+
+/* Hero bus: face towards the left/content */
+
+.hero-bus-symbol
+.rular-hero-bus-icon,
+.rular-hero-bus-icon {
+  width: 92px !important;
+  min-width: 92px !important;
+  height: auto !important;
+  transform:
+    scaleX(-1) !important;
+  filter:
+    drop-shadow(
+      0 11px 15px
+      rgba(0, 25, 71, 0.34)
+    );
+}
+
+@keyframes routeBusTravel {
+  0%,
+  7% {
+    left: 0;
+    transform:
+      translateX(-5%);
+  }
+
+  48%,
+  52% {
+    left: 50%;
+    transform:
+      translateX(-50%)
+      translateY(-2px);
+  }
+
+  93%,
+  100% {
+    left: 100%;
+    transform:
+      translateX(-95%);
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 700px) {
+  .rbs-side-headings,
+  .rbs-coach-row {
+    grid-template-columns:
+      66px
+      36px
+      minmax(122px, 1fr);
+  }
+
+  .rbs-coach-row {
+    min-height: 116px;
+  }
+
+  .rbs-aisle {
+    min-height: 112px;
+  }
+
+  .rbs-single-berth {
+    width: 56px;
+    min-width: 56px;
+    max-width: 56px;
+    height: 110px;
+    min-height: 110px;
+    max-height: 110px;
+  }
+
+  .rbs-double-berth {
+    width: min(100%, 122px);
+    min-width: 112px;
+    height: 110px;
+  }
+
+  .rbs-empty-single-slot {
+    width: 56px;
+    height: 110px;
+  }
+
+  .moving-route-bus {
+    width: 54px !important;
+  }
+
+  .moving-route-bus
+  .rular-route-bus-icon,
+  .rular-route-bus-icon {
+    width: 54px !important;
+    min-width: 54px !important;
+  }
+
+  .hero-bus-symbol
+  .rular-hero-bus-icon,
+  .rular-hero-bus-icon {
+    width: 78px !important;
+    min-width: 78px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .rbs-side-headings,
+  .rbs-coach-row {
+    grid-template-columns:
+      58px
+      32px
+      minmax(110px, 1fr);
+  }
+
+  .rbs-single-berth {
+    width: 52px;
+    min-width: 52px;
+    max-width: 52px;
+    height: 106px;
+    min-height: 106px;
+    max-height: 106px;
+  }
+
+  .rbs-double-berth {
+    width: min(100%, 110px);
+    min-width: 102px;
+    height: 106px;
+  }
+
+  .rbs-seat-copy small,
+  .rbs-half-copy small {
+    display: none;
+  }
+}
+
+@keyframes rbsSelectedPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px
+      rgba(67, 132, 235, 0.12),
+      0 0 17px
+      rgba(42, 112, 228, 0.37);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 5px
+      rgba(67, 132, 235, 0.17),
+      0 0 27px
+      rgba(42, 112, 228, 0.65);
+  }
+}
+
+@keyframes rbsLockMove {
+  0%,
+  100% {
+    transform:
+      translateY(0)
+      rotate(0deg);
+  }
+
+  50% {
+    transform:
+      translateY(-2px)
+      rotate(-6deg);
+  }
+}
+
+/* ===== FINAL BERTH SIZE + READABILITY TUNING ===== */
+
+.rbs-sleeper-layout {
+  --rbs-single-width: 88px;
+  --rbs-double-width: 186px;
+  --rbs-berth-height: 104px;
+  --rbs-aisle-width: 18px;
+  --rbs-col-gap: 6px;
+}
+
+/* row structure: single | aisle | double */
+.rbs-side-headings,
+.rbs-layout-row,
+.rbs-coach-row,
+.rbs-coach-item-row,
+.rbs-seat-row {
+  width: 100%;
+  display: grid !important;
+  grid-template-columns:
+    var(--rbs-single-width)
+    var(--rbs-aisle-width)
+    minmax(var(--rbs-double-width), 1fr);
+  column-gap: var(--rbs-col-gap) !important;
+  align-items: start;
+}
+
+/* aisle ko slim rakho taaki side gap kam ho */
+.rbs-aisle {
+  width: var(--rbs-aisle-width) !important;
+  min-width: var(--rbs-aisle-width) !important;
+}
+
+/* conductor side single berth */
+.rbs-single-berth {
+  width: var(--rbs-single-width) !important;
+  min-width: var(--rbs-single-width) !important;
+  height: var(--rbs-berth-height) !important;
+  min-height: var(--rbs-berth-height) !important;
+  padding: 8px 6px !important;
+}
+
+/* driver side double berth container */
+.rbs-double-berth {
+  width: 100% !important;
+  min-width: var(--rbs-double-width) !important;
+  height: var(--rbs-berth-height) !important;
+  min-height: var(--rbs-berth-height) !important;
+  display: grid !important;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* double berth ke dono halves */
+.rbs-double-half {
+  height: var(--rbs-berth-height) !important;
+  min-height: var(--rbs-berth-height) !important;
+  padding: 8px 6px !important;
+}
+
+/* text readability */
+.rbs-single-berth,
+.rbs-double-half {
+  font-size: 11px !important;
+  line-height: 1.2 !important;
+}
+
+/* seat number / berth label */
+.rbs-single-berth strong,
+.rbs-double-half strong,
+.rbs-single-berth b,
+.rbs-double-half b {
+  font-size: 14px !important;
+  line-height: 1.1 !important;
+  font-weight: 800 !important;
+}
+
+/* subtext / fare / type */
+.rbs-single-berth small,
+.rbs-double-half small,
+.rbs-single-berth span,
+.rbs-double-half span {
+  font-size: 11px !important;
+}
+
+/* selected state readable रहे */
+.rbs-single-berth.selected,
+.rbs-double-half.selected {
+  transform: scale(1.02);
+}
+
+/* mobile fine tuning */
+@media (max-width: 768px) {
+  .rbs-sleeper-layout {
+    --rbs-single-width: 90px;
+    --rbs-double-width: 190px;
+    --rbs-berth-height: 108px;
+    --rbs-aisle-width: 16px;
+    --rbs-col-gap: 5px;
+  }
+}
+

@@ -1,42 +1,47 @@
+
+!.env.example
+# Android / Expo
+# Archives
+# Backup
+# Build
+# Coverage
 # Dependencies
-node_modules/
-
-# Logs
-*.log
-
 # Environment
+# Generated frontend files
+# IDE
+# Local environment
+# Logs
+# Manual backups and audits
+# OS
+# Uploads
+# Vite
+*.backup
+*.backup-before-*
+*.bak
+*.before-*
+*.broken
+*.incomplete-*
+*.log
+*.save
+*.zip
+*_audit.txt
+*_batch.txt
+*_inspection.txt
+*_target.txt
+.DS_Store
 .env
 .env.*
-
-# Build
-dist/
-build/
-
-# Archives
-*.zip
-
-# Backup
-*.bak
-*.backup
-*.save
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Uploads
-uploads/
-
-# Coverage
-coverage/
-
-# Vite
-.vite/
-
-# Android / Expo
-.expo/
 .expo-shared/
-
-# IDE
-.vscode/
+.expo/
 .idea/
+.vite/
+.vscode/
+AdminSchedule_current.txt
+AdminSidebar.
+Thumbs.db
+backups/
+build/
+coverage/
+dist/
+node_modules/
+uploads/

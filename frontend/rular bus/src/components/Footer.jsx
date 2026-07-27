@@ -1,44 +1,26 @@
 export default function Footer() {
   return (
-    <footer
-      style={{
-        background: "#0B3D91",
-        color: "#fff",
-        marginTop: "40px",
-        padding: "30px 20px",
-        textAlign: "center",
-      }}
-    >
-      <h2 style={{ margin: 0 }}>🚌 Rular Bus</h2>
+    <footer className="worker-footer">
+      <div className="worker-footer-icon">🚌</div>
 
-      <p style={{ marginTop: "10px", color: "#ddd" }}>
-        Safe • Smart • Affordable Travel
+      <h2>Rular Bus</h2>
+
+      <strong>
+        रोजगार की राह से घर की चौखट तक — हम आपके साथ हैं
+      </strong>
+
+      <p>
+        आसान बुकिंग, साफ किराया और भरोसेमंद सफर।
       </p>
 
-      <div
-        style={{
-          marginTop: "20px",
-          display: "flex",
-          justifyContent: "center",
-          gap: "20px",
-          flexWrap: "wrap",
-        }}
-      >
-        <span>About</span>
-        <span>Contact</span>
-        <span>Privacy Policy</span>
-        <span>Terms</span>
+      <div className="worker-footer-actions">
+        <span>☎️ सहायता</span>
+        <span>🎫 मेरी बुकिंग</span>
+        <span>❌ रद्दीकरण</span>
+        <span>📍 संपर्क</span>
       </div>
 
-      <p
-        style={{
-          marginTop: "20px",
-          fontSize: "14px",
-          color: "#bbb",
-        }}
-      >
-        © 2026 Rular Bus. All Rights Reserved.
-      </p>
+      <small>© 2026 Rular Bus. All Rights Reserved.</small>
     </footer>
   );
 }

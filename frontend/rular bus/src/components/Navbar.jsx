@@ -1,74 +1,153 @@
-import logo from "../assets/logo/rular-logo.png";
 import { useNavigate } from "react-router-dom";
+
+import logo from "../assets/logo/rular-logo.png";
+import { useCustomerAuth } from "../context/CustomerAuthContext";
+import ThemeToggle from "../theme/ThemeToggle";
+
 export default function Navbar() {
   const navigate = useNavigate();
+
+  const {
+    customer,
+    loading,
+    isAuthenticated,
+    logout,
+  } = useCustomerAuth();
+
+  const handleLogout = async () => {
+    await logout();
+
+    navigate("/", {
+      replace: true,
+    });
+  };
+
   return (
-    <nav
-      style={{
-        background: "#ffffff",
-        padding: "12px 24px",
-        borderRadius: "18px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        boxShadow: "0 8px 20px rgba(0,0,0,0.08)",
-        marginBottom: "20px",
-      }}
-    >
+    <nav className="worker-navbar">
       <div
+        className="worker-brand"
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate("/")}
+        onKeyDown={(event) => {
+          if (
+            event.key === "Enter" ||
+            event.key === " "
+          ) {
+            navigate("/");
+          }
+        }}
         style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "12px",
+          cursor: "pointer",
         }}
       >
         <img
           src={logo}
           alt="Rular Bus"
-          style={{
-            width: "60px",
-            height: "60px",
-            objectFit: "contain",
-          }}
+          className="worker-brand-logo"
         />
 
-        <div>
-          <h2
-            style={{
-              margin: 0,
-              color: "#0B3D91",
-              fontSize: "22px",
-            }}
-          >
-            Rular Bus
-          </h2>
-
-          <p
-            style={{
-              margin: 0,
-              color: "#6b7280",
-              fontSize: "13px",
-            }}
-          >
-            India's Smart Bus Booking Platform
-          </p>
+        <div className="worker-brand-copy">
+          <h2>Rular Bus</h2>
+          <p>घर तक भरोसे का सफर</p>
         </div>
       </div>
 
-      <button
-  onClick={() => navigate("/login")}
-  style={{
-          background: "#0B3D91",
-          color: "#fff",
-          border: "none",
-          borderRadius: "10px",
-          padding: "10px 18px",
-          cursor: "pointer",
-          fontWeight: "600",
-        }}
-      >
-        Login
-      </button>
+      <div className="worker-navbar-actions">
+        <button
+          type="button"
+          className="worker-booking-button"
+          onClick={() =>
+            navigate("/bookings")
+          }
+        >
+          🎫 मेरी बुकिंग
+        </button>
+
+        <ThemeToggle />
+
+        {!loading &&
+          !isAuthenticated && (
+            <>
+              <button
+                type="button"
+                className="worker-login-button"
+                onClick={() =>
+                  navigate(
+                    "/customer/login"
+                  )
+                }
+              >
+                यात्री लॉगिन
+              </button>
+
+              <button
+                type="button"
+                className="worker-login-button"
+                onClick={() =>
+                  navigate(
+                    "/customer/register"
+                  )
+                }
+              >
+                रजिस्टर
+              </button>
+            </>
+          )}
+
+        {!loading &&
+          isAuthenticated && (
+            <>
+              <button
+                type="button"
+                className="worker-login-button"
+                onClick={() =>
+                  navigate(
+                    "/saved-travellers"
+                  )
+                }
+              >
+                👥 यात्री
+              </button>
+
+              <button
+                type="button"
+                className="worker-login-button"
+                onClick={() =>
+                  navigate("/profile")
+                }
+              >
+                👤 प्रोफाइल
+              </button>
+
+              <span
+                title={
+                  customer?.full_name ||
+                  ""
+                }
+                style={{
+                  maxWidth: "160px",
+                  overflow: "hidden",
+                  textOverflow:
+                    "ellipsis",
+                  whiteSpace: "nowrap",
+                  fontWeight: 700,
+                }}
+              >
+                {customer?.full_name ||
+                  "यात्री"}
+              </span>
+
+              <button
+                type="button"
+                className="worker-login-button"
+                onClick={handleLogout}
+              >
+                लॉगआउट
+              </button>
+            </>
+          )}
+      </div>
     </nav>
   );
 }

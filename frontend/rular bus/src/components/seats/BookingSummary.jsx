@@ -1,50 +1,139 @@
+const getDeckLabel = (deck) =>
+  String(deck).toUpperCase() ===
+  "UPPER"
+    ? "Upper Berth"
+    : "Lower Berth";
+
 export default function BookingSummary({
-  selectedSeats,
-  farePerSeat,
+  selectedSeats = [],
+  totalFare = 0,
+  source = "",
+  destination = "",
+  journeyDate = "",
+  departureTime = "",
+  arrivalTime = "",
+  journeyDuration = "",
+  arrivesNextDay = false,
   onContinue,
 }) {
-  const totalFare = selectedSeats.length * farePerSeat;
+  const hasSelection =
+    selectedSeats.length > 0;
+
+  const seatNames =
+    selectedSeats
+      .map(
+        (seat) =>
+          seat.seat_no
+      )
+      .join(", ");
+
+  const firstSeat =
+    selectedSeats[0];
+
+  const seatDetail =
+    selectedSeats.length === 1 &&
+    firstSeat
+      ? `${firstSeat.seat_no} • ${getDeckLabel(
+          firstSeat.deck
+        )}`
+      : seatNames;
 
   return (
-    <div
-      style={{
-        marginTop: 30,
-        background: "#f8f9fa",
-        padding: 20,
-        borderRadius: 16,
-        boxShadow: "0 8px 20px rgba(0,0,0,.08)",
-      }}
+    <aside
+      className={[
+        "premium-booking-summary",
+        "premium-booking-summary-final",
+        hasSelection
+          ? "summary-visible"
+          : "",
+      ].join(" ")}
+      aria-live="polite"
     >
-      <h3>Booking Summary</h3>
+      <div className="summary-seat-information">
+        <span>
+          चुनी गई सीट
+        </span>
 
-      <p>
-        <b>Seats:</b>{" "}
-        {selectedSeats.length === 0
-          ? "None"
-          : selectedSeats.join(", ")}
-      </p>
+        <strong>
+          {hasSelection
+            ? seatDetail
+            : "कोई सीट नहीं"}
+        </strong>
 
-      <p>
-        <b>Passengers:</b> {selectedSeats.length}
-      </p>
+        <small>
+          {hasSelection
+            ? `${selectedSeats.length} ${
+                selectedSeats.length ===
+                1
+                  ? "Passenger"
+                  : "Passengers"
+              }`
+            : "अपनी पसंद की सीट चुनें"}
+        </small>
+      </div>
 
-      <h2>₹{totalFare}</h2>
+      {hasSelection && (
+        <div className="summary-journey-information">
+          <div>
+            <span>
+              {source} → {destination}
+            </span>
+
+            <small>
+              {journeyDate}
+            </small>
+          </div>
+
+          <div className="summary-time-row">
+            <strong>
+              {departureTime}
+            </strong>
+
+            <i>→</i>
+
+            <strong>
+              {arrivalTime}
+            </strong>
+
+            {arrivesNextDay && (
+              <em>
+                अगले दिन
+              </em>
+            )}
+          </div>
+
+          <small className="summary-duration">
+            यात्रा अवधि: {journeyDuration}
+          </small>
+        </div>
+      )}
+
+      <div className="summary-price">
+        <span>
+          कुल किराया
+        </span>
+
+        <strong>
+          ₹
+          {Number(
+            totalFare || 0
+          ).toLocaleString(
+            "en-IN"
+          )}
+        </strong>
+      </div>
 
       <button
+        type="button"
+        disabled={!hasSelection}
         onClick={onContinue}
-        style={{
-          width: "100%",
-          padding: 15,
-          background: "#0B3D91",
-          color: "#fff",
-          border: "none",
-          borderRadius: 12,
-          fontWeight: "bold",
-          cursor: "pointer",
-        }}
       >
-        Continue Booking
+        <span>
+          Passenger Details पर जाएँ
+        </span>
+
+        <i>→</i>
       </button>
-    </div>
+    </aside>
   );
 }

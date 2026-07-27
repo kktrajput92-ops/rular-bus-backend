@@ -7,6 +7,7 @@ const TOOLS = [
   "DOOR",
   "DRIVER",
   "AISLE",
+  "EXTRA",
   "EMPTY",
 ];
 

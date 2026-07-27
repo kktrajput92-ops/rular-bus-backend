@@ -1,0 +1,227 @@
+/* ==========================================
+   FINAL SLEEPER PORTRAIT LOCK
+   ========================================== */
+
+.sleeper-layout {
+  width: 100%;
+  overflow: visible;
+}
+
+.sleeper-layout-labels,
+.sleeper-layout-rows
+.sleeper-layout-row {
+  grid-template-columns:
+    72px
+    42px
+    minmax(136px, 1fr)
+    !important;
+}
+
+.sleeper-layout-row {
+  min-height: 126px !important;
+}
+
+.conductor-berth-column {
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.driver-double-column {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, 62px)
+    !important;
+  justify-content:
+    space-between !important;
+  align-items:
+    center !important;
+  gap: 7px !important;
+  min-width: 0 !important;
+}
+
+.conductor-berth-column
+.sleeper-layout-berth,
+.driver-double-column
+.sleeper-layout-berth {
+  display: block !important;
+  width: 62px !important;
+  min-width: 62px !important;
+  max-width: 62px !important;
+  height: 116px !important;
+  min-height: 116px !important;
+  max-height: 116px !important;
+  aspect-ratio:
+    62 / 116 !important;
+  justify-self:
+    center !important;
+  flex:
+    0 0 62px !important;
+  border-radius:
+    14px !important;
+}
+
+.sleeper-empty-slot {
+  width: 62px !important;
+  min-width: 62px !important;
+  max-width: 62px !important;
+  height: 116px !important;
+  min-height: 116px !important;
+}
+
+/* Portrait window at top */
+
+.sleeper-layout-berth
+.sleeper-window-strip {
+  top: 7px !important;
+  right: 7px !important;
+  bottom: auto !important;
+  left: 7px !important;
+  width: auto !important;
+  height: 4px !important;
+}
+
+/* Pillow horizontally at head */
+
+.sleeper-layout-berth
+.sleeper-pillow {
+  top: 17px !important;
+  left: 50% !important;
+  width: 35px !important;
+  height: 14px !important;
+  transform:
+    translateX(-50%) !important;
+}
+
+/* Long vertical mattress */
+
+.sleeper-layout-berth
+.sleeper-bed-sheet {
+  top: 38px !important;
+  right: 8px !important;
+  bottom: 9px !important;
+  left: 8px !important;
+  width: auto !important;
+  height: auto !important;
+  border-radius:
+    9px !important;
+}
+
+/* Curtain at right side */
+
+.sleeper-layout-berth
+.sleeper-curtain {
+  top: 16px !important;
+  right: 4px !important;
+  display: flex !important;
+  flex-direction:
+    column !important;
+}
+
+.sleeper-layout-berth
+.sleeper-curtain i {
+  width: 15px !important;
+  height: 2px !important;
+}
+
+/* Center label */
+
+.sleeper-layout-berth
+.sleeper-seat-content strong {
+  margin-top:
+    10px !important;
+  font-size:
+    10px !important;
+}
+
+.sleeper-layout-berth
+.sleeper-seat-content small {
+  margin-top:
+    4px !important;
+  font-size:
+    5px !important;
+}
+
+/* Badges */
+
+.sleeper-layout-berth
+.sleeper-available {
+  top: 15px !important;
+  right: auto !important;
+  left: 4px !important;
+  font-size:
+    4px !important;
+}
+
+.sleeper-layout-berth
+.sleeper-fare {
+  right: 4px !important;
+  bottom: 4px !important;
+  padding:
+    3px 4px !important;
+  font-size:
+    6px !important;
+}
+
+.sleeper-layout-berth
+.sleeper-selected-check,
+.sleeper-layout-berth
+.sleeper-lock {
+  top: 15px !important;
+  right: auto !important;
+  left: 4px !important;
+}
+
+/* Aisle remains clear */
+
+.sleeper-main-aisle {
+  min-height:
+    116px !important;
+}
+
+@media (max-width: 390px) {
+  .sleeper-layout-labels,
+  .sleeper-layout-rows
+  .sleeper-layout-row {
+    grid-template-columns:
+      58px
+      32px
+      minmax(116px, 1fr)
+      !important;
+  }
+
+  .driver-double-column {
+    grid-template-columns:
+      repeat(2, 53px)
+      !important;
+    gap: 4px !important;
+  }
+
+  .conductor-berth-column
+  .sleeper-layout-berth,
+  .driver-double-column
+  .sleeper-layout-berth {
+    width: 53px !important;
+    min-width: 53px !important;
+    max-width: 53px !important;
+    height: 108px !important;
+    min-height: 108px !important;
+    max-height: 108px !important;
+    aspect-ratio:
+      53 / 108 !important;
+    flex:
+      0 0 53px !important;
+  }
+
+  .sleeper-empty-slot {
+    width: 53px !important;
+    min-width: 53px !important;
+    max-width: 53px !important;
+    height: 108px !important;
+    min-height: 108px !important;
+  }
+
+  .sleeper-main-aisle {
+    min-height:
+      108px !important;
+  }
+}

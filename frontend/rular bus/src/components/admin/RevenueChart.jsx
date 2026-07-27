@@ -21,23 +21,31 @@ export default function RevenueChart() {
   return (
     <div
       style={{
-        background: "#fff",
+        background: "var(--erp-surface)",
         borderRadius: 20,
         padding: 20,
         marginTop: 30,
-        boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+        boxShadow: "var(--erp-shadow-sm)",
       }}
     >
-      <h2 style={{ color: "#0B3D91", marginBottom: 20 }}>
+      <h2 style={{ color: "var(--erp-heading)", marginBottom: 20 }}>
         📊 Monthly Revenue
       </h2>
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="month" />
-          <YAxis />
-          <Tooltip />
+          <CartesianGrid stroke="var(--erp-border)" strokeDasharray="3 3" />
+          <XAxis dataKey="month" stroke="var(--erp-text-secondary)" />
+          <YAxis stroke="var(--erp-text-secondary)" />
+          <Tooltip
+              contentStyle={{
+                background: "var(--erp-surface)",
+                border: "1px solid var(--erp-border)",
+                borderRadius: 10,
+                color: "var(--erp-text)",
+              }}
+              labelStyle={{ color: "var(--erp-heading)" }}
+            />
           <Bar dataKey="revenue" fill="#0B3D91" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>

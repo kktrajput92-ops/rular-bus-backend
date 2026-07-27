@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/api";
 import { usePermission } from "../context/PermissionContext";
+import ThemeToggle from "../theme/ThemeToggle";
 export default function Login(){
 
 const navigate=useNavigate();
@@ -52,22 +53,40 @@ style={{
 display:"flex",
 justifyContent:"center",
 alignItems:"center",
-height:"100vh",
-background:"#F5F7FA"
+minHeight:"100vh",
+background:"var(--erp-bg)",
+color:"var(--erp-text)",
+position:"relative",
+padding:"20px",
+boxSizing:"border-box",
+transition:"background 0.25s ease, color 0.25s ease"
 }}
 >
 
 <div
 style={{
-width:380,
+position:"absolute",
+top:16,
+right:16,
+zIndex:10
+}}
+>
+<ThemeToggle />
+</div>
+
+<div
+style={{
+width:"min(380px, 100%)",
 padding:30,
-background:"#fff",
+background:"var(--erp-surface)",
+color:"var(--erp-text)",
+border:"1px solid var(--erp-border)",
 borderRadius:15,
-boxShadow:"0 10px 25px rgba(0,0,0,.08)"
+boxShadow:"var(--erp-shadow-lg)"
 }}
 >
 
-<h2>Admin Login</h2>
+<h2 style={{ color: "var(--erp-heading)", marginTop: 0 }}>Admin Login</h2>
 
 <input
 placeholder="Email"
@@ -76,7 +95,12 @@ onChange={(e)=>setEmail(e.target.value)}
 style={{
 width:"100%",
 padding:12,
-marginTop:15
+marginTop:15,
+boxSizing:"border-box",
+background:"var(--erp-input-bg)",
+color:"var(--erp-text)",
+border:"1px solid var(--erp-border)",
+borderRadius:8
 }}
 />
 
@@ -88,7 +112,12 @@ onChange={(e)=>setPassword(e.target.value)}
 style={{
 width:"100%",
 padding:12,
-marginTop:15
+marginTop:15,
+boxSizing:"border-box",
+background:"var(--erp-input-bg)",
+color:"var(--erp-text)",
+border:"1px solid var(--erp-border)",
+borderRadius:8
 }}
 />
 
@@ -101,6 +130,7 @@ padding:12,
 background:"#0B3D91",
 color:"#fff",
 border:"none",
+borderRadius:8,
 cursor:"pointer"
 }}
 >

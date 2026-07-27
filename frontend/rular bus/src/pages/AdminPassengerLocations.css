@@ -1,0 +1,35 @@
+.admin-passenger-locations-page {
+  min-height: 100vh;
+  padding: 28px;
+  background: var(--erp-bg);
+  color: var(--erp-text);
+}
+
+.admin-passenger-locations-layout {
+  display: grid;
+  grid-template-columns:
+    minmax(340px, 520px)
+    minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .admin-passenger-locations-page {
+    padding: 16px;
+  }
+
+  .admin-passenger-locations-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-passenger-locations-page {
+    padding: 12px;
+  }
+
+  .admin-passenger-locations-layout {
+    gap: 16px;
+  }
+}

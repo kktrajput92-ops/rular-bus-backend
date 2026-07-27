@@ -1,0 +1,626 @@
+.passenger-premium-page {
+  --passenger-blue: #0755b5;
+  --passenger-deep-blue: #062f70;
+  --passenger-border: #dce8f5;
+  --passenger-muted: #64748b;
+  --passenger-shadow:
+    0 14px 36px rgba(15, 63, 130, 0.09);
+  position: relative;
+}
+
+.passenger-premium-page * {
+  box-sizing: border-box;
+}
+
+/* ------------------------------
+   PAGE HEADER + PROGRESS
+------------------------------ */
+
+.passenger-premium-page > div > header {
+  position: relative;
+  margin-bottom: 20px !important;
+  padding-top: 74px;
+}
+
+.passenger-premium-page > div > header::before {
+  content: "✓  सीट चयन    ─────    2  यात्री विवरण    ─────    3  भुगतान";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 18px;
+  border: 1px solid #cbdff7;
+  border-radius: 16px;
+  background:
+    linear-gradient(
+      135deg,
+      rgba(255,255,255,.98),
+      rgba(235,244,255,.96)
+    );
+  box-shadow:
+    0 8px 22px rgba(11, 61, 145, 0.07);
+  color: #164a92;
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.1px;
+  text-align: center;
+}
+
+.passenger-premium-page > div > header h1 {
+  letter-spacing: -0.7px;
+}
+
+.passenger-premium-page > div > header p {
+  line-height: 1.5;
+}
+
+/* ------------------------------
+   COMMON PREMIUM CARDS
+------------------------------ */
+
+.passenger-premium-page section {
+  position: relative;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.passenger-premium-page form > section {
+  border-color: var(--passenger-border) !important;
+  box-shadow: var(--passenger-shadow) !important;
+}
+
+.passenger-premium-page form > section:hover {
+  border-color: #bfd6f1 !important;
+  box-shadow:
+    0 18px 42px rgba(15, 63, 130, 0.12) !important;
+}
+
+/* ------------------------------
+   JOURNEY HERO
+------------------------------ */
+
+.passenger-premium-page
+  > div
+  > section:first-of-type {
+  border-radius: 24px !important;
+  box-shadow:
+    0 18px 42px rgba(4, 49, 111, 0.17) !important;
+}
+
+.passenger-premium-page
+  > div
+  > section:first-of-type
+  > div:first-child {
+  position: relative;
+  overflow: hidden;
+  padding: 24px !important;
+  background:
+    radial-gradient(
+      circle at 92% 20%,
+      rgba(66, 180, 255, 0.34),
+      transparent 32%
+    ),
+    linear-gradient(
+      120deg,
+      #052f71 0%,
+      #0755b5 58%,
+      #008ad8 100%
+    ) !important;
+}
+
+.passenger-premium-page
+  > div
+  > section:first-of-type
+  > div:first-child::after {
+  content: "🚌";
+  position: absolute;
+  right: 28%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 38px;
+  opacity: 0.17;
+}
+
+.passenger-premium-page
+  > div
+  > section:first-of-type
+  > div:nth-child(2)
+  > div {
+  min-height: 78px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.passenger-premium-page
+  > div
+  > section:first-of-type
+  > div:last-child {
+  background:
+    linear-gradient(
+      90deg,
+      #f8fbff,
+      #ffffff
+    );
+}
+
+/* ------------------------------
+   CONTACT CARD
+------------------------------ */
+
+.passenger-premium-page form > section:first-child {
+  background:
+    linear-gradient(
+      135deg,
+      #ffffff 0%,
+      #f2f8ff 100%
+    ) !important;
+  border-left:
+    5px solid var(--passenger-blue) !important;
+}
+
+.passenger-premium-page
+  form
+  > section:first-child
+  > div:first-child
+  > div:first-child {
+  box-shadow:
+    0 8px 18px rgba(11, 61, 145, 0.12);
+}
+
+/* ------------------------------
+   PASSENGER CARDS
+------------------------------ */
+
+.passenger-premium-page
+  form
+  > section:not(:first-child):not(:last-of-type) {
+  overflow: hidden;
+  border-left:
+    5px solid #2f7fd7 !important;
+}
+
+.passenger-premium-page
+  form
+  > section:not(:first-child):not(:last-of-type)::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background:
+    linear-gradient(
+      90deg,
+      #0755b5,
+      #2ba6e8,
+      transparent
+    );
+}
+
+.passenger-premium-page
+  form
+  > section:not(:first-child):not(:last-of-type)
+  h2 {
+  letter-spacing: -0.3px;
+}
+
+.passenger-premium-page
+  form
+  > section:not(:first-child):not(:last-of-type)
+  span[style*="min-width"] {
+  box-shadow:
+    0 7px 16px rgba(11, 61, 145, 0.12);
+}
+
+/* ------------------------------
+   FORM CONTROLS
+------------------------------ */
+
+.passenger-premium-page input,
+.passenger-premium-page select {
+  min-height: 50px;
+  font-size: 15px;
+  color: #172a46;
+  background: #fbfdff !important;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.passenger-premium-page input:hover,
+.passenger-premium-page select:hover {
+  border-color: #9dbfe8 !important;
+  background: #ffffff !important;
+}
+
+.passenger-premium-page input:focus,
+.passenger-premium-page select:focus {
+  outline: none !important;
+  border-color: #1265c3 !important;
+  background: #ffffff !important;
+  box-shadow:
+    0 0 0 4px rgba(18, 101, 195, 0.11) !important;
+}
+
+.passenger-premium-page input::placeholder {
+  color: #9ba8b9;
+}
+
+/* ------------------------------
+   BOOKING SUMMARY
+------------------------------ */
+
+.passenger-premium-page form > section:last-of-type {
+  overflow: hidden;
+  background:
+    linear-gradient(
+      180deg,
+      #ffffff,
+      #fbfdff
+    ) !important;
+}
+
+.passenger-premium-page
+  form
+  > section:last-of-type
+  > div:last-child {
+  margin:
+    16px -22px -22px !important;
+  padding: 18px 22px !important;
+  border-top:
+    1px dashed #b9cde5 !important;
+  background:
+    linear-gradient(
+      90deg,
+      #fff7ed,
+      #fffaf4
+    );
+}
+
+.passenger-premium-page
+  form
+  > section:last-of-type
+  > div:not(:last-child) {
+  align-items: center;
+}
+
+/* ------------------------------
+   CONFIRMATION CARD
+------------------------------ */
+
+.passenger-premium-page form > label {
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.passenger-premium-page
+  form
+  > label:has(input:checked) {
+  background: #ecfdf5 !important;
+  border-color: #86efac !important;
+  box-shadow:
+    0 8px 20px rgba(22, 163, 74, 0.08);
+}
+
+.passenger-premium-page
+  form
+  > label
+  input[type="checkbox"] {
+  accent-color: #0b61bf;
+  min-height: auto;
+}
+
+/* ------------------------------
+   STICKY ACTION BAR
+------------------------------ */
+
+.passenger-premium-page form > div:last-child {
+  position: sticky;
+  z-index: 30;
+  bottom: 10px;
+  padding: 10px;
+  border: 1px solid rgba(193, 211, 232, 0.88);
+  border-radius: 16px;
+  background:
+    rgba(255, 255, 255, 0.93);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow:
+    0 14px 38px rgba(15, 47, 91, 0.18);
+}
+
+.passenger-premium-page
+  form
+  > div:last-child
+  button {
+  min-height: 52px;
+  transition:
+    transform 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+}
+
+.passenger-premium-page
+  form
+  > div:last-child
+  button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.passenger-premium-page
+  form
+  > div:last-child
+  button:last-child {
+  box-shadow:
+    0 10px 24px rgba(3, 86, 181, 0.24) !important;
+}
+
+/* ------------------------------
+   MOBILE
+------------------------------ */
+
+@media (max-width: 600px) {
+  .passenger-premium-page {
+    padding:
+      14px 10px 125px !important;
+  }
+
+  .passenger-premium-page
+    > div
+    > header {
+    padding-top: 66px;
+  }
+
+  .passenger-premium-page
+    > div
+    > header::before {
+    content:
+      "Seats ✓    •    Passenger ●    •    Payment ○";
+    min-height: 46px;
+    padding: 10px;
+    font-size: 12px;
+  }
+
+  .passenger-premium-page
+    > div
+    > header
+    h1 {
+    margin-top: 10px !important;
+    font-size: 27px !important;
+  }
+
+  .passenger-premium-page
+    > div
+    > section:first-of-type
+    > div:first-child {
+    padding: 18px !important;
+  }
+
+  .passenger-premium-page
+    > div
+    > section:first-of-type
+    > div:first-child::after {
+    display: none;
+  }
+
+  .passenger-premium-page
+    > div
+    > section:first-of-type
+    > div:nth-child(2) {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .passenger-premium-page
+    > div
+    > section:first-of-type
+    > div:nth-child(2)
+    > div {
+    min-height: 70px;
+    padding: 13px !important;
+  }
+
+  .passenger-premium-page form > section {
+    padding: 17px !important;
+    border-radius: 18px !important;
+  }
+
+  .passenger-premium-page
+    form
+    > section
+    > div[style*="repeat(2"] {
+    grid-template-columns:
+      1fr !important;
+  }
+
+  .passenger-premium-page
+    form
+    > section:last-of-type
+    > div:last-child {
+    margin:
+      15px -17px -17px !important;
+    padding: 17px !important;
+  }
+
+  .passenger-premium-page
+    form
+    > div:last-child {
+    grid-template-columns:
+      0.42fr 1fr !important;
+    bottom:
+      calc(8px + env(safe-area-inset-bottom));
+  }
+
+  .passenger-premium-page
+    form
+    > div:last-child
+    button {
+    min-width: 0 !important;
+    padding:
+      12px 8px !important;
+    font-size: 13px !important;
+  }
+}
+
+@media (max-width: 390px) {
+  .passenger-premium-page
+    form
+    > div:last-child {
+    grid-template-columns:
+      1fr !important;
+  }
+}
+
+/* =================================
+   PREMIUM MULTI-TRAVELLER POLISH
+================================= */
+
+.passenger-premium-page
+  > div
+  > header::after {
+  content: "PREMIUM MULTI-TRAVELLER BOOKING";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  color: #4a3000;
+  background:
+    linear-gradient(
+      90deg,
+      #fbbf24,
+      #fde68a
+    );
+  box-shadow:
+    0 7px 18px rgba(251,191,36,.2);
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .65px;
+}
+
+.passenger-premium-page
+  form
+  > section:not(:first-child):not(:last-of-type)
+  > div:first-child::after {
+  content: "PREMIUM TRAVELLER";
+  display: inline-flex;
+  margin-top: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #0b4e92;
+  background: #e5f1ff;
+  border: 1px solid #bdd8f8;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: .45px;
+}
+
+.passenger-premium-page
+  form
+  > section:last-of-type
+  h2::after {
+  content: "ONE COMBINED PAYMENT";
+  display: inline-flex;
+  margin-left: 9px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  font-size: 9px;
+  font-weight: 900;
+  vertical-align: middle;
+  letter-spacing: .35px;
+}
+
+/* Premium traveller source segmented control */
+
+.passenger-premium-page
+  button[type="button"] {
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease;
+}
+
+.passenger-premium-page
+  button[type="button"]:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+/* Stronger selected seat badges */
+
+.passenger-premium-page
+  span[style*="min-width: 58"] {
+  background:
+    linear-gradient(
+      135deg,
+      #eaf3ff,
+      #dcedff
+    ) !important;
+  border-color: #a9cbed !important;
+}
+
+/* Save family checkbox premium state */
+
+.passenger-premium-page
+  label:has(input[name="save_for_future"]:checked),
+.passenger-premium-page
+  label:has(input[type="checkbox"]:checked) {
+  transition:
+    background .16s ease,
+    border-color .16s ease;
+}
+
+/* Better sticky checkout */
+
+.passenger-premium-page
+  form
+  > div:last-child::before {
+  content: "🔒 Secure one-payment checkout";
+  position: absolute;
+  left: 13px;
+  bottom: calc(100% + 6px);
+  padding: 5px 9px;
+  border-radius: 999px;
+  color: #166534;
+  background: #ecfdf5;
+  border: 1px solid #bbf7d0;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+@media (max-width: 600px) {
+  .passenger-premium-page
+    > div
+    > header::after {
+    margin-top: 8px;
+    font-size: 9px;
+  }
+
+  .passenger-premium-page
+    form
+    > section:last-of-type
+    h2::after {
+    display: block;
+    width: fit-content;
+    margin:
+      7px 0 0;
+  }
+
+  .passenger-premium-page
+    form
+    > div:last-child::before {
+    left: 10px;
+  }
+}

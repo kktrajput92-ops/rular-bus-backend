@@ -1,0 +1,334 @@
+/* ==================================================
+   RULAR BUS — CALCULATED FINAL SEAT PROPORTIONS
+
+   Mobile usable coach width:
+   8 + 76 + 18 + 34 + 156 + 8 = 300px
+
+   Single berth: 76 × 124
+   SL intentional gap: 18
+   Aisle: 34
+   Double berth: 156 × 124
+   Right gap: 8
+   ================================================== */
+
+.rbs-sleeper-layout {
+  width: 100%;
+  padding:
+    8px 8px 16px !important;
+}
+
+/* Exact column calculation */
+.rbs-side-headings,
+.rbs-coach-row {
+  display: grid !important;
+  grid-template-columns:
+    94px
+    34px
+    156px !important;
+  column-gap: 0 !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/*
+  First column = 76px berth + 18px intentional gap.
+  Only SL side receives this extra space.
+*/
+.rbs-conductor-column {
+  display: flex !important;
+  width: 94px !important;
+  min-width: 94px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 18px 0 0 !important;
+}
+
+/* Center aisle */
+.rbs-aisle {
+  width: 34px !important;
+  min-width: 34px !important;
+  min-height: 124px !important;
+}
+
+.rbs-aisle::before {
+  left: 7px !important;
+}
+
+.rbs-aisle::after {
+  right: 7px !important;
+}
+
+.rbs-aisle span {
+  padding: 3px 2px !important;
+  font-size: 5px !important;
+}
+
+/* Driver side fills its complete calculated space */
+.rbs-driver-column {
+  display: flex !important;
+  width: 156px !important;
+  min-width: 156px !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  padding: 0 !important;
+}
+
+/* Equal-height single berth */
+.rbs-single-berth {
+  width: 76px !important;
+  min-width: 76px !important;
+  max-width: 76px !important;
+
+  height: 124px !important;
+  min-height: 124px !important;
+  max-height: 124px !important;
+
+  border-radius: 15px !important;
+}
+
+/* Equal-height driver-side double berth */
+.rbs-double-berth {
+  width: 156px !important;
+  min-width: 156px !important;
+  max-width: 156px !important;
+
+  height: 124px !important;
+  min-height: 124px !important;
+  max-height: 124px !important;
+
+  border-radius: 15px !important;
+}
+
+/* Two equal passenger positions inside double berth */
+.rbs-double-seat-area {
+  display: grid !important;
+  grid-template-columns:
+    repeat(2, 78px) !important;
+  width: 156px !important;
+  height: 124px !important;
+}
+
+.rbs-double-half {
+  width: 78px !important;
+  min-width: 78px !important;
+  max-width: 78px !important;
+  height: 124px !important;
+  min-height: 124px !important;
+}
+
+/* Equal row height */
+.rbs-coach-row {
+  min-height: 124px !important;
+}
+
+.rbs-coach-rows {
+  gap: 10px !important;
+}
+
+/* Empty SL slot must preserve calculated alignment */
+.rbs-empty-single-slot {
+  width: 76px !important;
+  min-width: 76px !important;
+  max-width: 76px !important;
+
+  height: 124px !important;
+  min-height: 124px !important;
+}
+
+/* Headings aligned with actual columns */
+.rbs-side-headings {
+  margin-bottom: 8px !important;
+  color: #8593a7 !important;
+  font-size: 5px !important;
+  font-weight: 900 !important;
+  letter-spacing: 0.65px !important;
+  text-align: center !important;
+}
+
+.rbs-side-headings span:first-child {
+  width: 76px;
+  margin-right: 18px;
+}
+
+/* Readable seat labels */
+.rbs-seat-copy strong,
+.rbs-half-copy strong {
+  margin-top: 11px !important;
+  font-size: 12px !important;
+  line-height: 1.1 !important;
+  font-weight: 900 !important;
+}
+
+.rbs-seat-copy small,
+.rbs-half-copy small {
+  display: block !important;
+  margin-top: 4px !important;
+  font-size: 6px !important;
+  line-height: 1.2 !important;
+  font-weight: 800 !important;
+}
+
+/* Readable fares */
+.rbs-fare {
+  right: 5px !important;
+  bottom: 5px !important;
+  padding: 3px 5px !important;
+  font-size: 7px !important;
+}
+
+.rbs-half-fare {
+  right: 4px !important;
+  bottom: 5px !important;
+  padding: 3px 4px !important;
+  font-size: 6px !important;
+}
+
+/* Availability badge */
+.rbs-available-badge {
+  top: 14px !important;
+  left: 5px !important;
+  padding: 2px 4px !important;
+  font-size: 4px !important;
+}
+
+/* Portrait bed graphics */
+.rbs-window-line {
+  top: 7px !important;
+  right: 7px !important;
+  left: 7px !important;
+  height: 4px !important;
+}
+
+.rbs-pillow {
+  top: 18px !important;
+  width: 38px !important;
+  height: 15px !important;
+}
+
+.rbs-double-pillow {
+  top: 18px !important;
+  right: 11px !important;
+  left: 11px !important;
+  gap: 10px !important;
+}
+
+.rbs-double-pillow i {
+  height: 15px !important;
+}
+
+.rbs-mattress,
+.rbs-double-mattress {
+  top: 41px !important;
+  right: 8px !important;
+  bottom: 9px !important;
+  left: 8px !important;
+}
+
+.rbs-double-divider {
+  top: 41px !important;
+  bottom: 9px !important;
+}
+
+/* Coach shell size remains unchanged */
+.premium-bus-shell {
+  max-width: 470px !important;
+}
+
+/* Mobile exact 300px layout */
+@media (max-width: 700px) {
+  .rbs-sleeper-layout {
+    padding:
+      8px 8px 16px !important;
+  }
+
+  .rbs-side-headings,
+  .rbs-coach-row {
+    grid-template-columns:
+      94px
+      34px
+      156px !important;
+  }
+
+  .rbs-conductor-column {
+    width: 94px !important;
+    min-width: 94px !important;
+    padding-right: 18px !important;
+  }
+
+  .rbs-single-berth {
+    width: 76px !important;
+    min-width: 76px !important;
+    max-width: 76px !important;
+
+    height: 124px !important;
+    min-height: 124px !important;
+    max-height: 124px !important;
+  }
+
+  .rbs-driver-column,
+  .rbs-double-berth {
+    width: 156px !important;
+    min-width: 156px !important;
+    max-width: 156px !important;
+  }
+
+  .rbs-double-berth,
+  .rbs-double-half {
+    height: 124px !important;
+    min-height: 124px !important;
+    max-height: 124px !important;
+  }
+}
+
+/* Very narrow phones */
+@media (max-width: 360px) {
+  /*
+    278px usable:
+    70 single + 16 SL gap + 30 aisle
+    + 154 double + 8 right = 278
+  */
+
+  .rbs-side-headings,
+  .rbs-coach-row {
+    grid-template-columns:
+      86px
+      30px
+      154px !important;
+  }
+
+  .rbs-conductor-column {
+    width: 86px !important;
+    min-width: 86px !important;
+    padding-right: 16px !important;
+  }
+
+  .rbs-single-berth {
+    width: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+  }
+
+  .rbs-aisle {
+    width: 30px !important;
+    min-width: 30px !important;
+  }
+
+  .rbs-driver-column,
+  .rbs-double-berth {
+    width: 154px !important;
+    min-width: 154px !important;
+    max-width: 154px !important;
+  }
+
+  .rbs-double-seat-area {
+    grid-template-columns:
+      repeat(2, 77px) !important;
+    width: 154px !important;
+  }
+
+  .rbs-double-half {
+    width: 77px !important;
+    min-width: 77px !important;
+    max-width: 77px !important;
+  }
+}

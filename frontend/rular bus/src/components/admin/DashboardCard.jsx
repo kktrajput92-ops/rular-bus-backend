@@ -2,39 +2,92 @@ export default function DashboardCard({
   title,
   value,
   icon,
-  color = "#0B3D91",
+  color = "var(--erp-primary)",
 }) {
   return (
-    <div
+    <article
       style={{
-        background: "#fff",
-        borderRadius: 18,
-        padding: 20,
-        boxShadow: "0 10px 20px rgba(0,0,0,.08)",
-        borderLeft: `6px solid ${color}`,
+        position: "relative",
+        overflow: "hidden",
+        minHeight: "142px",
+        padding: "20px",
+        border: "1px solid var(--erp-border)",
+        borderRadius: "var(--erp-radius-lg)",
+        background:
+          "linear-gradient(145deg, var(--erp-surface), var(--erp-surface-muted))",
+        boxShadow: "var(--erp-shadow-sm)",
+        transition:
+          "transform var(--erp-transition-fast), box-shadow var(--erp-transition-fast), border-color var(--erp-transition-fast)",
+      }}
+      onMouseEnter={(event) => {
+        event.currentTarget.style.transform = "translateY(-4px)";
+        event.currentTarget.style.boxShadow = "var(--erp-shadow-md)";
+        event.currentTarget.style.borderColor = color;
+      }}
+      onMouseLeave={(event) => {
+        event.currentTarget.style.transform = "translateY(0)";
+        event.currentTarget.style.boxShadow = "var(--erp-shadow-sm)";
+        event.currentTarget.style.borderColor = "var(--erp-border)";
       }}
     >
+      <span
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          inset: "0 auto 0 0",
+          width: "5px",
+          background: color,
+          borderRadius: "var(--erp-radius-lg) 0 0 var(--erp-radius-lg)",
+        }}
+      />
+
+      <span
+        aria-hidden="true"
+        style={{
+          position: "absolute",
+          top: "-34px",
+          right: "-34px",
+          width: "110px",
+          height: "110px",
+          borderRadius: "50%",
+          background: color,
+          opacity: 0.08,
+          filter: "blur(4px)",
+        }}
+      />
+
       <div
         style={{
+          position: "relative",
+          zIndex: 1,
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
+          justifyContent: "space-between",
+          gap: "18px",
+          height: "100%",
         }}
       >
-        <div>
-          <div
+        <div style={{ minWidth: 0 }}>
+          <p
             style={{
-              color: "#666",
-              fontSize: 15,
+              margin: 0,
+              color: "var(--erp-text-secondary)",
+              fontSize: "14px",
+              fontWeight: 650,
+              letterSpacing: "0.01em",
             }}
           >
             {title}
-          </div>
+          </p>
 
           <h2
             style={{
-              marginTop: 10,
-              color: "#1F2937",
+              margin: "12px 0 0",
+              color: "var(--erp-heading)",
+              fontSize: "clamp(24px, 3vw, 32px)",
+              fontWeight: 800,
+              lineHeight: 1.1,
+              overflowWrap: "anywhere",
             }}
           >
             {value}
@@ -42,13 +95,24 @@ export default function DashboardCard({
         </div>
 
         <div
+          aria-hidden="true"
           style={{
-            fontSize: 40,
+            display: "grid",
+            placeItems: "center",
+            flexShrink: 0,
+            width: "58px",
+            height: "58px",
+            border: `1px solid ${color}`,
+            borderRadius: "16px",
+            background: "var(--erp-surface)",
+            color,
+            fontSize: "30px",
+            boxShadow: "var(--erp-shadow-xs)",
           }}
         >
           {icon}
         </div>
       </div>
-    </div>
+    </article>
   );
 }

@@ -1,0 +1,57 @@
+.admin-company-page {
+  display: flex;
+  min-height: 100vh;
+  background: var(--erp-bg);
+}
+
+.admin-company-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.admin-company-content {
+  padding: 20px;
+}
+
+.admin-company-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(320px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .admin-company-page {
+    display: block;
+  }
+
+  .admin-company-main {
+    width: 100%;
+  }
+
+  .admin-company-content {
+    padding: 76px 14px 20px;
+  }
+
+  .admin-company-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .admin-company-grid > * {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-company-content {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .admin-company-content input:not([type="color"]),
+  .admin-company-content select,
+  .admin-company-content textarea {
+    width: 100%;
+  }
+}

@@ -23,15 +23,15 @@ export default function DashboardAnalytics() {
     <div
       style={{
         marginTop: 30,
-        background: "#fff",
+        background: "var(--erp-surface)",
         borderRadius: 20,
         padding: 25,
-        boxShadow: "0 10px 25px rgba(0,0,0,.08)",
+        boxShadow: "var(--erp-shadow-sm)",
       }}
     >
       <h2
         style={{
-          color: "#0B3D91",
+          color: "var(--erp-heading)",
           marginBottom: 20,
         }}
       >
@@ -40,10 +40,18 @@ export default function DashboardAnalytics() {
 
       <ResponsiveContainer width="100%" height={320}>
         <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
+          <CartesianGrid stroke="var(--erp-border)" strokeDasharray="3 3" />
+          <XAxis dataKey="name" stroke="var(--erp-text-secondary)" />
+          <YAxis stroke="var(--erp-text-secondary)" />
+          <Tooltip
+              contentStyle={{
+                background: "var(--erp-surface)",
+                border: "1px solid var(--erp-border)",
+                borderRadius: 10,
+                color: "var(--erp-text)",
+              }}
+              labelStyle={{ color: "var(--erp-heading)" }}
+            />
           <Bar dataKey="revenue" fill="#0B3D91" radius={[8, 8, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>

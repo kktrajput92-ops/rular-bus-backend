@@ -165,7 +165,7 @@ function AdminRoute() {
     <div
       style={{
         minHeight: "100vh",
-        background: "#f5f7fa",
+        background: "var(--erp-bg)",
         padding: "30px",
       }}
     >
@@ -183,11 +183,11 @@ function AdminRoute() {
 
         <div>
 
-          <h1 style={{ margin: 0, color: "#0B3D91" }}>
+          <h1 style={{ margin: 0, color: "var(--erp-heading)" }}>
             🛣 Route Management
           </h1>
 
-          <p style={{ color: "#666" }}>
+          <p style={{ color: "var(--erp-text-muted)" }}>
             Rular Bus Admin ERP
           </p>
 
@@ -212,7 +212,7 @@ function AdminRoute() {
       <form
         onSubmit={saveRoute}
         style={{
-          background: "#fff",
+          background: "var(--erp-surface)",
           padding: "20px",
           borderRadius: "10px",
           marginBottom: "25px",
@@ -308,7 +308,7 @@ style={{
       </form>
       <div
         style={{
-          background: "#fff",
+          background: "var(--erp-surface)",
           borderRadius: "10px",
           overflow: "hidden",
           boxShadow: "0 4px 10px rgba(0,0,0,.08)",

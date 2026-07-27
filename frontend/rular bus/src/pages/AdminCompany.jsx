@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import AdminSidebar from "../components/admin/AdminSidebar";
 import AdminHeader from "../components/admin/AdminHeader";
 import { API_BASE } from "../config";
-
+import "./AdminCompany.css";
 const API = `${API_BASE}/api/companies`;
 export default function AdminCompany() {
  const [company, setCompany] = useState({
@@ -61,65 +61,116 @@ const handleSave = async () => {
     const method = company.id ? "PUT" : "POST";
     const url = company.id ? `${API}/${company.id}` : API;
 
+    const logoFile =
+      company.logo instanceof File ? company.logo : null;
+
+    const signatureFile =
+      company.signature instanceof File ? company.signature : null;
+
+    const {
+      logo,
+      signature,
+      ...companyPayload
+    } = company;
+
     const res = await fetch(url, {
       method,
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(company),
+      body: JSON.stringify(companyPayload),
     });
 
-    const json = await res.json();
+    const responseText = await res.text();
 
-   if (json.success) {
-  const companyId = json.data?.id || company.id;
+    let json = {};
 
-  if (company.logo || company.signature) {
-    const formData = new FormData();
-    formData.append("company_id", companyId);
-
-    if (company.logo) {
-      formData.append("logo", company.logo);
+    try {
+      json = responseText ? JSON.parse(responseText) : {};
+    } catch {
+      throw new Error(
+        `Invalid server response. HTTP status: ${res.status}`
+      );
     }
 
-    if (company.signature) {
-      formData.append("signature", company.signature);
+    if (!res.ok || !json.success) {
+      throw new Error(
+        json.message ||
+          `Company save failed. HTTP status: ${res.status}`
+      );
     }
 
-  const uploadRes = await fetch(`${API}/upload`, {
-  method: "POST",
-  body: formData,
-});
+    const companyId = json.data?.id || company.id;
 
-const uploadJson = await uploadRes.json();
-console.log(uploadJson);
+    if (!companyId) {
+      throw new Error("Company ID was not returned by server");
+    }
 
-if (!uploadRes.ok) {
-  alert(uploadJson.message || "Upload failed");
-}
-  }
+    if (logoFile || signatureFile) {
+      const formData = new FormData();
 
-  alert(json.message);
-  loadCompany();
-} else {
-  alert(json.message || "Save failed");
-}
+      formData.append("company_id", String(companyId));
+
+      if (logoFile) {
+        formData.append("logo", logoFile);
+      }
+
+      if (signatureFile) {
+        formData.append("signature", signatureFile);
+      }
+
+      const uploadRes = await fetch(`${API}/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      const uploadResponseText = await uploadRes.text();
+
+      let uploadJson = {};
+
+      try {
+        uploadJson = uploadResponseText
+          ? JSON.parse(uploadResponseText)
+          : {};
+      } catch {
+        throw new Error(
+          `Invalid upload response. HTTP status: ${uploadRes.status}`
+        );
+      }
+
+      if (!uploadRes.ok || !uploadJson.success) {
+        throw new Error(
+          uploadJson.message ||
+            `Branding upload failed. HTTP status: ${uploadRes.status}`
+        );
+      }
+    }
+
+    await loadCompany();
+
+    alert(json.message || "Company profile saved successfully");
   } catch (err) {
-    console.error(err);
-    alert("Server Error");
+    console.error("Company Save Error:", err);
+
+    alert(
+      err instanceof Error
+        ? err.message
+        : "Unable to save company profile"
+    );
   }
 };
+
   return (
-    <div style={{ display: "flex", background: "#f4f6f9" }}>
+  <div className="admin-company-page">
       <AdminSidebar />
 
-      <div style={{ flex: 1 }}>
+      <div className="admin-company-main">
         <AdminHeader />
 
-        <div style={{ padding: 20 }}>
+        <div className="admin-company-content">
           <h1
             style={{
-              color: "#0B3D91",
+              color: "var(--erp-heading)",
               marginBottom: 20,
             }}
           >
@@ -136,7 +187,7 @@ if (!uploadRes.ok) {
     justifyContent: "space-between",
     alignItems: "center",
     flexWrap: "wrap",
-    boxShadow: "0 8px 20px rgba(0,0,0,.15)",
+    boxShadow: "var(--erp-shadow-md)",
   }}
 >
   <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
@@ -151,7 +202,7 @@ if (!uploadRes.ok) {
         width: 80,
         height: 80,
         borderRadius: 12,
-        background: "#fff",
+        background: "var(--erp-surface)",
         objectFit: "contain",
         padding: 6,
       }}
@@ -185,22 +236,17 @@ if (!uploadRes.ok) {
   </div>
 </div>
         <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "minmax(0,2fr) minmax(360px,1fr)",
-    gap: 20,
-    alignItems: "start",
-  }}
+  className="admin-company-grid"
 >
   <div
     style={{
-      background: "#fff",
+      background: "var(--erp-surface)",
       padding: 20,
       borderRadius: 12,
-      boxShadow: "0 2px 8px rgba(0,0,0,.1)",
+      boxShadow: "var(--erp-shadow-sm)",
     }}
   >
-            <h2 style={{ color: "#0B3D91", marginBottom: 15 }}>
+            <h2 style={{ color: "var(--erp-heading)", marginBottom: 15 }}>
               Company Information
             </h2>
 
@@ -335,7 +381,7 @@ if (!uploadRes.ok) {
 
             <h2
               style={{
-                color: "#0B3D91",
+                color: "var(--erp-heading)",
                 marginTop: 30,
                 marginBottom: 15,
               }}
@@ -433,7 +479,7 @@ if (!uploadRes.ok) {
               </div>
 
             </div>
-            <h2 style={{ color: "#0B3D91", marginTop: 30 }}>
+            <h2 style={{ color: "var(--erp-heading)", marginTop: 30 }}>
               Branding
             </h2>
 
@@ -470,7 +516,7 @@ if (!uploadRes.ok) {
                       width: 120,
                       height: 120,
                       objectFit: "contain",
-                      border: "1px solid #ddd",
+                      border: "1px solid var(--erp-border)",
                       borderRadius: 8,
                     }}
                   />
@@ -492,7 +538,7 @@ if (!uploadRes.ok) {
                       width: 220,
                       height: 80,
                       objectFit: "contain",
-                      border: "1px solid #ddd",
+                      border: "1px solid var(--erp-border)",
                       borderRadius: 8,
                     }}
                   />
@@ -502,9 +548,9 @@ if (!uploadRes.ok) {
                   style={{
                     marginBottom: 15,
                     padding: 12,
-                    border: "1px solid #ddd",
+                    border: "1px solid var(--erp-border)",
                     borderRadius: 8,
-                    background: "#f8f9fa",
+                    background: "var(--erp-surface-muted)",
                   }}
                 >
                   <strong>Status:</strong>{" "}
@@ -528,12 +574,12 @@ if (!uploadRes.ok) {
     alignItems: "center",
     gap: 15,
     padding: "15px 20px",
-    background: "#f8fafc",
-    border: "1px solid #e5e7eb",
+    background: "var(--erp-surface-muted)",
+    border: "1px solid var(--erp-border)",
     borderRadius: 12,
   }}
 >
-  <span style={{ color: "#555", fontWeight: 500 }}>
+  <span style={{ color: "var(--erp-text-secondary)", fontWeight: 500 }}>
     Company profile changes are ready to save.
   </span>
 
@@ -548,7 +594,7 @@ if (!uploadRes.ok) {
       cursor: "pointer",
       fontSize: 16,
       fontWeight: "bold",
-      boxShadow: "0 4px 10px rgba(0,0,0,.15)",
+      boxShadow: "var(--erp-shadow-sm)",
     }}
   >
     💾 Save Company Profile
@@ -559,17 +605,17 @@ if (!uploadRes.ok) {
 
 <div
   style={{
-  background: "#fff",
+  background: "var(--erp-surface)",
   padding: 20,
   borderRadius: 12,
-  boxShadow: "0 2px 8px rgba(0,0,0,.1)",
+  boxShadow: "var(--erp-shadow-sm)",
   minHeight: 500,
   position: "sticky",
   top: 20,
   alignSelf: "start",
 }}
   >
-    <h2 style={{ color: "#0B3D91", marginTop: 0 }}>
+    <h2 style={{ color: "var(--erp-heading)", marginTop: 0 }}>
       Live Preview
     </h2>
 
@@ -591,7 +637,7 @@ if (!uploadRes.ok) {
     }}
   />
 
-  <h2 style={{ margin: 0, color: "#0B3D91" }}>
+  <h2 style={{ margin: 0, color: "var(--erp-heading)" }}>
     {company.company_name || "Company Name"}
   </h2>
 

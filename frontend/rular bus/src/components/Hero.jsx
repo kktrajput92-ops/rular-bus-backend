@@ -1,35 +1,36 @@
 export default function Hero() {
   return (
-    <section
-      style={{
-        textAlign: "center",
-        padding: "30px 20px",
-        marginBottom: "30px",
-      }}
-    >
-      <h1
-        style={{
-          fontSize: "36px",
-          color: "#0B3D91",
-          margin: 0,
-          fontWeight: "700",
-        }}
-      >
-        Find Your Perfect Journey
-      </h1>
+    <section className="worker-hero">
+      <div className="worker-hero-content">
+        <div className="worker-hero-badge">
+          🏠 यूपी-बिहार के यात्रियों का भरोसेमंद सफर साथी
+        </div>
 
-      <p
-        style={{
-          fontSize: "18px",
-          color: "#6b7280",
-          maxWidth: "650px",
-          margin: "15px auto",
-          lineHeight: "1.6",
-        }}
-      >
-        Travel safely across India with comfortable buses, affordable fares,
-        and a fast, secure booking experience.
-      </p>
+        <h1>
+          घर जाने की टिकट,
+          <span> अब और आसान</span>
+        </h1>
+
+        <p>
+          काम के लिए आप चाहे कितनी भी दूर हों, Rular Bus आपको
+          सुरक्षित, आराम से और भरोसे के साथ अपनों तक पहुँचाने में
+          साथ है।
+        </p>
+
+        <div className="worker-hero-trust">
+          <span>🛡️ सुरक्षित यात्रा</span>
+          <span>💰 सही किराया</span>
+          <span>☎️ फोन पर मदद</span>
+        </div>
+      </div>
+
+      <div className="worker-hero-visual" aria-hidden="true">
+        <div className="worker-sun" />
+        <div className="worker-home-icon">🏠</div>
+        <div className="worker-route-line" />
+        <div className="worker-bus">🚌</div>
+        <div className="worker-traveller">🧳</div>
+      </div>
     </section>
   );
 }

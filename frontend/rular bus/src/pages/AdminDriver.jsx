@@ -204,7 +204,7 @@ const columns = [
     <div
       style={{
         minHeight: "100vh",
-        background: "#f5f7fa",
+        background: "var(--erp-bg)",
         padding: "30px",
       }}
     >
@@ -222,11 +222,11 @@ const columns = [
 
         <div>
 
-          <h1 style={{ margin: 0, color: "#0B3D91" }}>
+          <h1 style={{ margin: 0, color: "var(--erp-heading)" }}>
             👨‍✈️ Driver Management
           </h1>
 
-          <p style={{ color: "#666" }}>
+          <p style={{ color: "var(--erp-text-muted)" }}>
             Rular Bus Admin ERP
           </p>
           <RBInput
@@ -240,7 +240,7 @@ const columns = [
        <form
         onSubmit={saveDriver}
         style={{
-          background: "#fff",
+          background: "var(--erp-surface)",
           padding: "20px",
           borderRadius: "10px",
           marginBottom: "25px",
@@ -300,7 +300,7 @@ const columns = [
       </form>
       <div
         style={{
-          background: "#fff",
+          background: "var(--erp-surface)",
           borderRadius: "10px",
           overflow: "hidden",
           boxShadow: "0 4px 10px rgba(0,0,0,.08)",
@@ -312,7 +312,7 @@ const columns = [
     style={{
       padding: "25px",
       textAlign: "center",
-      background: "#fff",
+      background: "var(--erp-surface)",
       borderRadius: "10px",
     }}
   >

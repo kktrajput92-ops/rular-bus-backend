@@ -1,56 +1,47 @@
-export default function BusContainer({ children }) {
+export default function BusContainer({
+  children,
+  deck = "LOWER",
+}) {
   return (
-  <div
-    style={{
-      position: "relative",
-      maxWidth: "460px",
-      margin: "24px auto",
-      padding: "26px",
-      background: "linear-gradient(180deg,#ffffff,#f8fbff)",
-      borderRadius: "32px",
-      border: "2px solid #dbeafe",
-      boxShadow: "0 18px 40px rgba(15,23,42,.12)",
-      overflow: "hidden",
-    }}
-  >
-    {/* Left Bus Wall */}
-    <div
-      style={{
-        position: "absolute",
-        left: 0,
-        top: 0,
-        bottom: 0,
-        width: 8,
-        background: "#2563eb",
-      }}
-    />
+    <section
+      className={`premium-bus-shell ${
+        deck === "UPPER"
+          ? "upper-coach"
+          : "lower-coach"
+      }`}
+    >
+      <div className="bus-roof-highlight" />
 
-    {/* Right Bus Wall */}
-    <div
-      style={{
-        position: "absolute",
-        right: 0,
-        top: 0,
-        bottom: 0,
-        width: 8,
-        background: "#2563eb",
-      }}
-    />
+      <div className="coach-deck-name">
+        <span>
+          {deck === "UPPER"
+            ? "UPPER COACH"
+            : "LOWER COACH"}
+        </span>
+      </div>
 
-    {/* Window Strip */}
-    <div
-      style={{
-        position: "absolute",
-        top: 10,
-        left: 28,
-        right: 28,
-        height: 8,
-        borderRadius: 20,
-        background: "#bfdbfe",
-      }}
-    />
+      <div className="premium-bus-body">
+        <div className="bus-side-window left" />
+        <div className="bus-side-window right" />
 
-    {children}
-  </div>
-);
+        {children}
+
+        <div className="coach-rear-section">
+          <div className="rear-light left" />
+
+          <span>REAR</span>
+
+          <div className="rear-light right" />
+        </div>
+      </div>
+
+      <div className="bus-wheel left">
+        <span />
+      </div>
+
+      <div className="bus-wheel right">
+        <span />
+      </div>
+    </section>
+  );
 }

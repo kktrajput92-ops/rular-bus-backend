@@ -1,0 +1,89 @@
+.nearest-location-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin: 18px 0 14px;
+}
+
+.nearest-location-button {
+  border: 0;
+  border-radius: 12px;
+  padding: 11px 16px;
+  background: #0b72e7;
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.nearest-location-button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.nearest-location-privacy {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.nearest-location-message {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(59, 130, 246, 0.11);
+  font-size: 13px;
+}
+
+.nearest-location-suggestions {
+  display: grid;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.nearest-location-suggestions > div {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.nearest-location-suggestions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 999px;
+  padding: 8px 11px;
+  background: rgba(59, 130, 246, 0.08);
+  color: inherit;
+  cursor: pointer;
+}
+
+.nearest-location-suggestions button small {
+  font-weight: 800;
+  color: #0b72e7;
+}
+
+@media (max-width: 640px) {
+  .nearest-location-row {
+    align-items: stretch;
+  }
+
+  .nearest-location-button {
+    width: 100%;
+  }
+
+  .nearest-location-privacy {
+    width: 100%;
+  }
+
+  .nearest-location-suggestions > div {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .nearest-location-suggestions button {
+    justify-content: space-between;
+    width: 100%;
+    border-radius: 12px;
+  }
+}

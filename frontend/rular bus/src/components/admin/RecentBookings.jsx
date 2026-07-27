@@ -1,18 +1,26 @@
 export default function RecentBookings({ bookings = [] }) {
+  const cellStyle = {
+    padding: 12,
+    borderBottom: "1px solid var(--erp-border)",
+    color: "var(--erp-text)",
+    textAlign: "left",
+  };
+
   return (
-    <div
+    <section
       style={{
-        background: "#fff",
-        borderRadius: 20,
-        padding: 20,
-        boxShadow: "0 10px 25px rgba(0,0,0,.08)",
         marginTop: 30,
+        padding: 20,
+        background: "var(--erp-surface)",
+        border: "1px solid var(--erp-border)",
+        borderRadius: "var(--erp-radius-lg)",
+        boxShadow: "var(--erp-shadow-sm)",
       }}
     >
       <h3
         style={{
-          marginBottom: 20,
-          color: "#0B3D91",
+          margin: "0 0 20px",
+          color: "var(--erp-heading)",
         }}
       >
         📚 Recent Bookings
@@ -23,20 +31,21 @@ export default function RecentBookings({ bookings = [] }) {
           style={{
             width: "100%",
             borderCollapse: "collapse",
+            minWidth: 650,
           }}
         >
           <thead>
             <tr
               style={{
-                background: "#0B3D91",
+                background: "var(--erp-primary)",
                 color: "#fff",
               }}
             >
-              <th style={{ padding: 12 }}>Booking ID</th>
-              <th style={{ padding: 12 }}>Passenger</th>
-              <th style={{ padding: 12 }}>Route</th>
-              <th style={{ padding: 12 }}>Seat</th>
-              <th style={{ padding: 12 }}>Status</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Booking ID</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Passenger</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Route</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Seat</th>
+              <th style={{ padding: 12, textAlign: "left" }}>Status</th>
             </tr>
           </thead>
 
@@ -46,8 +55,10 @@ export default function RecentBookings({ bookings = [] }) {
                 <td
                   colSpan="5"
                   style={{
+                    ...cellStyle,
                     padding: 25,
                     textAlign: "center",
+                    color: "var(--erp-text-secondary)",
                   }}
                 >
                   No Bookings Found
@@ -56,17 +67,17 @@ export default function RecentBookings({ bookings = [] }) {
             ) : (
               bookings.map((item) => (
                 <tr key={item.id}>
-                  <td style={{ padding: 12 }}>{item.id}</td>
-                  <td style={{ padding: 12 }}>{item.passenger_name}</td>
-                  <td style={{ padding: 12 }}>
+                  <td style={cellStyle}>{item.id}</td>
+                  <td style={cellStyle}>{item.passenger_name}</td>
+                  <td style={cellStyle}>
                     {item.source} ➜ {item.destination}
                   </td>
-                  <td style={{ padding: 12 }}>{item.seat_number}</td>
+                  <td style={cellStyle}>{item.seat_number}</td>
                   <td
                     style={{
-                      padding: 12,
-                      color: "#198754",
-                      fontWeight: "bold",
+                      ...cellStyle,
+                      color: "#22c55e",
+                      fontWeight: 700,
                     }}
                   >
                     {item.booking_status}
@@ -77,6 +88,6 @@ export default function RecentBookings({ bookings = [] }) {
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 }
