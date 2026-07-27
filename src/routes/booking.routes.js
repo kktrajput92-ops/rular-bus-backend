@@ -2,6 +2,11 @@ const express = require("express");
 
 const router = express.Router();
 
+const optionalCustomerAuthMiddleware = require(
+  "../middleware/optionalCustomerAuth.middleware"
+);
+
+
 const {
   addBooking,
   getAllBookings,
@@ -11,7 +16,11 @@ const {
 } = require("../controllers/booking.controller");
 
 // Create Booking
-router.post("/", addBooking);
+router.post(
+  "/",
+  optionalCustomerAuthMiddleware,
+  addBooking
+);
 
 // Get All Bookings
 router.get("/", getAllBookings);

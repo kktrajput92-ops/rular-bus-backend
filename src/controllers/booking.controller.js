@@ -13,6 +13,42 @@ const addBooking = async (req, res) => {
   };
 
   try {
+
+    const customerProfileId =
+
+      req.customer?.id
+
+        ? Number(req.customer.id)
+
+        : null;
+
+
+    if (
+
+      customerProfileId !== null &&
+
+      (
+
+        !Number.isInteger(customerProfileId) ||
+
+        customerProfileId <= 0
+
+      )
+
+    ) {
+
+      return res.status(401).json({
+
+        success: false,
+
+        message:
+
+          "Invalid customer profile identity.",
+
+      });
+
+    }
+
     const scheduleId = Number(req.body.schedule_id);
 
     const contactPhone = String(
@@ -397,7 +433,8 @@ const addBooking = async (req, res) => {
          currency_code,
          contact_phone,
          contact_email,
-         passenger_count
+         passenger_count,
+         customer_profile_id
        )
        VALUES
        (
@@ -411,7 +448,8 @@ const addBooking = async (req, res) => {
          'INR',
          $7,
          $8,
-         $9
+         $9,
+         $10
        )
        RETURNING
          id,
@@ -435,7 +473,8 @@ const addBooking = async (req, res) => {
         contactPhone,
         contactEmail || null,
         normalizedPassengers.length,
-      ]
+          customerProfileId,
+        ]
     );
 
     const bookingId = bookingInsert.rows[0].id;
@@ -592,6 +631,8 @@ const addBooking = async (req, res) => {
   } catch (error) {
     if (transactionStarted) {
       try {
+
+
         await client.query("ROLLBACK");
       } catch (rollbackError) {
         console.error(

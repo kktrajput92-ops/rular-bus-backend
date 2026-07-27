@@ -1,28 +1,29 @@
 const express = require("express");
 
-const router = express.Router();
-
 const {
   addStop,
   getAllStops,
   getStopsByRoute,
+  getPublicStopsByRoute,
   updateStop,
   deleteStop,
 } = require("../controllers/stop.controller");
 
-// Add Stop
-router.post("/", addStop);
+const router = express.Router();
 
-// Get All Stops
+router.get("/public/route/:route_id", getPublicStopsByRoute);
+router.get("/route/:route_id", getStopsByRoute);
+
+router.post("/", addStop);
 router.get("/", getAllStops);
 
-// Get Stops By Route
+/*
+ * Backward-compatible route.
+ * Keep this after named routes to prevent path conflicts.
+ */
 router.get("/:route_id", getStopsByRoute);
 
-// Update Stop
 router.put("/:id", updateStop);
-
-// Delete Stop
 router.delete("/:id", deleteStop);
 
 module.exports = router;

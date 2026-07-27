@@ -1,193 +1,426 @@
 const pool = require("../config/db");
 
-// Add Payment
+const VALID_PAYMENT_METHODS = [
+  "UPI",
+  "DEBIT_CARD",
+  "CREDIT_CARD",
+  "NET_BANKING",
+  "WALLET",
+];
+
+const normalizePaymentMethod = (
+  value
+) =>
+  String(value || "")
+    .trim()
+    .toUpperCase()
+    .replace(/\s+/g, "_");
+
 const addPayment = async (req, res) => {
+  const client = await pool.connect();
+  let transactionStarted = false;
+
   try {
-    const {
-      booking_id,
-      amount,
-      payment_method,
-    } = req.body;
-console.log("BOOKING ID RECEIVED =", booking_id);
-    // Check booking exists
-    const booking = await pool.query(
-      "SELECT * FROM bookings WHERE id=$1",
-      [booking_id]
+    const bookingId = Number(
+      req.body.booking_id
     );
 
-    if (booking.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        message: "Booking not found",
-      });
-    }
+    const paymentMethod =
+      normalizePaymentMethod(
+        req.body.payment_method
+      );
 
-    // Check payment already exists
-    const payment = await pool.query(
-      "SELECT * FROM payments WHERE booking_id=$1",
-      [booking_id]
-    );
-console.log("PAYMENT CHECK =", payment.rows);
-    if (payment.rows.length > 0) {
+    if (
+      !Number.isInteger(bookingId) ||
+      bookingId <= 0
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Payment already exists",
+        message:
+          "Valid booking ID is required.",
       });
     }
 
-    const transaction_id =
-      "TXN" + Date.now();
+    if (
+      !VALID_PAYMENT_METHODS.includes(
+        paymentMethod
+      )
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Valid payment method is required.",
+      });
+    }
 
-    const result = await pool.query(
-  `INSERT INTO payments
-  (
-    booking_id,
-    amount,
-    payment_method,
-    payment_status,
-    transaction_id
-  )
-  VALUES ($1,$2,$3,$4,$5)
-  RETURNING *`,
-  [
-    booking_id,
-    amount,
-    payment_method,
-    "paid",
-    transaction_id,
-  ]
-);
+    await client.query("BEGIN");
+    transactionStarted = true;
 
-    res.json({
+    const bookingResult =
+      await client.query(
+        `
+          SELECT
+            id,
+            fare_amount,
+            currency_code,
+            booking_status
+          FROM bookings
+          WHERE id = $1
+          FOR UPDATE
+        `,
+        [bookingId]
+      );
+
+    if (!bookingResult.rows.length) {
+      const error = new Error(
+        "Booking not found."
+      );
+
+      error.status = 404;
+      throw error;
+    }
+
+    const booking =
+      bookingResult.rows[0];
+
+    const amount = Number(
+      booking.fare_amount
+    );
+
+    if (
+      !Number.isFinite(amount) ||
+      amount <= 0
+    ) {
+      const error = new Error(
+        "Booking fare is invalid."
+      );
+
+      error.status = 400;
+      throw error;
+    }
+
+    const existingPayment =
+      await client.query(
+        `
+          SELECT *
+          FROM payments
+          WHERE booking_id = $1
+          ORDER BY id DESC
+          LIMIT 1
+          FOR UPDATE
+        `,
+        [bookingId]
+      );
+
+    if (existingPayment.rows.length) {
+      const existing =
+        existingPayment.rows[0];
+
+      if (
+        String(
+          existing.payment_status
+        ).toLowerCase() === "paid"
+      ) {
+        const error = new Error(
+          "Payment already completed for this booking."
+        );
+
+        error.status = 409;
+        throw error;
+      }
+
+      const updated =
+        await client.query(
+          `
+            UPDATE payments
+            SET
+              amount = $1,
+              payment_method = $2,
+              payment_status = 'paid',
+              transaction_id = $3
+            WHERE id = $4
+            RETURNING *
+          `,
+          [
+            amount,
+            paymentMethod,
+            `TXN${Date.now()}`,
+            existing.id,
+          ]
+        );
+
+      await client.query("COMMIT");
+      transactionStarted = false;
+
+      return res.json({
+        success: true,
+        message:
+          "Payment completed successfully.",
+        payment: updated.rows[0],
+      });
+    }
+
+    const transactionId =
+      `TXN${Date.now()}`;
+
+    const result = await client.query(
+      `
+        INSERT INTO payments (
+          booking_id,
+          amount,
+          payment_method,
+          payment_status,
+          transaction_id
+        )
+        VALUES (
+          $1,
+          $2,
+          $3,
+          'paid',
+          $4
+        )
+        RETURNING *
+      `,
+      [
+        bookingId,
+        amount,
+        paymentMethod,
+        transactionId,
+      ]
+    );
+
+    await client.query("COMMIT");
+    transactionStarted = false;
+
+    return res.status(201).json({
       success: true,
-      message: "Payment Added Successfully",
+      message:
+        "Payment completed successfully.",
       payment: result.rows[0],
     });
+  } catch (error) {
+    if (transactionStarted) {
+      try {
+        await client.query(
+          "ROLLBACK"
+        );
+      } catch (rollbackError) {
+        console.error(
+          "Payment rollback failed:",
+          rollbackError
+        );
+      }
+    }
 
-  } catch (err) {
-    console.error(err);
+    console.error(
+      "Add payment failed:",
+      error
+    );
 
-    res.status(500).json({
-      success: false,
-      message: err.message,
-    });
+    return res
+      .status(error.status || 500)
+      .json({
+        success: false,
+        message:
+          error.message ||
+          "Payment failed.",
+      });
+  } finally {
+    client.release();
   }
 };
 
-// Get All Payments
-const getAllPayments = async (req, res) => {
+const getAllPayments = async (
+  req,
+  res
+) => {
   try {
+    const result = await pool.query(
+      `
+        SELECT
+          payments.id,
+          payments.booking_id,
+          payments.amount,
+          payments.payment_method,
+          payments.payment_status,
+          payments.transaction_id,
+          payments.created_at,
 
-    const result = await pool.query(`
-      SELECT
-      payments.id,
-      passengers.full_name,
-      routes.source,
-      routes.destination,
-      payments.amount,
-      payments.payment_method,
-      payments.payment_status,
-      payments.transaction_id
+          bookings.contact_phone,
+          bookings.contact_email,
+          bookings.passenger_count,
+          bookings.fare_amount AS booking_fare,
 
-      FROM payments
+          routes.source,
+          routes.destination
 
-      JOIN bookings
-      ON payments.booking_id=bookings.id
+        FROM payments
 
-      JOIN passengers
-      ON bookings.passenger_id=passengers.id
+        INNER JOIN bookings
+          ON bookings.id =
+             payments.booking_id
 
-      JOIN schedules
-      ON bookings.schedule_id=schedules.id
+        INNER JOIN schedules
+          ON schedules.id =
+             bookings.schedule_id
 
-      JOIN routes
-      ON schedules.route_id=routes.id
+        INNER JOIN routes
+          ON routes.id =
+             schedules.route_id
 
-      ORDER BY payments.id DESC
-    `);
+        ORDER BY payments.id DESC
+      `
+    );
 
-    res.json({
+    return res.json({
       success: true,
       payments: result.rows,
     });
+  } catch (error) {
+    console.error(
+      "Get payments failed:",
+      error
+    );
 
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: err.message,
+      message:
+        "Failed to load payments.",
     });
   }
 };
 
-// Update Payment Status
-const updatePaymentStatus = async (req, res) => {
+const updatePaymentStatus = async (
+  req,
+  res
+) => {
   try {
-
-    const { id } = req.params;
-    const { payment_status } = req.body;
-
-    const result = await pool.query(
-      `UPDATE payments
-       SET payment_status=$1
-       WHERE id=$2
-       RETURNING *`,
-      [payment_status, id]
+    const paymentId = Number(
+      req.params.id
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
+    const paymentStatus = String(
+      req.body.payment_status || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    if (
+      !Number.isInteger(paymentId) ||
+      paymentId <= 0
+    ) {
+      return res.status(400).json({
         success: false,
-        message: "Payment not found",
+        message:
+          "Valid payment ID is required.",
       });
     }
 
-    res.json({
+    if (
+      ![
+        "pending",
+        "paid",
+        "failed",
+        "refunded",
+      ].includes(paymentStatus)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Invalid payment status.",
+      });
+    }
+
+    const result = await pool.query(
+      `
+        UPDATE payments
+        SET payment_status = $1
+        WHERE id = $2
+        RETURNING *
+      `,
+      [paymentStatus, paymentId]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Payment not found.",
+      });
+    }
+
+    return res.json({
       success: true,
-      message: "Payment Updated Successfully",
+      message:
+        "Payment updated successfully.",
       payment: result.rows[0],
     });
+  } catch (error) {
+    console.error(
+      "Update payment failed:",
+      error
+    );
 
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: err.message,
+      message:
+        "Failed to update payment.",
     });
   }
 };
 
-// Delete Payment
-const deletePayment = async (req, res) => {
+const deletePayment = async (
+  req,
+  res
+) => {
   try {
-
-    const { id } = req.params;
-
-    const result = await pool.query(
-      "DELETE FROM payments WHERE id=$1 RETURNING *",
-      [id]
+    const paymentId = Number(
+      req.params.id
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
+    if (
+      !Number.isInteger(paymentId) ||
+      paymentId <= 0
+    ) {
+      return res.status(400).json({
         success: false,
-        message: "Payment not found",
+        message:
+          "Valid payment ID is required.",
       });
     }
 
-    res.json({
+    const result = await pool.query(
+      `
+        DELETE FROM payments
+        WHERE id = $1
+        RETURNING *
+      `,
+      [paymentId]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({
+        success: false,
+        message:
+          "Payment not found.",
+      });
+    }
+
+    return res.json({
       success: true,
-      message: "Payment Deleted Successfully",
+      message:
+        "Payment deleted successfully.",
     });
+  } catch (error) {
+    console.error(
+      "Delete payment failed:",
+      error
+    );
 
-  } catch (err) {
-    console.error(err);
-
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      message: err.message,
+      message:
+        "Failed to delete payment.",
     });
   }
 };

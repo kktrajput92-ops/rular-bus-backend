@@ -3,22 +3,57 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  addPayment,
   getAllPayments,
   updatePaymentStatus,
   deletePayment,
-} = require("../controllers/payment.controller");
+} = require(
+  "../controllers/payment.controller"
+);
 
-// Add Payment
-router.post("/", addPayment);
+const {
+  createPaymentOrder,
+  rejectLegacyMockPayment,
+  verifyPayment,
+} = require(
+  "../controllers/razorpayPayment.controller"
+);
 
-// Get All Payments
-router.get("/", getAllPayments);
+/*
+ * Public customer payment flow.
+ * Amount is always loaded from the booking in the backend.
+ */
+router.post(
+  "/create-order",
+  createPaymentOrder
+);
 
-// Update Payment Status
-router.put("/:id", updatePaymentStatus);
+router.post(
+  "/verify",
+  verifyPayment
+);
 
-// Delete Payment
-router.delete("/:id", deletePayment);
+/*
+ * Old endpoint previously marked payments paid
+ * without talking to a payment gateway.
+ */
+router.post(
+  "/",
+  rejectLegacyMockPayment
+);
+
+router.get(
+  "/",
+  getAllPayments
+);
+
+router.put(
+  "/:id",
+  updatePaymentStatus
+);
+
+router.delete(
+  "/:id",
+  deletePayment
+);
 
 module.exports = router;
